@@ -37,32 +37,45 @@ website:
     # logo-alt: "BMC205 Web Technology logo"
     collapse-below: lg
     right:
+      - text: "Home"
+        file: index.qmd
       - text: "Syllabus"
         file: syllabus.qmd
       - text: "Schedule"
         file: schedule.qmd
-      - text: "Content"
-        file: content/index.qmd
-      - text: "Assignments"
-        file: assignment/index.qmd
-      - text: "Quizzes"
-        file: quiz/index.qmd
-      - text: "Resources"
-        file: resource/index.qmd
-      - text: "Lab Manuals"
-        file: labs/index.qmd
+      - text: "Materials"
+        menu:
+          - text: "Weekly Content"
+            file: content/index.qmd
+          - text: "Presentations"
+            file: presentations/index.qmd
+          - text: "Lab Manuals"
+            file: labs/index.qmd
+          - text: "Quizzes"
+            file: quiz/index.qmd
+          - text: "Resources"
+            file: resource/index.qmd
+      - text: "Assessments"
+        menu:
+          - text: "Assignments"
+            file: assignment/index.qmd
+          - text: "Assessment Calendar"
+            file: schedule.qmd
 
   sidebar:
-    - title: "Schedule & Materials"
+    - title: "Course Navigation"
       style: "docked"
       search: true
       background: light
       contents:
-        - section: "Course Schedule"
+        - section: "Start Here"
           contents:
+            - index.qmd
             - schedule.qmd
-        - section: "Weekly Content"
+            - syllabus.qmd
+        - section: "Weekly Materials"
           contents:
+            - content/index.qmd
             - text: "Week 1-2: HTML & Introduction"
               file: content/week-01.qmd
             - text: "Week 2-3: HTML Elements & CSS"
@@ -85,33 +98,13 @@ website:
               file: content/week-11.qmd
             - text: "Week 12: REST & Final Project"
               file: content/week-12.qmd
-
-    - title: "Assignments & Labs"
-      contents:
-        - section: "Assignments"
+        - section: "Practice & Evaluation"
           contents:
-            - assignment/index.qmd
-            - assignment/01-assignment.qmd
-            - assignment/02-assignment.qmd
-            - assignment/03-assignment.qmd
-            - assignment/04-assignment.qmd
-        - section: "Lab Manuals"
-          contents:
+            - presentations/index.qmd
             - labs/index.qmd
-            - labs/lab-01.qmd
-            - labs/lab-02.qmd
-            - labs/lab-03.qmd
-        - section: "Quizzes"
-          contents:
+            - assignment/index.qmd
             - quiz/index.qmd
-            - quiz/lecture-01-quiz.qmd
-            - quiz/lecture-02-quiz.qmd
-            - quiz/lecture-03-quiz.qmd
-            - quiz/lecture-04-quiz.qmd
-
-    - title: "Resources"
-      contents:
-        - section: "Learning Resources"
+        - section: "Resources"
           contents:
             - resource/index.qmd
             - resource/tools.qmd
