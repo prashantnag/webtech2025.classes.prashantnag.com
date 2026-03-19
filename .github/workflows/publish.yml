@@ -52,6 +52,9 @@ jobs:
             any::here
             any::yaml
             any::targets
+            any::tarchetypes
+            any::fs
+            any::reticulate
             any::lubridate
             any::glue
             any::calendar
@@ -76,6 +79,9 @@ jobs:
 
       - name: Set up GitHub Pages
         uses: actions/configure-pages@v5
+
+      - name: Build schedule targets
+        run: Rscript -e 'targets::tar_make(names = c("schedule_page_data", "schedule_ical_file"))'
 
       - name: Render Quarto site
         run: quarto render
