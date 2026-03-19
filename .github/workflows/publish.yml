@@ -71,7 +71,7 @@ jobs:
 
       - name: Install Julia Jupyter kernel and quiz dependencies
         run: |
-          julia -e 'ENV["JUPYTER"] = "jupyter"; import Pkg; Pkg.add(["IJulia", "QuizQuestions"]); using IJulia; installkernel("julia-1.12")'
+          julia -e 'ENV["JUPYTER"] = "jupyter"; import Pkg; Pkg.add(["IJulia", "QuizQuestions"]); using IJulia; installkernel("Julia 1.12", specname="julia-1.12")'
 
       - name: Verify available Jupyter kernels
         run: |
