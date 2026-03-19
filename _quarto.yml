@@ -30,6 +30,13 @@ website:
   twitter-card:
     creator: "@prashantnag"
     site: "@prashantnag"
+  google-analytics:
+    tracking-id: "G-55BKX62YZH"
+    anonymize-ip: true
+  cookie-consent:
+    type: implied
+    style: simple
+    palette: dark
 
   navbar:
     background: "#2C3E50"
@@ -121,7 +128,7 @@ format:
     code-copy: true
     code-overflow: wrap
     # mainfont: "Atkinson Hyperlegible"
-    highlight-style: monokai
+    highlight-style: github
 
 execute:
   freeze: auto
