@@ -26,6 +26,14 @@ jobs:
         with:
           tinytex: false
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Jupyter
+        run: python -m pip install --upgrade pip jupyter
+
       - name: Set up Julia
         uses: julia-actions/setup-julia@v2
         with:
@@ -33,7 +41,12 @@ jobs:
 
       - name: Install Julia Jupyter kernel and quiz dependencies
         run: |
-          julia -e 'import Pkg; Pkg.add(["IJulia", "QuizQuestions"]); using IJulia; installkernel("julia-1.12")'
+          julia -e 'ENV["JUPYTER"] = "jupyter"; import Pkg; Pkg.add(["IJulia", "QuizQuestions"]); using IJulia; installkernel("julia-1.12")'
+
+      - name: Verify available Jupyter kernels
+        run: |
+          quarto check jupyter
+          jupyter kernelspec list
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
