@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch gh-pages branch
+        run: git fetch origin gh-pages:refs/remotes/origin/gh-pages
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
