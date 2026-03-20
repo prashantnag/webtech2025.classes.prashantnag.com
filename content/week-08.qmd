@@ -28,10 +28,10 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa desktop >}} View Lecture](/lectures/lecture-21.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-21.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -102,10 +102,10 @@ public class FirstServlet extends HttpServlet {
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa desktop >}} View Lecture](/lectures/lecture-22.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-22.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -179,10 +179,10 @@ out.println("Response content");
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa desktop >}} View Lecture](/lectures/lecture-23.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-23.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -242,10 +242,10 @@ response.addCookie(cookie);
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa desktop >}} View Lecture](/lectures/lecture-24.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-24.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
