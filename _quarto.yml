@@ -44,6 +44,10 @@ website:
     type: implied
     style: simple
     palette: light
+  announcement:
+    content: "📢 Supplementary course website — official activities on Moodle. Content is updated regularly. Feedback welcome!"
+    type: primary
+    position: below-navbar
 
   navbar:
     background: "#2C3E50"
