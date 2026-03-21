@@ -51,7 +51,7 @@ website:
 
   sidebar:
     style: docked
-    background: dark
+    background: "#2C3E50"
     logo: files/favicon.svg
     tools:
       - icon: github
