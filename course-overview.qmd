@@ -44,7 +44,7 @@ By the end of this course, students will be able to:
 ::: {.column width="75%"}
 | Role | Name | Office hours | Location |
 |---|---|---|---|
-| Instructor | [Mr. Prashant Kumar Nag](https://prashantnag.com) | By appointment | Room A06, Dept. of Computer Applications |
+| Instructor | [Mr. Prashant Kumar Nag](https://prashantnag.com) | By appointment | Room A06, Admin Block, GCET |
 
 **Email:** [prashantkumar.nag@galgotiacollege.edu](mailto:prashantkumar.nag@galgotiacollege.edu)
 
