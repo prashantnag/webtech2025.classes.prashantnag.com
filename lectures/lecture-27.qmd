@@ -6,7 +6,7 @@ date: "March 11, 2026"
 code-annotations: below
 ---
 
-## {#title-slide data-menu-title="Title Slide" background="#053660"}
+## {#title-slide data-menu-title="Title" background="#053660"}
 
 <div class="custom-title">
 [Lecture 27]{.baby-blue-text}
@@ -17,245 +17,512 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle3">
-Week 7 | Unit III: Servlets<br>
+Week 9 | Unit III: Servlets<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Objectives"}
 
 [Learning Objectives]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Understand why HTTP alone cannot remember users
-- Explain cookies and sessions in simple terms
-- Implement basic login tracking in servlet apps
-- Compare cookies, URL rewriting, and HttpSession
+- Explain stateless HTTP and formal need for session tracking
+- Understand complete cookie model: creation, scope, expiry, transport
+- Implement cookie CRUD with robust servlet code patterns
+- Evaluate security and privacy risks in cookie usage
+- Compare cookies with alternative tracking techniques
+- Design secure remember-me style flows
 :::
 
 ---
 
-## {data-menu-title="Stateless HTTP"}
+## {data-menu-title="Syllabus"}
 
-[Why Session Tracking is Needed]{.slide-title2}
+[Unit III Topic Traceability]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-HTTP is **stateless**.
+Primary syllabus topic:
 
-That means each request is independent.
+- Session tracking using cookies
 
-Without session tracking:
+Conceptual progression:
 
-- server cannot remember who logged in
-- cart items disappear between pages
-- personalized data cannot continue
+- Lecture 26: request navigation
+- Lecture 27: browser-side tracking
+- Lecture 28: server-side session tracking (`HttpSession`)
 :::
 
 ---
 
-## {data-menu-title="Cookie Basics"}
+## {data-menu-title="Statelessness"}
 
-[What is a Cookie?]{.slide-title}
+[Revisiting Stateless HTTP]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-A cookie is a small key-value text data stored in browser.
+HTTP request processing is independent by design.
 
-- Set by server
-- Sent back by browser in later requests
-- Useful for preferences, user id tokens, language, etc.
+Implication:
+
+- server cannot infer user continuity from protocol alone
+
+Tracking is therefore an application-level layer built on top of HTTP.
 :::
 
-```{.java}
-Cookie c = new Cookie("username", "rahul");
-c.setMaxAge(60 * 60); // 1 hour
-response.addCookie(c);
+---
+
+## {data-menu-title="Tracking Need"}
+
+[What Breaks Without Tracking]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Without tracking, systems fail in practical use cases:
+
+- authentication continuity
+- shopping cart persistence
+- multi-step forms and workflow states
+- personalization and preferences
+- activity auditing per user session
+:::
+
+---
+
+## {data-menu-title="Cookie Definition"}
+
+[Cookie: Formal Definition]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Cookie is a small piece of state sent by server and stored by browser, later returned in matching requests.
+
+Important characteristics:
+
+- client-stored, server-defined metadata
+- scoped by domain/path rules
+- governed by expiry and security flags
+:::
+
+---
+
+## {data-menu-title="Header Model"}
+
+[HTTP Header-Level View]{.slide-title2}
+
+<hr>
+
+```{.http}
+HTTP/1.1 200 OK
+Set-Cookie: lang=en; Path=/; Max-Age=2592000; HttpOnly; Secure; SameSite=Lax
+```
+
+```{.http}
+GET /dashboard HTTP/1.1
+Cookie: lang=en; theme=dark
 ```
 
 ---
 
-## {data-menu-title="Read Cookies"}
+## {data-menu-title="Lifecycle"}
 
-[How to Read Cookies]{.slide-title2}
+[Cookie Lifecycle in Browser]{.slide-title}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 4.0
+flowchart LR
+  A[Server emits Set-Cookie] --> B[Browser stores cookie]
+  B --> C[User navigates matching URL]
+  C --> D[Browser sends Cookie header]
+  D --> E[Server interprets state]
+  E --> F[Cookie expires/deleted/overwritten]
+```
+
+---
+
+## {data-menu-title="Attributes"}
+
+[Cookie Attributes Deep Dive]{.slide-title2}
+
+<hr>
+
+| Attribute | Function | Design Note |
+|---|---|---|
+| Name/Value | core pair | keep value compact |
+| Expires/Max-Age | lifetime policy | use short life for auth-related state |
+| Domain | host matching | avoid overly broad domain when possible |
+| Path | URL prefix scope | least privilege path reduces exposure |
+| HttpOnly | blocks JS read access | strong XSS mitigation layer |
+| Secure | HTTPS-only transport | mandatory for auth cookies |
+| SameSite | cross-site sending policy | CSRF risk control |
+
+---
+
+## {data-menu-title="Domain Path"}
+
+[Domain and Path Scope Semantics]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Scope controls where browser sends cookie.
+
+Examples:
+
+- `Path=/app` -> sent to `/app/*`, not to `/admin/*`
+- restrictive scope improves security boundaries
+- broader domain scope can unintentionally share cookie across subdomains
+:::
+
+---
+
+## {data-menu-title="Create"}
+
+[Creating Cookies in Servlet]{.slide-title2}
+
+<hr>
+
+```{.java}
+Cookie preference = new Cookie("theme", "dark");
+preference.setPath("/");
+preference.setMaxAge(30 * 24 * 60 * 60);
+preference.setHttpOnly(true);
+preference.setSecure(true);
+response.addCookie(preference);
+```
+
+---
+
+## {data-menu-title="Read"}
+
+[Reading Cookies Safely]{.slide-title}
 
 <hr>
 
 ```{.java}
 Cookie[] cookies = request.getCookies();
+String theme = "light";
+
 if (cookies != null) {
   for (Cookie c : cookies) {
-    if ("username".equals(c.getName())) {
-      String user = c.getValue();
+    if ("theme".equals(c.getName())) {
+      theme = c.getValue();
+      break;
     }
   }
 }
 ```
 
-::: {.body-text-m}
-Always check `cookies != null` to avoid null pointer errors.
+::: {.body-text-s}
+Always handle `null` cookie array safely.
 :::
 
 ---
 
-## {data-menu-title="Cookie Limits"}
+## {data-menu-title="Update"}
 
-[Cookie Limitations]{.slide-title}
+[Updating Cookie Value Correctly]{.slide-title2}
+
+<hr>
+
+```{.java}
+Cookie updated = new Cookie("theme", "light");
+updated.setPath("/");
+updated.setMaxAge(30 * 24 * 60 * 60);
+response.addCookie(updated);
+```
+
+::: {.body-text-m}
+Update means overwrite with same identity (`name + path + domain`).
+:::
+
+---
+
+## {data-menu-title="Delete"}
+
+[Deleting Cookie Correctly]{.slide-title}
+
+<hr>
+
+```{.java}
+Cookie remove = new Cookie("theme", "");
+remove.setPath("/");
+remove.setMaxAge(0);
+response.addCookie(remove);
+```
+
+::: {.body-text-s}
+Wrong path/domain is the most common reason cookie deletion appears to fail.
+:::
+
+---
+
+## {data-menu-title="Types"}
+
+[Cookie Types in Practice]{.slide-title2}
+
+<hr>
+
+| Type | Lifetime | Typical Use |
+|---|---|---|
+| Session cookie | browser session only | temporary flow state |
+| Persistent cookie | until expiry | preferences, remember-me token id |
+| First-party cookie | same site | app-level continuity |
+| Third-party cookie | external embedded domains | analytics/ads context |
+
+---
+
+## {data-menu-title="Limits"}
+
+[Size and Count Constraints]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Practical limitations:
+
+- roughly 4 KB per cookie (implementation dependent)
+- limited number per domain
+- all sent cookies increase request header size
+
+Design implication: keep cookie payload minimal and tokenized.
+:::
+
+---
+
+## {data-menu-title="Security Model"}
+
+[Cookie Security Threat Model]{.slide-title2}
+
+<hr>
+
+| Threat | Risk | Mitigation |
+|---|---|---|
+| XSS | token theft via JS | `HttpOnly`, output encoding, CSP |
+| MITM on HTTP | cookie sniffing | `Secure` + HTTPS everywhere |
+| CSRF | cross-site action abuse | `SameSite`, CSRF token |
+| Client tampering | modified values | server-side validation/signing |
+
+---
+
+## {data-menu-title="SameSite"}
+
+[SameSite Policy Selection]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Policy options:
+
+- `Strict`: strongest isolation, may affect UX
+- `Lax`: practical default for many apps
+- `None`: cross-site required, must pair with `Secure`
+
+Selection depends on app navigation model and security posture.
+:::
+
+---
+
+## {data-menu-title="Sensitive Data"}
+
+[What Must Never Be in Cookies]{.slide-title2}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Limited size (around 4 KB per cookie)
-- User can delete/disable cookies
-- Not safe for passwords or sensitive data
-- Sent with requests, so too many cookies can slow traffic
+- raw password
+- OTP values
+- complete user profile JSON
+- bank or card details
+- unencrypted personally sensitive records
+
+Store opaque identifiers; resolve sensitive state on server.
 :::
 
 ---
 
-## {data-menu-title="Session Basics"}
+## {data-menu-title="RememberMe"}
 
-[What is HttpSession?]{.slide-title2}
+[Remember-Me Architecture Pattern]{.slide-title}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 4.0
+sequenceDiagram
+  participant B as Browser
+  participant A as App Server
+  participant D as Token Store
+
+  B->>A: Login with remember-me checked
+  A->>D: Persist random token hash + user id
+  A-->>B: Set rememberToken cookie
+  B->>A: Future request with token cookie
+  A->>D: Validate token and device context
+  A-->>B: Restore authenticated session
+```
+
+---
+
+## {data-menu-title="Remember Code"}
+
+[Remember-Me Code Pattern]{.slide-title2}
+
+<hr>
+
+```{.java}
+String token = tokenService.generateOpaqueToken(userId);
+Cookie remember = new Cookie("rememberToken", token);
+remember.setHttpOnly(true);
+remember.setSecure(true);
+remember.setPath("/");
+remember.setMaxAge(7 * 24 * 60 * 60);
+response.addCookie(remember);
+```
+
+::: {.body-text-s}
+Persist only token reference server-side; rotate and revoke on logout.
+:::
+
+---
+
+## {data-menu-title="Alternatives"}
+
+[All Four Session Tracking Techniques]{.slide-title}
+
+<hr>
+
+| Technique | Suitable For | Limitation |
+|---|---|---|
+| Cookies | preferences, lightweight client-side continuity | client-controlled, limited size |
+| URL rewriting | cookie-disabled fallback | session id visible in URL |
+| Hidden form fields | controlled form chains | not global navigation-safe |
+| `HttpSession` | secure server-side state | memory/distribution concerns |
+
+::: {.body-text-s}
+The four standard tracking techniques in servlet syllabus context are: Cookies, URL rewriting, Hidden form fields, and HttpSession.
+:::
+
+---
+
+## {data-menu-title="URL Rewriting"}
+
+[Cookie Disabled: URL Rewriting]{.slide-title2}
+
+<hr>
+
+```{.java}
+String encoded = response.encodeURL("dashboard.jsp");
+response.sendRedirect(encoded);
+```
+
+::: {.body-text-m}
+Container appends session id when necessary; use cautiously due to URL exposure.
+:::
+
+---
+
+## {data-menu-title="Debugging"}
+
+[Practical Debugging Workflow]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-`HttpSession` stores user data on server side.
+Debug steps:
 
-You can store attributes per user login session.
-
-Example data:
-
-- user id
-- role
-- cart items
-- temporary messages
-:::
-
-```{.java}
-HttpSession session = request.getSession();
-session.setAttribute("user", "rahul");
-```
-
----
-
-## {data-menu-title="Read Session"}
-
-[Reading Session Values]{.slide-title}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession(false);
-if (session != null) {
-  String user = (String) session.getAttribute("user");
-}
-```
-
-::: {.body-text-m}
-Use `getSession(false)` when you only want existing session, not a new one.
+1. inspect response `Set-Cookie` header
+2. verify browser storage and expiry metadata
+3. inspect request `Cookie` header on next call
+4. confirm path/domain/sameSite matching
+5. test HTTPS vs HTTP behavior for `Secure`
 :::
 
 ---
 
-## {data-menu-title="Login Example"}
+## {data-menu-title="Common Issues"}
 
-[Simple Login Tracking Flow]{.slide-title2}
-
-<hr>
-
-```{.java}
-// Login servlet (success case)
-HttpSession session = request.getSession();
-session.setAttribute("loggedInUser", email);
-response.sendRedirect("dashboard.jsp");
-```
-
-```{.jsp}
-<!-- dashboard.jsp -->
-<%
-  HttpSession s = request.getSession(false);
-  String user = (s == null) ? null : (String) s.getAttribute("loggedInUser");
-  if (user == null) {
-    response.sendRedirect("login.jsp");
-    return;
-  }
-%>
-<h2>Welcome, <%= user %></h2>
-```
-
----
-
-## {data-menu-title="Logout"}
-
-[How Logout Works]{.slide-title}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession(false);
-if (session != null) {
-  session.invalidate();
-}
-response.sendRedirect("login.jsp");
-```
-
-::: {.body-text-m}
-`invalidate()` clears all session data and marks session invalid.
-:::
-
----
-
-## {data-menu-title="Tracking Methods"}
-
-[Session Tracking Techniques]{.slide-title2}
-
-<hr>
-
-| Method | Where data stored | Good for | Caution |
-|---|---|---|---|
-| Cookies | Browser | Preferences, simple tokens | User can disable/edit |
-| HttpSession | Server | Auth state, per-user data | Memory usage on server |
-| URL Rewriting | URL query/path | Fallback when cookies disabled | URL can expose data |
-
----
-
-## {data-menu-title="Common Mistakes"}
-
-[Common Mistakes to Avoid]{.slide-title}
+[Frequent Implementation Issues]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Storing password in cookie
-- Forgetting session null checks
-- Not invalidating session on logout
-- Sending sensitive data in URL parameters
-- Assuming cookies are always enabled
+- cookie deleted with wrong scope
+- auth cookie missing `HttpOnly`/`Secure`
+- oversized cookie payload causing truncation or rejection
+- trusting unsigned client cookie data
+- assuming third-party cookie acceptance in modern browsers
 :::
 
 ---
 
-## {data-menu-title="Exam Focus"}
+## {data-menu-title="Case Study"}
 
-[AKTU Exam-Oriented Checklist]{.slide-title2}
+[Case Study: Personalized Dashboard]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Prepare these short-answer points:
+Requirement:
 
-1. Define cookie and session
-2. Difference between cookie and HttpSession
-3. How to create, read, and delete cookie
-4. How to create session and invalidate on logout
-5. Why HTTP needs session tracking
+- remember language and theme for 30 days
+- keep auth state secure
+
+Design:
+
+- cookie for language/theme preferences
+- server session/token for authentication state
+- clear both on logout
+:::
+
+---
+
+## {data-menu-title="Exam"}
+
+[Exam and Viva Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare conceptual + practical answers:
+
+1. explain cookie lifecycle and attributes
+2. compare cookie with `HttpSession`
+3. write servlet code for cookie CRUD
+4. explain `HttpOnly`, `Secure`, `SameSite`
+5. discuss remember-me secure architecture
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Hands-On Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Build preference module:
+
+- set theme cookie from settings page
+- load preference at login page and dashboard
+- add cookie deletion on reset
+- verify behavior in browser dev tools
+
+Extension challenge:
+
+- add signed cookie validation for tamper detection.
 :::
 
 ---
@@ -267,10 +534,10 @@ Prepare these short-answer points:
 <hr>
 
 ::: {.body-text-m}
-You are now ready to:
+You should now be able to:
 
-- explain session tracking in beginner-friendly language
-- write cookie and session code in servlet projects
-- build basic login-logout flows
-- answer common AKTU theory and practical questions
+- model cookie tracking with protocol-level clarity
+- implement secure cookie handling patterns
+- evaluate trade-offs among tracking approaches
+- solve cookie/session questions at MCA theory and lab level
 :::

@@ -6,7 +6,7 @@ date: "March 10, 2026"
 code-annotations: below
 ---
 
-## {#title-slide data-menu-title="Title Slide" background="#053660"}
+## {#title-slide data-menu-title="Title" background="#053660"}
 
 <div class="custom-title">
 [Lecture 26]{.baby-blue-text}
@@ -17,147 +17,317 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle3">
-Week 7 | Unit III: Servlets<br>
+Week 9 | Unit III: Servlets<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Objectives"}
 
 [Learning Objectives]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Understand when to use redirect vs forward
-- Explain browser behavior in each case
-- Pass data correctly during navigation
-- Avoid common mistakes in servlet navigation logic
+- Formally define redirect, forward, and include in servlet architecture
+- Analyze control transfer from protocol and container perspective
+- Explain the impact of each strategy on URL, request scope, and caching
+- Apply Post-Redirect-Get (PRG) pattern with reasoning, not just memorized syntax
+- Select routing strategy for real application scenarios
+- Troubleshoot routing bugs using deterministic checklist
 :::
 
 ---
 
-## {data-menu-title="Simple Analogy"}
+## {data-menu-title="Syllabus"}
 
-[Simple Real-Life Analogy]{.slide-title2}
+[Unit III Topic Traceability]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-- **Redirect**: Teacher says, "Go to Room 205 for this work." You leave and go yourself.
-- **Forward**: Teacher sends your file internally to another faculty room. You stay in the same process.
+Syllabus mapping:
 
-Same idea in web apps:
+- Redirecting requests to other resources
 
-- Redirect = browser gets a new URL and sends a new request.
-- Forward = server passes the same request internally.
+Prerequisites used:
+
+- HTTP methods and request-response model
+- Servlet lifecycle and `HttpServletRequest/HttpServletResponse`
+
+Forward dependency:
+
+- Session tracking topics in lectures 27 and 28
 :::
 
 ---
 
-## {data-menu-title="Redirect Basics"}
+## {data-menu-title="Problem"}
 
-[What is Redirect?]{.slide-title}
+[Why Request Routing is a Core Skill]{.slide-title}
 
 <hr>
 
-```{.java}
-response.sendRedirect("login.jsp");
+::: {.body-text-m}
+In enterprise applications, most defects are flow defects, not syntax defects.
+
+Typical failures caused by poor routing choices:
+
+- duplicate inserts after browser refresh
+- lost validation messages
+- stale URLs causing incorrect bookmarking
+- accidental redirect loops
+- inconsistent security flow after login/logout
+
+Routing is therefore an architectural decision, not a minor API choice.
+:::
+
+---
+
+## {data-menu-title="Architecture"}
+
+[Where Routing Happens in MVC]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 4.0
+flowchart LR
+  A[Client Request] --> B[Front Controller / Servlet]
+  B --> C[Service Layer]
+  C --> D{Outcome}
+  D -->|Validation errors| E[Forward to JSP]
+  D -->|State changed| F[Redirect to GET URL]
+  E --> G[HTML with request scope messages]
+  F --> H[Fresh GET request]
+  H --> I[Stable response]
 ```
 
-::: {.body-text-m}
-- Browser receives HTTP status (usually `302`)
-- Browser makes a **new request** to target URL
-- URL in address bar **changes**
-- Request attributes from old request are **not available**
-:::
-
 ---
 
-## {data-menu-title="Forward Basics"}
+## {data-menu-title="Definitions"}
 
-[What is RequestDispatcher Forward?]{.slide-title2}
+[Formal Definitions]{.slide-title}
 
 <hr>
 
-```{.java}
-RequestDispatcher rd = request.getRequestDispatcher("result.jsp");
-rd.forward(request, response);
-```
-
-::: {.body-text-m}
-- Happens **inside server**
-- Uses **same request and response** objects
-- URL in address bar usually **does not change**
-- Request attributes remain available
-:::
-
----
-
-## {data-menu-title="Redirect vs Forward"}
-
-[Redirect vs Forward Comparison]{.slide-title2}
-
-<hr>
-
-| Feature | Redirect | Forward |
+| Term | Definition | Initiator |
 |---|---|---|
-| Requests | 2 requests | 1 request |
-| URL change | Yes | No |
-| Request data | Lost | Preserved |
-| Use case | Post-success navigation, external pages | Internal JSP/servlet handoff |
-| Performance | Slightly slower | Faster |
+| Redirect | HTTP response instructing client to request a different URI | Server, executed by browser |
+| Forward | Internal dispatch of same request/response to another resource | Servlet container |
+| Include | Internal inclusion of another resource output into current response | Servlet container |
 
 ---
 
-## {data-menu-title="When to Redirect"}
+## {data-menu-title="Redirect Mechanics"}
 
-[When Redirect is Better]{.slide-title}
+[Redirect Internal Mechanics]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Use redirect when:
+`sendRedirect()` behavior in sequence:
 
-- You want user to see the new URL
-- You need to move user to another module/app
-- You are implementing PRG pattern (Post-Redirect-Get)
-- You want page refresh to avoid form resubmission
+1. Container sets status and `Location` header
+2. Response is committed to client
+3. Browser creates a brand-new request
+4. Target resource executes independently
+
+Consequences:
+
+- request scope does not survive
+- request method may change based on status code behavior
+- network round-trip is required
 :::
 
-```{.java}
-// After successful form save
-response.sendRedirect("success.jsp");
+---
+
+## {data-menu-title="Redirect Sequence"}
+
+[Protocol Sequence: Redirect]{.slide-title}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 3.8
+sequenceDiagram
+  participant B as Browser
+  participant S as Source Servlet
+  participant T as Target Resource
+
+  B->>S: POST /student/create
+  S-->>B: 302 Location: /student/list
+  B->>T: GET /student/list
+  T-->>B: 200 OK + HTML
 ```
 
 ---
 
-## {data-menu-title="When to Forward"}
+## {data-menu-title="Forward Mechanics"}
 
-[When Forward is Better]{.slide-title2}
+[Forward Internal Mechanics]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Use forward when:
+`RequestDispatcher.forward()` behavior:
 
-- You want to show JSP with server-side processed data
-- You need request attributes in next resource
-- You are moving from controller servlet to view JSP
+1. Current servlet passes control internally
+2. Same request/response objects are reused
+3. Target resource receives all request attributes
+4. Response to browser is generated once
+
+Consequences:
+
+- better performance than redirect in most cases
+- URL generally stays at original route
+- ideal for controller-to-view rendering
 :::
 
-```{.java}
-request.setAttribute("studentName", "Aditi");
-request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+---
+
+## {data-menu-title="Forward Sequence"}
+
+[Protocol Sequence: Forward]{.slide-title}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 3.8
+sequenceDiagram
+  participant B as Browser
+  participant C as Controller Servlet
+  participant V as JSP View
+
+  B->>C: POST /student/create
+  C->>V: forward(request, response)
+  V-->>B: 200 OK + HTML response
 ```
 
 ---
 
-## {data-menu-title="Common Flow"}
+## {data-menu-title="Include Mechanics"}
 
-[Common AKTU Exam Flow Pattern]{.slide-title}
+[Include and Response Composition]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+`include()` is for compositional rendering, not flow termination.
+
+Use cases:
+
+- common header/footer fragments
+- audit snippets or banners
+- template blocks in legacy JSP apps
+
+Important behavior:
+
+- control returns to caller after include
+- included resource should not commit independent final response
+:::
+
+---
+
+## {data-menu-title="API"}
+
+[Essential API Usage]{.slide-title}
+
+<hr>
+
+```{.java}
+// Redirect
+response.sendRedirect(request.getContextPath() + "/student/list");
+
+// Forward
+request.getRequestDispatcher("/views/student-form.jsp").forward(request, response);
+
+// Include
+request.getRequestDispatcher("/views/common/header.jsp").include(request, response);
+```
+
+---
+
+## {data-menu-title="Comparison"}
+
+[Decision Matrix]{.slide-title2}
+
+<hr>
+
+| Criterion | Redirect | Forward | Include |
+|---|---|---|---|
+| Browser performs second request | Yes | No | No |
+| URL updates | Yes | No | No |
+| Request attributes available | No | Yes | Yes |
+| Cross-application/external target | Yes | No | No |
+| Suitable for Post-Redirect-Get (PRG) | Yes | No | No |
+| Suitable for templating | No | No | Yes |
+
+---
+
+## {data-menu-title="Status Codes"}
+
+[Redirect Status Codes and Semantics]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Relevant HTTP status semantics:
+
+- `301`: permanent move, cacheable by clients/proxies
+- `302`: temporary redirect (commonly used by `sendRedirect`)
+- `303`: explicit instruction to use GET for follow-up
+- `307/308`: method-preserving redirects
+
+For MCA-level understanding, method preservation and cache behavior are critical distinctions.
+:::
+
+---
+
+## {data-menu-title="Post-Redirect-Get"}
+
+[Why Post-Redirect-Get (PRG) Solves Duplicate Submission]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Without Post-Redirect-Get (PRG):
+
+- POST response page is tied to mutation request
+- refresh triggers browser re-submission prompt
+- accidental duplicate transaction risk
+
+With Post-Redirect-Get (PRG):
+
+- mutation handled in POST
+- user lands on idempotent GET page
+- refresh remains safe
+:::
+
+---
+
+## {data-menu-title="Post-Redirect-Get Flow"}
+
+[Post-Redirect-Get (PRG) Flow Diagram]{.slide-title}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 3.9
+flowchart LR
+  A[POST /save] --> B[Server validates and persists]
+  B --> C[302 redirect to /list]
+  C --> D[GET /list]
+  D --> E[Render stable list view]
+```
+
+---
+
+## {data-menu-title="Post-Redirect-Get Code"}
+
+[Post-Redirect-Get (PRG) Implementation Pattern]{.slide-title2}
 
 <hr>
 
@@ -165,86 +335,216 @@ request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
 
-  String email = request.getParameter("email");
-  String password = request.getParameter("password");
-
-  if ("student@gcet.ac.in".equals(email) && "1234".equals(password)) {
-    request.getSession().setAttribute("userEmail", email);
-    response.sendRedirect("home.jsp");
-  } else {
-    request.setAttribute("error", "Invalid credentials");
-    request.getRequestDispatcher("login.jsp").forward(request, response);
+  ValidationResult result = validator.validate(request);
+  if (!result.isValid()) {
+    request.setAttribute("errors", result.getErrors());
+    request.getRequestDispatcher("/views/student-form.jsp").forward(request, response);
+    return;
   }
+
+  studentService.create(result.toStudent());
+  response.sendRedirect(request.getContextPath() + "/student/list");
 }
 ```
 
 ---
 
-## {data-menu-title="Passing Data"}
+## {data-menu-title="Scope Rules"}
 
-[How to Pass Data Correctly]{.slide-title2}
+[Scope and Data Propagation Rules]{.slide-title}
 
 <hr>
 
-::: {.body-text-m}
-For **forward**:
+| Scope | Survives Forward | Survives Redirect | Typical Use |
+|---|---|---|---|
+| Request scope | Yes | No | validation errors, form inputs |
+| Session scope | Yes | Yes | login state, flash messages |
+| Application scope | Yes | Yes | shared config references |
 
-- use `request.setAttribute(...)`
-- read with `${attributeName}` in JSP
+---
 
-For **redirect**:
+## {data-menu-title="Flash"}
 
-- use query string (`success.jsp?msg=ok`) for tiny data
-- or use session for temporary data
-:::
+[Flash Message Pattern]{.slide-title2}
+
+<hr>
 
 ```{.java}
-// Redirect with query parameter
-response.sendRedirect("success.jsp?status=ok");
+HttpSession session = request.getSession();
+session.setAttribute("flashSuccess", "Student created successfully");
+response.sendRedirect(request.getContextPath() + "/student/list");
+```
+
+```{.jsp}
+<c:if test="${not empty sessionScope.flashSuccess}">
+  <div class="alert alert-success">${sessionScope.flashSuccess}</div>
+</c:if>
+<c:remove var="flashSuccess" scope="session"/>
 ```
 
 ---
 
-## {data-menu-title="Common Mistakes"}
+## {data-menu-title="Path Strategy"}
 
-[Common Mistakes (Very Important)]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Calling `forward()` after response is already committed
-- Expecting request attributes after redirect
-- Writing output, then trying redirect/forward
-- Using relative paths incorrectly
-- Forgetting `return;` after redirect in complex methods
-:::
-
----
-
-## {data-menu-title="Mini Practice"}
-
-[Mini Practice Question]{.slide-title2}
+[Path Resolution Strategy]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Scenario:
+Path mistakes are among the top causes of navigation failures.
 
-1. Student submits registration form.
-2. If data valid, show confirmation page and new URL should appear.
-3. If data invalid, show same form with error message.
+Best practice:
 
-Think:
-
-- Which case uses redirect?
-- Which case uses forward?
+- use context-relative paths for redirects with `getContextPath()`
+- use app-internal absolute dispatcher paths like `/views/x.jsp`
+- avoid brittle hard-coded deployment paths
 :::
 
-::: {.fragment .body-text-m}
-Expected approach:
+---
 
-- Valid: `sendRedirect("confirmation.jsp")`
-- Invalid: `forward(request, response)` to form JSP with error attribute
+## {data-menu-title="Case 1"}
+
+[Case Study: Login Flow]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Design goal:
+
+- wrong credentials -> display error on same login page
+- correct credentials -> move to dashboard safely
+
+Correct strategy:
+
+- failure: `forward` with `request` error attribute
+- success: `redirect` to dashboard GET endpoint
+:::
+
+---
+
+## {data-menu-title="Case 2"}
+
+[Case Study: Update Profile]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Requirement: after update, user should bookmark resulting profile URL.
+
+Routing choice:
+
+- POST `/profile/update` performs update
+- redirect to GET `/profile/{id}`
+
+This ensures canonical URL and refresh-safe behavior.
+:::
+
+---
+
+## {data-menu-title="Case 3"}
+
+[Case Study: Shared Layout]{.slide-title2}
+
+<hr>
+
+```{.java}
+request.getRequestDispatcher("/views/common/header.jsp").include(request, response);
+request.getRequestDispatcher("/views/dashboard-body.jsp").include(request, response);
+request.getRequestDispatcher("/views/common/footer.jsp").include(request, response);
+```
+
+::: {.body-text-m}
+Demonstrates include-based composition in traditional JSP rendering.
+:::
+
+---
+
+## {data-menu-title="AntiPatterns"}
+
+[Common Anti-Patterns]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- forwarding after response commit
+- redirecting and then still writing response body
+- assuming request attributes survive redirect
+- implementing state-changing actions through GET
+- redirect loops due to missing route guards
+:::
+
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Investigation order:
+
+1. confirm actual status code and headers
+2. verify final URL in browser network tab
+3. inspect request attributes at target
+4. validate path/context correctness
+5. check for double-dispatch or missing return
+
+This approach reduces random trial-and-error debugging.
+:::
+
+---
+
+## {data-menu-title="Security"}
+
+[Routing and Security Interactions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Security-sensitive observations:
+
+- never include confidential tokens in redirect query strings
+- guard post-login redirects against open redirect attacks
+- after logout, redirect to public page and invalidate session
+- ensure auth checks on redirected target resources
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam-Oriented Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare detailed answers for:
+
+1. distinguish redirect and forward with request lifecycle
+2. explain Post-Redirect-Get (PRG) with sequence flow
+3. discuss request/session scope behavior in navigation
+4. explain include usage with example
+5. list routing anti-patterns and fixes
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Hands-On Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Implement `StudentRegistrationServlet`:
+
+- invalid form -> forward with error map
+- valid form -> persist and redirect to list
+- show one-time flash message on list
+- add safe default redirect target after auth
+
+This single exercise integrates all lecture concepts.
 :::
 
 ---
@@ -256,10 +556,10 @@ Expected approach:
 <hr>
 
 ::: {.body-text-m}
-You should now be confident about:
+After this lecture, you should be able to:
 
-- redirect vs forward differences
-- selecting correct navigation type in servlet controllers
-- preserving/passing data without confusion
-- avoiding frequent beginner mistakes asked in AKTU exams
+- reason about routing at protocol and container level
+- apply redirect/forward/include with correctness
+- design Post-Redirect-Get (PRG)-based mutation workflows
+- debug and secure servlet navigation in production-like scenarios
 :::

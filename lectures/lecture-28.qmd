@@ -6,7 +6,7 @@ date: "March 24, 2026"
 code-annotations: below
 ---
 
-## {#title-slide data-menu-title="Title Slide" background="#053660"}
+## {#title-slide data-menu-title="Title" background="#053660"}
 
 <div class="custom-title">
 [Lecture 28]{.baby-blue-text}
@@ -24,144 +24,317 @@ Week 9 | Unit III: Servlets<br>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Objectives"}
 
 [Learning Objectives]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Explain why `HttpSession` is required in servlet applications
-- Create, read, update, and invalidate session attributes
-- Distinguish `getSession()` and `getSession(false)` behavior
-- Configure timeout and identify session expiration behavior
-- Implement login-protected routes using session checks
-- Apply safe practices for session handling in exams and labs
+- Explain `HttpSession` architecture and lifecycle in servlet container
+- Use session APIs correctly with strong null-safety patterns
+- Implement authentication, authorization, timeout, and logout flows
+- Analyze session security risks: fixation, hijacking, stale sessions
+- Apply scalable session design principles for distributed deployments
+- Build exam-quality conceptual and code-level answers
 :::
 
 ---
 
-## {data-menu-title="Why HttpSession"}
+## {data-menu-title="Syllabus"}
 
-[Why HttpSession?]{.slide-title2}
+[Unit III Topic Traceability]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-HTTP is stateless, so server forgets user identity between requests.
+Primary syllabus mapping:
 
-`HttpSession` provides per-user server-side state to track:
+- Session tracking with `HttpSession`
 
-- login status
-- user profile info
-- cart or temporary workflow data
+Dependency relationship:
+
+- uses cookie concepts from lecture 27
+- supports JSP/MVC control flow in lecture 29 onward
 :::
 
 ---
 
-## {data-menu-title="Create Session"}
+## {data-menu-title="Need"}
 
-[Creating and Using Session]{.slide-title}
+[Why HttpSession is Needed]{.slide-title}
 
 <hr>
 
-```{.java code-line-numbers="|1|2|3"}
-HttpSession session = request.getSession();
-session.setAttribute("loggedInUser", email);
-session.setAttribute("role", "student");
-```
+::: {.body-text-m}
+Cookie-only tracking is insufficient for secure, mutable, server-controlled state.
 
-::: {.body-text-s}
-`getSession()` returns existing session or creates a new one if missing.
+`HttpSession` provides:
+
+- server ownership of user state
+- reduced client tampering risk
+- controlled lifecycle and invalidation
+- centralized management for authenticated flows
 :::
 
 ---
 
-## {data-menu-title="Read Session"}
+## {data-menu-title="Architecture"}
 
-[Reading Session Safely]{.slide-title2}
-
-<hr>
-
-```{.java code-line-numbers="|1|2|3-5|7"}
-HttpSession session = request.getSession(false);
-
-if (session != null) {
-  String user = (String) session.getAttribute("loggedInUser");
-  String role = (String) session.getAttribute("role");
-}
-
-// getSession(false) avoids creating a new empty session
-```
-
----
-
-## {data-menu-title="Session Lifecycle"}
-
-[Session Lifecycle]{.slide-title}
+[Session Architecture in Container]{.slide-title2}
 
 <hr>
 
 ```{mermaid}
-%%| fig-height: 3.8
+%%| fig-height: 4.0
 flowchart LR
-  A[First request] --> B[getSession creates session]
-  B --> C[Set attributes]
-  C --> D[Subsequent requests use same session id]
-  D --> E[Timeout or invalidate]
-  E --> F[Session destroyed]
+  A[Browser Request] --> B[Servlet Container]
+  B --> C[Session ID Resolver]
+  C --> D[Session Store]
+  D --> E[HttpSession object]
+  E --> F[Servlet/JSP Business Logic]
 ```
 
-::: {.body-text-s}
-Session survives across requests until timeout or explicit invalidation.
+---
+
+## {data-menu-title="Identity"}
+
+[How Session Identity Works]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Session identity is maintained by a session id token, commonly `JSESSIONID`.
+
+Transport path:
+
+- primarily cookie
+- optionally URL rewriting for fallback
+
+The token points to server-side state; business data is not stored in token itself.
 :::
 
 ---
 
-## {data-menu-title="Login Flow"}
+## {data-menu-title="Lifecycle"}
 
-[Login and Protected Page Flow]{.slide-title2}
+[Session Lifecycle States]{.slide-title2}
 
 <hr>
 
-```{.java code-line-numbers="|1-5|7|9"}
-// In login servlet after credential validation
-HttpSession session = request.getSession();
-session.setAttribute("loggedInUser", email);
-response.sendRedirect("dashboard.jsp");
+```{mermaid}
+%%| fig-height: 4.0
+stateDiagram-v2
+  [*] --> Created: request.getSession()/getSession(true)
+  Created --> Active: container returns session id
+  Active --> Active: subsequent valid requests update last accessed time
+  Active --> Expired: max inactive interval exceeded
+  Active --> Invalidated: invalidate() or security reset
+  Expired --> [*]
+  Invalidated --> [*]
+```
 
-// In protected servlet/JSP
-HttpSession s = request.getSession(false);
-if (s == null || s.getAttribute("loggedInUser") == null) {
-  response.sendRedirect("login.jsp");
-}
+::: {.body-text-s}
+`HttpSession` is created by the container, remains active while reused by valid requests, and is destroyed either by timeout or explicit invalidation.
+:::
+
+---
+
+## {data-menu-title="Core API"}
+
+[Core HttpSession API Map]{.slide-title}
+
+<hr>
+
+| API | Semantics | Typical Use |
+|---|---|---|
+| `getSession()` | fetch or create | post-login creation |
+| `getSession(false)` | fetch only if exists | protected page checks |
+| `setAttribute` | add/update key | user id, role |
+| `getAttribute` | read key | auth/authorization checks |
+| `removeAttribute` | remove key | transient cleanup |
+| `invalidate` | destroy session | logout and security reset |
+| `setMaxInactiveInterval` | timeout in seconds | inactivity policy |
+
+---
+
+## {data-menu-title="Create"}
+
+[Create Session After Authentication]{.slide-title2}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession(true);
+session.setAttribute("userId", user.getId());
+session.setAttribute("role", user.getRole());
+session.setAttribute("loginAt", java.time.Instant.now());
 ```
 
 ---
 
-## {data-menu-title="Logout"}
+## {data-menu-title="Read"}
 
-[Logout and Session Invalidate]{.slide-title}
+[Read Session with Null Safety]{.slide-title}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession(false);
+if (session == null) {
+  response.sendRedirect(request.getContextPath() + "/login.jsp");
+  return;
+}
+Long userId = (Long) session.getAttribute("userId");
+```
+
+---
+
+## {data-menu-title="Update"}
+
+[Update and Remove Attributes]{.slide-title2}
 
 <hr>
 
 ```{.java}
 HttpSession session = request.getSession(false);
 if (session != null) {
-  session.invalidate();
+  session.setAttribute("lastAction", "PROFILE_UPDATED");
+  session.removeAttribute("temporaryOtp");
 }
-response.sendRedirect("login.jsp");
+```
+
+::: {.body-text-s}
+Remove transient values as soon as they are no longer required.
+:::
+
+---
+
+## {data-menu-title="Invalidate"}
+
+[Session Invalidation Semantics]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+`invalidate()` should be treated as security boundary reset.
+
+Use cases:
+
+- explicit logout
+- password change
+- role changes requiring re-auth
+- suspicious activity detection
+:::
+
+```{.java}
+HttpSession session = request.getSession(false);
+if (session != null) session.invalidate();
+```
+
+---
+
+## {data-menu-title="Auth Flow"}
+
+[Authentication Flow with HttpSession]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 4.0
+sequenceDiagram
+  participant U as User
+  participant L as LoginServlet
+  participant P as ProtectedServlet
+
+  U->>L: POST /login credentials
+  L-->>U: create session + redirect /dashboard
+  U->>P: GET /dashboard with session id
+  P-->>U: authorize and render response
+```
+
+---
+
+## {data-menu-title="Protected Route"}
+
+[Protected Endpoint Guard Pattern]{.slide-title}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession(false);
+boolean loggedIn = session != null && session.getAttribute("userId") != null;
+
+if (!loggedIn) {
+  response.sendRedirect(request.getContextPath() + "/login.jsp");
+  return;
+}
+```
+
+---
+
+## {data-menu-title="Authorization"}
+
+[Role-Based Authorization Check]{.slide-title2}
+
+<hr>
+
+```{.java}
+String role = (String) session.getAttribute("role");
+if (!"ADMIN".equals(role)) {
+  response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
+  return;
+}
 ```
 
 ::: {.body-text-m}
-`invalidate()` clears all session attributes and ends that user session.
+Authentication verifies identity; authorization enforces privilege.
 :::
+
+---
+
+## {data-menu-title="Filter Strategy"}
+
+[Why Use Servlet Filters for Session Checks]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Centralizing auth checks in filter avoids repeated boilerplate across servlets.
+
+Benefits:
+
+- consistency
+- easier audits
+- lower maintenance cost
+:::
+
+---
+
+## {data-menu-title="Filter Code"}
+
+[Auth Filter Example]{.slide-title2}
+
+<hr>
+
+```{.java}
+HttpServletRequest req = (HttpServletRequest) request;
+HttpServletResponse res = (HttpServletResponse) response;
+HttpSession session = req.getSession(false);
+
+boolean loggedIn = session != null && session.getAttribute("userId") != null;
+if (!loggedIn) {
+  res.sendRedirect(req.getContextPath() + "/login.jsp");
+  return;
+}
+chain.doFilter(request, response);
+```
 
 ---
 
 ## {data-menu-title="Timeout"}
 
-[Session Timeout Management]{.slide-title2}
+[Session Timeout Configuration]{.slide-title}
 
 <hr>
 
@@ -170,65 +343,193 @@ HttpSession session = request.getSession();
 session.setMaxInactiveInterval(20 * 60); // 20 minutes
 ```
 
-::: {.body-text-m}
-- Timeout is based on inactivity
-- After timeout, session attributes are no longer available
-- User should be redirected to login on expired sessions
+```{.xml}
+<session-config>
+  <session-timeout>20</session-timeout>
+</session-config>
+```
+
+---
+
+## {data-menu-title="Expiration UX"}
+
+[Graceful Session Expiration Handling]{.slide-title2}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession(false);
+if (session == null) {
+  request.setAttribute("msg", "Session expired. Please login again.");
+  request.getRequestDispatcher("/login.jsp").forward(request, response);
+  return;
+}
+```
+
+::: {.body-text-s}
+Better UX reduces user confusion and support tickets.
 :::
 
 ---
 
-## {data-menu-title="URL Rewriting"}
+## {data-menu-title="Fixation"}
 
-[Fallback: URL Rewriting]{.slide-title}
+[Session Fixation Attack and Mitigation]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-When cookies are disabled, session tracking can use URL rewriting.
-:::
+Fixation risk: attacker forces victim to use known session id.
 
-```{.java}
-String url = response.encodeURL("dashboard.jsp");
-response.sendRedirect(url);
-```
+Mitigation at login:
 
-::: {.body-text-s}
-`encodeURL()` appends session id when required.
+1. invalidate pre-auth session
+2. create fresh session id
+3. bind authenticated identity to new session
 :::
 
 ---
 
-## {data-menu-title="Common Mistakes"}
+## {data-menu-title="Fixation Code"}
 
-[Common Mistakes to Avoid]{.slide-title2}
+[Fixation Mitigation Code]{.slide-title2}
+
+<hr>
+
+```{.java}
+HttpSession old = request.getSession(false);
+if (old != null) {
+  old.invalidate();
+}
+HttpSession fresh = request.getSession(true);
+fresh.setAttribute("userId", user.getId());
+```
+
+---
+
+## {data-menu-title="Hijacking"}
+
+[Session Hijacking Risk Controls]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Calling `getSession()` in every check (creates unnecessary sessions)
-- Forgetting null checks when using `getSession(false)`
-- Storing sensitive info like passwords in session attributes
-- Not invalidating session during logout
-- Ignoring timeout behavior in protected routes
+- enforce HTTPS end-to-end
+- set secure cookie flags for session id
+- short inactivity timeout for sensitive applications
+- logout invalidates server session and client token
+- monitor suspicious IP/device/session anomalies
 :::
 
 ---
 
-## {data-menu-title="Exam Focus"}
+## {data-menu-title="Storage Policy"}
 
-[AKTU Exam-Oriented Checklist]{.slide-title}
+[What to Store in Session]{.slide-title2}
+
+<hr>
+
+| Store | Avoid |
+|---|---|
+| user id and role | password or secrets |
+| compact workflow state | large object graphs |
+| one-time flash messages | heavy report data |
+| authorization cache keys | permanent records |
+
+---
+
+## {data-menu-title="Cookie Link"}
+
+[Relationship with Cookie Layer]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Prepare these key points:
+`HttpSession` uses cookie primarily as transport for session id.
 
-1. Define session and `HttpSession`
-2. Explain `getSession()` vs `getSession(false)`
-3. Write login and logout code using session
-4. Explain timeout and invalidation
-5. Mention URL rewriting as fallback tracking method
+If cookie unavailable:
+
+- container can rewrite URL using `encodeURL`
+- security and URL hygiene concerns increase
+:::
+
+```{.java}
+String safeUrl = response.encodeURL("dashboard.jsp");
+response.sendRedirect(safeUrl);
+```
+
+---
+
+## {data-menu-title="Debug"}
+
+[Session Debugging Checklist]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Check sequence:
+
+1. session created at login success?
+2. session id present in next request?
+3. auth filter/guard ordering correct?
+4. timeout policy too aggressive?
+5. logout invalidation functioning?
+:::
+
+---
+
+## {data-menu-title="Common Issues"}
+
+[Frequent Implementation Errors]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- using `getSession()` in guards and creating empty sessions
+- missing null checks with `getSession(false)`
+- forgetting authorization after authentication
+- keeping stale sessions active after role changes
+- storing oversized data causing memory pressure
+:::
+
+---
+
+## {data-menu-title="Exam"}
+
+[Exam and Viva Questions]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Prepare long-answer quality responses:
+
+1. explain `HttpSession` lifecycle with diagram
+2. compare `getSession()` and `getSession(false)`
+3. design auth + authorization + logout flow
+4. discuss session fixation and mitigation
+5. explain scaling concerns for session-based apps
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Hands-On Lab Task]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Implement secure module:
+
+- login servlet + role attribute
+- auth filter for protected routes
+- admin authorization check
+- configurable timeout behavior
+- logout and forced re-login after role change
+
+Stretch objective:
+
+- simulate fixation mitigation and verify session id rotation.
 :::
 
 ---
@@ -242,8 +543,8 @@ Prepare these key points:
 ::: {.body-text-m}
 You can now:
 
-- build simple login tracking with sessions
-- protect pages with session checks
-- manage logout and timeout cleanly
-- answer common servlet session questions in theory and practical exams
+- architect session management beyond basic syntax
+- implement robust and secure servlet session flows
+- reason about lifecycle, security, and scaling trade-offs
+- answer Unit III concepts at MCA standard depth
 :::
