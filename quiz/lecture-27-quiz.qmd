@@ -1,0 +1,56 @@
+---
+title: "Lecture 27 Quiz: Cookies & Session Tracking"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-27.qmd) | [Week 9 Content](/content/week-09.qmd) | [Lab 7](/labs/lab-07.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 27 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Stateful", "B. Stateless", "C. Persistent", "D. Transactional"]
+question = "Question 1: HTTP protocol behavior requires session tracking mainly because HTTP is what?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Server-side binary object only", "B. Browser-stored key-value data sent with later requests", "C. SQL row created automatically per user", "D. A JSP directive"]
+question = "Question 2: Which description best matches a cookie?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Passwords in plain text", "B. Large media files", "C. Small preferences or identifiers", "D. Java class bytecode"]
+question = "Question 3: Cookies are best suited for storing which kind of data?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `request.getSession()`", "B. `response.addCookie()`", "C. `session.invalidate()`", "D. `request.getCookies()`"]
+question = "Question 4: Which call is used to obtain all cookies sent by the browser in the current request?"
+answer = 4
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It deletes the servlet class", "B. It clears session data and ends the current login session", "C. It converts session to cookie", "D. It forwards to login.jsp automatically"]
+question = "Question 5: What is the key effect of calling `session.invalidate()` during logout?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

@@ -1,5 +1,5 @@
 ---
-title: "Lecture 19: ES6+ Features"
+title: "Lecture 19: Block Scope Variables (let, const)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 25, 2026"

@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 3: HTML Basics & Structure"
+title: "Lecture 3: HTML Introduction & Basic Structure, HTML Tags"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "January 28, 2026"

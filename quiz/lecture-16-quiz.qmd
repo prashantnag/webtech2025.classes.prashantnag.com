@@ -1,11 +1,11 @@
----
+﻿---
 title: "Lecture 16 Quiz: Arrow Functions & Callbacks"
 jupyter: julia-1.12
 ---
 
 ::: {.callout-note}
 Review before quiz:
-[Lectures](/lectures/lecture-16.qmd) | [Week 4 Content](/content/week-04.qmd) | [Lab 4](/labs/lab-04.qmd) | [Assignment 2](/assignment/02-assignment.qmd)
+[Lectures](/lectures/lecture-16.qmd) | [Week 4 Content](/content/week-04.qmd) | [Lab 4](/labs/lab-04.qmd) | [Home Assignment 2](/assignment/02-assignment.qmd)
 :::
 
 ```{julia cache=true}
@@ -54,3 +54,4 @@ question = "Question 5: Which is a good practice when using callbacks?"
 answer = 3
 radioq(choices, answer; label=question, keep_order=true)
 ```
+

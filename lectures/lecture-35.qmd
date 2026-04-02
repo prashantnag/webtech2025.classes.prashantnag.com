@@ -1,0 +1,357 @@
+---
+title: "Lecture 35: Spring IoC, Bean Scopes & Life Cycle Callbacks"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 23, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 35]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Spring IoC, Bean Scopes & Life Cycle Callbacks]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 9 | Unit IV: Spring Framework<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain IoC container responsibilities in depth
+- List and compare all five Spring bean scopes
+- Describe the complete Spring bean lifecycle
+- Use `@PostConstruct` and `@PreDestroy` callbacks
+- Use `InitializingBean`, `DisposableBean` interfaces
+- Define custom `init-method` and `destroy-method` in configuration
+:::
+
+---
+
+## {data-menu-title="IoC Container Recap"}
+
+[IoC Container Responsibilities]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+The Spring IoC container does four things:
+:::
+
+::: {.incremental .body-text-m}
+1. **Reads** configuration (XML / annotations / Java config)
+2. **Creates** bean instances at the right time
+3. **Wires** dependencies between beans
+4. **Manages** lifecycle from creation to destruction
+:::
+
+```{mermaid}
+%%| fig-height: 2.5
+flowchart LR
+  A[Config Metadata] --> B[IoC Container]
+  B --> C[Instantiate]
+  C --> D[Inject Dependencies]
+  D --> E[Init Callbacks]
+  E --> F[Bean Ready for Use]
+  F --> G[Destroy Callbacks]
+```
+
+---
+
+## {data-menu-title="Bean Scopes Overview"}
+
+[The Five Bean Scopes]{.slide-title}
+
+<hr>
+
+| Scope | Instances | Lifetime |
+|---|---|---|
+| `singleton` | One per container | Until container shuts down |
+| `prototype` | New per `getBean()` | Caller managed |
+| `request` | One per HTTP request | Until response sent |
+| `session` | One per HTTP session | Until session expires |
+| `application` | One per `ServletContext` | Until app stops |
+
+::: {.body-text-s}
+`request`, `session`, `application` scopes are only available in a web-aware Spring context.
+:::
+
+---
+
+## {data-menu-title="Singleton Scope"}
+
+[Singleton Scope (Default)]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4-6"}
+@Component         // #<1>
+// @Scope("singleton") — this is the default; you can omit it
+public class AppConfig {
+  public AppConfig() {
+    System.out.println("AppConfig created"); // #<2>
+  }
+}
+```
+1. `singleton` is the default — no annotation needed
+2. This constructor runs exactly once for the container's lifetime
+
+::: {.callout-note}
+Singleton here means **one per Spring container**, NOT the classic GoF Singleton design pattern.
+:::
+
+---
+
+## {data-menu-title="Prototype Scope"}
+
+[Prototype Scope]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4-8"}
+@Component
+@Scope("prototype")                        // #<1>
+public class ReportGenerator {
+  public ReportGenerator() {
+    System.out.println("New instance: " + this.hashCode());
+  }
+}
+
+// Each call returns a NEW instance
+ReportGenerator r1 = ctx.getBean(ReportGenerator.class);
+ReportGenerator r2 = ctx.getBean(ReportGenerator.class); // #<2>
+// r1 != r2
+```
+1. Each `getBean()` call creates and returns a new instance
+2. Spring does NOT call `destroy()` on prototype beans — caller is responsible
+
+---
+
+## {data-menu-title="Request and Session Scope"}
+
+[Request & Session Scopes]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4-5"}
+@Component
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS) // #<1>
+public class RequestContext {
+  private String requestId = UUID.randomUUID().toString();
+}
+
+@Component
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS) // #<2>
+public class ShoppingCart {
+  private List<Item> items = new ArrayList<>();
+}
+```
+1. New bean created for every HTTP request
+2. Bean persists for the duration of the HTTP session
+
+---
+
+## {data-menu-title="Bean Lifecycle"}
+
+[Bean Lifecycle Step by Step]{.slide-title}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 4.5
+flowchart TD
+  A[Load Class] --> B[Instantiate Bean]
+  B --> C[Inject Dependencies]
+  C --> D[BeanNameAware / BeanFactoryAware callbacks]
+  D --> E[BeanPostProcessor before]
+  E --> F[@PostConstruct / afterPropertiesSet / init-method]
+  F --> G[BeanPostProcessor after]
+  G --> H[Bean Ready for Use]
+  H --> I[Container Shutdown]
+  I --> J[@PreDestroy / destroy / destroy-method]
+```
+
+---
+
+## {data-menu-title="PostConstruct PreDestroy"}
+
+[@PostConstruct & @PreDestroy]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-5|7-10"}
+@Component
+public class DatabaseConnectionPool {
+
+  @PostConstruct               // #<1>
+  public void init() {
+    System.out.println("Pool initialised — connections opened");
+  }
+
+  @PreDestroy                  // #<2>
+  public void cleanup() {
+    System.out.println("Pool destroyed — connections closed");
+  }
+}
+```
+1. Runs after dependency injection — ideal for opening connections and setup
+2. Runs just before bean is removed from context — ideal for cleanup
+
+::: {.body-text-s}
+Requires `jakarta.annotation-api` (javax.annotation in older Spring).
+:::
+
+---
+
+## {data-menu-title="InitializingBean DisposableBean"}
+
+[InitializingBean & DisposableBean]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-5|7-9"}
+@Component
+public class CacheManager implements InitializingBean, DisposableBean {
+
+  @Override
+  public void afterPropertiesSet() throws Exception {   // #<1>
+    System.out.println("Cache warming up...");
+  }
+
+  @Override
+  public void destroy() throws Exception {              // #<2>
+    System.out.println("Cache cleared.");
+  }
+}
+```
+1. Spring calls this after all properties are set — equivalent to `@PostConstruct`
+2. Spring calls this on context close — equivalent to `@PreDestroy`
+
+::: {.body-text-s}
+`@PostConstruct`/`@PreDestroy` are preferred — they avoid Spring API coupling.
+:::
+
+---
+
+## {data-menu-title="init-method destroy-method"}
+
+[Custom init-method & destroy-method]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|3-4"}
+// Java Config
+@Bean(initMethod = "onStart", destroyMethod = "onStop") // #<1>
+public SearchIndexer searchIndexer() {
+  return new SearchIndexer();
+}
+
+// SearchIndexer class (no Spring annotation needed)
+public class SearchIndexer {
+  public void onStart()  { System.out.println("Index built");   }
+  public void onStop()   { System.out.println("Index flushed"); }
+}
+```
+1. Specify method names in `@Bean` — useful for third-party classes you cannot annotate
+
+---
+
+## {data-menu-title="Lifecycle Priority"}
+
+[Callback Execution Order]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+When multiple callback mechanisms are present, Spring calls them in this order:
+:::
+
+::: {.incremental .body-text-m}
+**Initialisation:**
+1. `@PostConstruct` annotated method
+2. `afterPropertiesSet()` from `InitializingBean`
+3. `init-method` defined in `@Bean`
+
+**Destruction:**
+1. `@PreDestroy` annotated method
+2. `destroy()` from `DisposableBean`
+3. `destroy-method` defined in `@Bean`
+:::
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Using singleton scope for stateful objects (e.g., user session data)
+- Expecting Spring to destroy prototype beans — it does not
+- Placing heavy IO operations in constructor instead of `@PostConstruct`
+- Forgetting `@Scope(proxyMode = TARGET_CLASS)` for request/session scopes
+- Not closing `ApplicationContext` — `@PreDestroy` callbacks won't fire
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[AKTU Exam-Oriented Checklist]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare these high-probability questions:
+
+1. Explain Inversion of Control with a diagram
+2. List and compare all five bean scopes with examples
+3. Draw and explain the Spring bean lifecycle
+4. Explain `@PostConstruct` and `@PreDestroy` with code
+5. Difference between `InitializingBean` and `@PostConstruct`
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+You now understand:
+
+- IoC container managing the full bean lifecycle
+- Five scopes and when to choose each
+- Complete lifecycle: instantiation → injection → init → use → destroy
+- Three ways to hook into lifecycle: annotations, interfaces, config
+- Common pitfalls with scope and lifecycle callbacks
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 36 - AOP, Autowiring, Annotations & Bean Configuration Styles
+</div>
+</div>

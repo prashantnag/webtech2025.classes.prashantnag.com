@@ -1,0 +1,56 @@
+---
+title: "Lecture 39 Quiz: RESTful Web Services - Controllers, Request Mapping, CRUD APIs"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-39.qmd) | [Week 12 Content](/content/week-12.qmd) | [Lab 9](/labs/lab-09.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 39 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It stores server session in browser cookies", "B. It uses stateless communication where each request is self-contained", "C. It requires SOAP envelopes for every endpoint", "D. It only supports XML and not JSON"]
+question = "Question 1: Which statement correctly describes REST API communication?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `GET /api/users/{id}`", "B. `POST /api/users`", "C. `PUT /api/users/{id}`", "D. `DELETE /api/users/{id}`"]
+question = "Question 2: Which endpoint-method combination is best for creating a new user resource?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `200 OK`", "B. `201 Created`", "C. `204 No Content`", "D. `409 Conflict`"]
+question = "Question 3: What is the most appropriate status code for successful resource creation via POST?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@PathVariable`", "B. `@RequestParam`", "C. `@RequestBody`", "D. `@ModelAttribute`"]
+question = "Question 4: Which annotation is generally used for optional filtering and pagination values in query strings (e.g., `?page=1&size=10`)?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@RestControllerAdvice`", "B. `@SpringBootApplication`", "C. `@EnableCaching`", "D. `@ConfigurationProperties`"]
+question = "Question 5: Which annotation is used to centralize exception handling across REST controllers?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

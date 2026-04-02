@@ -1,0 +1,56 @@
+---
+title: "Lecture 20 Quiz: Objects & Object Literals"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-20.qmd) | [Week 5 Content](/content/week-05.qmd) | [Lab 5](/labs/lab-05.qmd) | [Home Assignment 2](/assignment/02-assignment.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 20 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. HTML and CSS only", "B. Unit I and Unit II concepts", "C. Databases only", "D. Spring Boot only"]
+question = "Question 1: This revision lecture mainly prepares students for questions from:"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<table>`", "B. `<section>`", "C. `<form>`", "D. `<canvas>`"]
+question = "Question 2: Which HTML element is specifically used to collect and submit user input?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `#header`", "B. `header#`", "C. `.header`", "D. `header()`"]
+question = "Question 3: Which CSS selector targets an element by id?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Margin is inside the border", "B. Padding is outside the margin", "C. Padding is inside the border and around content", "D. Border is removed in box model calculations"]
+question = "Question 4: Which statement about the CSS box model is correct?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `querySelector`", "B. `addEventListener`", "C. `innerHTML`", "D. All of these"]
+question = "Question 5: Which JavaScript features are commonly used when revising DOM interaction?"
+answer = 4
+radioq(choices, answer; label=question, keep_order=true)
+```

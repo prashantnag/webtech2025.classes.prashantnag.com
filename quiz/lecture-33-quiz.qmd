@@ -1,0 +1,56 @@
+---
+title: "Lecture 33 Quiz: Spring Core Basics & Dependency Injection"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-33.qmd) | [Week 11 Content](/content/week-11.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 33 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. The application calls a library to get what it needs", "B. The framework controls object creation and injects dependencies into your code", "C. The developer manually instantiates all objects with `new`", "D. The database manages Java object creation automatically"]
+question = "Question 1: What does Inversion of Control (IoC) mean in Spring?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Constructor injection", "B. Setter injection", "C. Field injection", "D. All three are equally preferred"]
+question = "Question 2: Which injection style is recommended for mandatory dependencies because it supports immutable `final` fields?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `BeanFactory` eagerly initialises all beans at startup; `ApplicationContext` is lazy", "B. `ApplicationContext` eagerly initialises beans and adds event publishing, i18n, and annotation support", "C. They are identical — `ApplicationContext` is just a renamed alias", "D. `BeanFactory` supports AOP; `ApplicationContext` does not"]
+question = "Question 3: What is a key difference between `ApplicationContext` and `BeanFactory`?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@Configuration` + `@Bean` methods in a Java class", "B. `<bean>` declarations in an XML file", "C. `@Component` + `@Autowired` on classes", "D. `@SpringBootApplication` on the main class"]
+question = "Question 4: Which approach is Java Config style for defining Spring beans?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It causes a NullPointerException at deploy time", "B. It increases performance significantly", "C. Fields cannot be `final`, dependencies are hidden, and the class is hard to unit test without Spring", "D. Spring automatically converts field injection to constructor injection at runtime"]
+question = "Question 5: Why is field injection (`@Autowired` directly on a field) discouraged in production code?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```

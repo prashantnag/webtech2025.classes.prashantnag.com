@@ -67,12 +67,8 @@ website:
           - text: "Schedule"
             file: index.qmd
           - resource/index.qmd
-      - section: "Assignments"
-        contents:
-          - assignment/01-assignment.qmd
-          - assignment/02-assignment.qmd
-          - assignment/03-assignment.qmd
-          - assignment/04-assignment.qmd
+      - text: "Assignments"
+        file: assignment/index.qmd
       - section: "Labs"
         contents:
           - labs/lab-01.qmd

@@ -1,0 +1,249 @@
+---
+title: "Lecture 28: Session Tracking using HttpSession"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 24, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 28]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Session Tracking using HttpSession]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 9 | Unit III: Servlets<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain why `HttpSession` is required in servlet applications
+- Create, read, update, and invalidate session attributes
+- Distinguish `getSession()` and `getSession(false)` behavior
+- Configure timeout and identify session expiration behavior
+- Implement login-protected routes using session checks
+- Apply safe practices for session handling in exams and labs
+:::
+
+---
+
+## {data-menu-title="Why HttpSession"}
+
+[Why HttpSession?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+HTTP is stateless, so server forgets user identity between requests.
+
+`HttpSession` provides per-user server-side state to track:
+
+- login status
+- user profile info
+- cart or temporary workflow data
+:::
+
+---
+
+## {data-menu-title="Create Session"}
+
+[Creating and Using Session]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1|2|3"}
+HttpSession session = request.getSession();
+session.setAttribute("loggedInUser", email);
+session.setAttribute("role", "student");
+```
+
+::: {.body-text-s}
+`getSession()` returns existing session or creates a new one if missing.
+:::
+
+---
+
+## {data-menu-title="Read Session"}
+
+[Reading Session Safely]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1|2|3-5|7"}
+HttpSession session = request.getSession(false);
+
+if (session != null) {
+  String user = (String) session.getAttribute("loggedInUser");
+  String role = (String) session.getAttribute("role");
+}
+
+// getSession(false) avoids creating a new empty session
+```
+
+---
+
+## {data-menu-title="Session Lifecycle"}
+
+[Session Lifecycle]{.slide-title}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 3.8
+flowchart LR
+  A[First request] --> B[getSession creates session]
+  B --> C[Set attributes]
+  C --> D[Subsequent requests use same session id]
+  D --> E[Timeout or invalidate]
+  E --> F[Session destroyed]
+```
+
+::: {.body-text-s}
+Session survives across requests until timeout or explicit invalidation.
+:::
+
+---
+
+## {data-menu-title="Login Flow"}
+
+[Login and Protected Page Flow]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-5|7|9"}
+// In login servlet after credential validation
+HttpSession session = request.getSession();
+session.setAttribute("loggedInUser", email);
+response.sendRedirect("dashboard.jsp");
+
+// In protected servlet/JSP
+HttpSession s = request.getSession(false);
+if (s == null || s.getAttribute("loggedInUser") == null) {
+  response.sendRedirect("login.jsp");
+}
+```
+
+---
+
+## {data-menu-title="Logout"}
+
+[Logout and Session Invalidate]{.slide-title}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession(false);
+if (session != null) {
+  session.invalidate();
+}
+response.sendRedirect("login.jsp");
+```
+
+::: {.body-text-m}
+`invalidate()` clears all session attributes and ends that user session.
+:::
+
+---
+
+## {data-menu-title="Timeout"}
+
+[Session Timeout Management]{.slide-title2}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession();
+session.setMaxInactiveInterval(20 * 60); // 20 minutes
+```
+
+::: {.body-text-m}
+- Timeout is based on inactivity
+- After timeout, session attributes are no longer available
+- User should be redirected to login on expired sessions
+:::
+
+---
+
+## {data-menu-title="URL Rewriting"}
+
+[Fallback: URL Rewriting]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+When cookies are disabled, session tracking can use URL rewriting.
+:::
+
+```{.java}
+String url = response.encodeURL("dashboard.jsp");
+response.sendRedirect(url);
+```
+
+::: {.body-text-s}
+`encodeURL()` appends session id when required.
+:::
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Calling `getSession()` in every check (creates unnecessary sessions)
+- Forgetting null checks when using `getSession(false)`
+- Storing sensitive info like passwords in session attributes
+- Not invalidating session during logout
+- Ignoring timeout behavior in protected routes
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[AKTU Exam-Oriented Checklist]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare these key points:
+
+1. Define session and `HttpSession`
+2. Explain `getSession()` vs `getSession(false)`
+3. Write login and logout code using session
+4. Explain timeout and invalidation
+5. Mention URL rewriting as fallback tracking method
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+You can now:
+
+- build simple login tracking with sessions
+- protect pages with session checks
+- manage logout and timeout cleanly
+- answer common servlet session questions in theory and practical exams
+:::

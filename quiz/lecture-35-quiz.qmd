@@ -1,0 +1,56 @@
+---
+title: "Lecture 35 Quiz: Spring IoC, Bean Scopes & Life Cycle Callbacks"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-35.qmd) | [Week 11 Content](/content/week-11.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 35 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. One new instance is created for every call to `getBean()`", "B. One instance is shared across all Spring containers in the JVM", "C. One instance per Spring container, shared by all that request it", "D. One instance per HTTP request"]
+question = "Question 1: What does the `singleton` bean scope mean in Spring?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `singleton`", "B. `prototype`", "C. `session`", "D. `request`"]
+question = "Question 2: Which scope creates a brand new bean instance for every `getBean()` call, and Spring does NOT manage its destruction?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@PostConstruct` → `afterPropertiesSet()` → `init-method`", "B. `init-method` → `afterPropertiesSet()` → `@PostConstruct`", "C. `afterPropertiesSet()` → `@PostConstruct` → `init-method`", "D. All three run simultaneously in parallel threads"]
+question = "Question 3: When multiple init callbacks are present, what is the correct execution order in Spring?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Just before the bean is instantiated", "B. After dependency injection is complete, just before the bean is put into service", "C. Every time the bean's method is invoked", "D. When the Spring container starts scanning for components"]
+question = "Question 4: When does `@PostConstruct` run in the Spring bean lifecycle?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@Scope(\"request\")` alone is sufficient in all Spring contexts", "B. `proxyMode = ScopedProxyMode.TARGET_CLASS` is required so a singleton bean can hold a reference to a shorter-scoped bean", "C. Request-scoped beans are automatically proxied by default with no extra configuration", "D. You must register the bean in web.xml for request scope to work"]
+question = "Question 5: Why is `proxyMode = ScopedProxyMode.TARGET_CLASS` needed when using `request` or `session` scope in a Spring MVC app?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

@@ -1,0 +1,234 @@
+---
+title: "Lecture 40: Spring Boot Actuator, Logger, Web App Build & Final Revision"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 30, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 40]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Spring Boot Actuator, Logger, Web App Build & Final Revision]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 12 | Unit V: Final Revision<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Enable and use Spring Boot Actuator endpoints
+- Configure structured logging and log levels by environment
+- Prepare a Spring Boot app for packaging and deployment
+- Review production checklist: health, security, observability
+- Consolidate Unit V concepts before final exam/project
+:::
+
+---
+
+## {data-menu-title="Actuator Basics"}
+
+[Actuator Endpoint Basics]{.slide-title2}
+
+<hr>
+
+```{.properties}
+management.endpoints.web.exposure.include=health,info,metrics,env,loggers
+management.endpoint.health.show-details=always
+management.server.port=8082
+```
+
+```text
+GET /actuator/health
+GET /actuator/info
+GET /actuator/metrics
+GET /actuator/env
+GET /actuator/loggers
+```
+
+---
+
+## {data-menu-title="Operational Monitoring"}
+
+[Operational Monitoring Use Cases]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Detect DB/network outages via health endpoint
+- Monitor request latency and JVM memory usage
+- Verify active profiles and runtime environment
+- Change logger level at runtime for debugging
+:::
+
+---
+
+## {data-menu-title="Logging"}
+
+[Logging Best Practices]{.slide-title2}
+
+<hr>
+
+```{.properties}
+logging.level.root=INFO
+logging.level.com.example=DEBUG
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n
+```
+
+```{.java}
+private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
+log.info("Creating user: {}", req.getUsername());
+log.warn("Duplicate email attempted: {}", req.getEmail());
+log.error("Payment service unavailable", ex);
+```
+
+---
+
+## {data-menu-title="Build Artifacts"}
+
+[Build and Package]{.slide-title}
+
+<hr>
+
+```bash
+# Maven
+mvn clean package
+java -jar target/app-0.0.1-SNAPSHOT.jar
+
+# Gradle
+gradle clean build
+java -jar build/libs/app-0.0.1-SNAPSHOT.jar
+```
+
+::: {.body-text-s}
+Create reproducible builds and lock dependency versions for stable deployments.
+:::
+
+---
+
+## {data-menu-title="Deployment Paths"}
+
+[Deployment Options]{.slide-title2}
+
+<hr>
+
+| Option | Typical Use |
+|---|---|
+| VPS / VM | Full control, manual ops |
+| Docker container | Consistent runtime portability |
+| PaaS (Render, Railway, Heroku-like) | Fast deployment for student projects |
+| Kubernetes | Scalable enterprise orchestration |
+
+---
+
+## {data-menu-title="Docker Quickstart"}
+
+[Dockerizing Spring Boot]{.slide-title}
+
+<hr>
+
+```{.dockerfile}
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY target/app.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+```
+
+```bash
+docker build -t webtech-app:1.0 .
+docker run -p 8080:8080 webtech-app:1.0
+```
+
+---
+
+## {data-menu-title="Production Checklist"}
+
+[Production Readiness Checklist]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Secrets externalized (env vars / vault), not in source code
+- Actuator endpoints secured and minimally exposed
+- DB migrations versioned (Flyway/Liquibase)
+- Global error handling enabled
+- Logs centralized and searchable
+- Backups and basic alerting configured
+:::
+
+---
+
+## {data-menu-title="Unit V Revision"}
+
+[Unit V Final Revision Map]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  A[Spring Boot Setup] --> B[Configuration + Profiles]
+  B --> C[REST Controllers + CRUD]
+  C --> D[Validation + Exception Handling]
+  D --> E[Actuator + Logging]
+  E --> F[Packaging + Deployment]
+```
+
+---
+
+## {data-menu-title="Viva Questions"}
+
+[High-Probability Viva Questions]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. Difference between `@Controller` and `@RestController`?
+2. Why do we use `@Valid` in REST API inputs?
+3. When should you return `201`, `204`, and `404`?
+4. What actuator endpoints are safe to expose publicly?
+5. How do profiles help in deployment?
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Actuator + logging transform app into an observable service
+- Deployment readiness requires security + reliability practices
+- Unit V combines configuration, APIs, monitoring, and delivery
+- You are now exam-ready and project-ready for full-stack backend work
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Thank You]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Course Wrap-up: All the best for final project and end-sem exam
+</div>
+</div>

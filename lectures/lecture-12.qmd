@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 12: JavaScript Variables & Data Types"
+title: "Lecture 12: CSS Box Model, Float & Clear"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 12, 2026"

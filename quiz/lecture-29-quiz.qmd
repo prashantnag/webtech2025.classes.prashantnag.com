@@ -1,0 +1,56 @@
+---
+title: "Lecture 29 Quiz: JSP Introduction & JSP Overview"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/index.qmd) | [Week 10 Content](/content/week-10.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 29 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. JSP runs only in browser", "B. JSP is a Java server-side technology for dynamic web pages", "C. JSP is a CSS preprocessor", "D. JSP is a database query language"]
+question = "Question 1: What is JSP in Java web development?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Static HTML only", "B. Java bytecode only", "C. HTML mixed with JSP elements processed on the server", "D. JSON schema definitions"]
+question = "Question 2: Which description best fits typical JSP page content?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Browser directly compiles JSP", "B. Container translates JSP to servlet and executes it", "C. JSP is interpreted as JavaScript", "D. JSP files are sent unprocessed to client"]
+question = "Question 3: What happens when a JSP is requested for the first time?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<% ... %>`", "B. `<style>...</style>`", "C. `<script src=...>`", "D. `<!-- ... -->`"]
+question = "Question 4: Which syntax is commonly used for JSP scriptlet blocks?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. JSP is mainly used for servlet container configuration", "B. JSP helps separate presentation from business logic in MVC-style apps", "C. JSP replaces all Java classes", "D. JSP can only generate XML"]
+question = "Question 5: Why is JSP commonly used alongside servlets in web applications?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

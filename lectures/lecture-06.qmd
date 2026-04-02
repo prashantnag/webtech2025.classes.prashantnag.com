@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 6: HTML Hyperlinks & Tables"
+title: "Lecture 6: HTML Images & Hyperlinks"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 3, 2026"

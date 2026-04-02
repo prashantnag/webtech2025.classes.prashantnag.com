@@ -1,0 +1,56 @@
+---
+title: "Lecture 19 Quiz: Block Scope Variables (let, const)"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-19.qmd) | [Week 5 Content](/content/week-05.qmd) | [Lab 5](/labs/lab-05.qmd) | [Home Assignment 2](/assignment/02-assignment.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 19 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Single quotes only", "B. Double quotes only", "C. Backticks with `\${}` interpolation", "D. Angle brackets"]
+question = "Question 1: Which syntax is used for JavaScript template literals?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `let`", "B. `const`", "C. `var`", "D. `static`"]
+question = "Question 2: Which keyword is block-scoped and cannot be reassigned after initialization?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Splitting CSS files", "B. Unpacking values from arrays or objects", "C. Repeating loops automatically", "D. Sending HTTP requests"]
+question = "Question 3: What does destructuring allow you to do?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It copies and expands arrays or objects", "B. It converts strings to numbers", "C. It hides function parameters", "D. It defines HTML attributes"]
+question = "Question 4: What is the main use of the spread operator `...`?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It runs only in loops", "B. It is used when an argument is missing", "C. It replaces `return`", "D. It creates global variables"]
+question = "Question 5: Why are default function parameters useful?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

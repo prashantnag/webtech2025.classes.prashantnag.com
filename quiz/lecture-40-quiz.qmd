@@ -1,0 +1,56 @@
+---
+title: "Lecture 40 Quiz: Spring Boot Actuator, Logger, Web App Build & Final Revision"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-40.qmd) | [Week 12 Content](/content/week-12.qmd) | [Lab 9](/labs/lab-09.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 40 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `spring-boot-starter-web`", "B. `spring-boot-starter-test`", "C. `spring-boot-starter-actuator`", "D. `spring-boot-starter-thymeleaf`"]
+question = "Question 1: Which dependency exposes operational endpoints such as `/actuator/health`?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `200 OK`", "B. `201 Created`", "C. `500 Internal Server Error`", "D. `503 Service Unavailable`"]
+question = "Question 2: If a service dependency (like database) is down and health check fails, which status is commonly associated with service outage conditions?"
+answer = 4
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `log.info(\"User {} created\", username)`", "B. `System.out.println(\"user created\")`", "C. `printStackTrace()` in every catch block", "D. Writing logs directly to SQL table in controller"]
+question = "Question 3: Which logging approach is most appropriate in production Spring Boot applications?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Hard-code secrets in `application.properties` for convenience", "B. Expose all actuator endpoints publicly in production", "C. Externalize secrets and restrict actuator endpoint exposure", "D. Disable health endpoint to improve performance"]
+question = "Question 4: Which is a correct production-readiness best practice?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `mvn clean package` then run JAR", "B. `mvn clean install` then run WAR only", "C. `java compile` then run class files directly", "D. `mvn dependency:tree` and deploy immediately"]
+question = "Question 5: What is the standard Maven flow to build a deployable Spring Boot artifact?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

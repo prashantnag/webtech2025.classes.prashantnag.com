@@ -1,0 +1,275 @@
+---
+title: "Lecture 37: Revision & Hands-on (Spring Core)"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 25, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 37]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Revision & Hands-on (Spring Core)]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 12 | Unit V: REST Services<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Session Goals"}
+
+[Session Goals]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Revise all essential Spring Core concepts from Unit IV
+- Connect IoC, DI, AOP, and bean lifecycle in one flow
+- Build a mini layered app (`controller -> service -> repository`)
+- Practice debugging common Spring configuration mistakes
+- Prepare for end-sem practical and viva questions
+:::
+
+---
+
+## {data-menu-title="Revision Map"}
+
+[Spring Core Revision Map]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 4
+flowchart LR
+  A[IoC Container] --> B[Dependency Injection]
+  B --> C[Bean Scopes]
+  C --> D[Bean Lifecycle]
+  D --> E[AOP]
+  E --> F[Layered Architecture]
+  F --> G[Hands-on Mini App]
+```
+
+::: {.body-text-s}
+Think in terms of responsibilities: container manages, beans execute, aspects monitor.
+:::
+
+---
+
+## {data-menu-title="IoC + DI Recap"}
+
+[IoC and DI Recap]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**IoC:** Spring controls object creation and wiring.  
+**DI:** Dependencies are provided to classes from outside.
+:::
+
+| Injection Type | Pros | Caution |
+|---|---|---|
+| Constructor | Clear dependencies, testable, immutable | Large constructors can become verbose |
+| Setter | Optional dependency support | Object can be partially configured |
+| Field | Minimal code | Hard to test, hidden dependency |
+
+---
+
+## {data-menu-title="Hands-on Setup"}
+
+[Mini App Setup]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-7|9-13"}
+@SpringBootApplication
+public class DemoApp {
+  public static void main(String[] args) {
+    SpringApplication.run(DemoApp.class, args);
+  }
+}
+
+@RestController
+@RequestMapping("/api/tasks")
+public class TaskController {
+  private final TaskService service;
+  public TaskController(TaskService service) { this.service = service; }
+}
+```
+
+---
+
+## {data-menu-title="Layered Design"}
+
+[Layered Architecture Recap]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart TD
+  A[Controller] --> B[Service]
+  B --> C[Repository]
+  C --> D[Database]
+```
+
+::: {.incremental .body-text-m}
+- Controller: request/response handling
+- Service: business rules
+- Repository: data access
+- Keep logic out of controllers for maintainability
+:::
+
+---
+
+## {data-menu-title="Scope Choice"}
+
+[Bean Scope Choice in Practice]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Choose scope by state behavior:
+:::
+
+- `singleton`: stateless services (`TaskService`, validators)
+- `prototype`: short-lived object with independent state
+- `request`: per-request context, tracing info
+- `session`: shopping cart, logged-in preferences
+
+::: {.callout-note}
+Avoid mutable shared state in singleton beans.
+:::
+
+---
+
+## {data-menu-title="Lifecycle Hooks"}
+
+[Lifecycle Hook Recap]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4-7|9-12"}
+@Component
+public class CacheWarmup {
+
+  @PostConstruct
+  public void init() {
+    System.out.println("Cache initialized");
+  }
+
+  @PreDestroy
+  public void shutdown() {
+    System.out.println("Cache shutdown");
+  }
+}
+```
+
+---
+
+## {data-menu-title="AOP Practical"}
+
+[AOP Logging Aspect]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4-5|7-10"}
+@Aspect
+@Component
+public class TimingAspect {
+  @Around("execution(* com.example.service.*.*(..))")
+  public Object profile(ProceedingJoinPoint pjp) throws Throwable {
+    long start = System.currentTimeMillis();
+    Object result = pjp.proceed();
+    System.out.println(pjp.getSignature() + " took " +
+      (System.currentTimeMillis() - start) + "ms");
+    return result;
+  }
+}
+```
+
+---
+
+## {data-menu-title="Debug Checklist"}
+
+[Common Debug Checklist]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Bean not found: check `@ComponentScan` package boundaries
+- Ambiguous bean: use `@Qualifier` or `@Primary`
+- AOP not applied: verify proxy creation (`@EnableAspectJAutoProxy` in non-Boot)
+- `@PreDestroy` not called: ensure context closes gracefully
+- Circular dependency: refactor to constructor + interface separation
+:::
+
+---
+
+## {data-menu-title="Classroom Task"}
+
+[Hands-on Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Build a mini TODO module:
+
+1. Add `TaskController`, `TaskService`, `TaskRepository`
+2. Use constructor injection in all classes
+3. Add one AOP timing aspect for service methods
+4. Add one bean with `@PostConstruct`/`@PreDestroy`
+5. Test endpoint `/api/tasks`
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[Exam-Oriented Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare:
+
+1. Explain IoC and DI with examples
+2. Compare constructor and setter injection
+3. Explain bean lifecycle and callbacks
+4. Draw layered architecture for Spring app
+5. Explain practical use of AOP in one real scenario
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Spring Core concepts are interconnected, not isolated
+- Unit IV mastery makes Unit V implementation easier
+- Strong architecture and clean DI improve marks and maintainability
+- Hands-on coding is the best revision strategy before exam
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 38 - Spring Boot Configuration, Annotations & Build Systems
+</div>
+</div>

@@ -1,0 +1,265 @@
+---
+title: "Lecture 26: Redirecting Requests & Request Dispatching"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 10, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 26]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Redirecting Requests & Request Dispatching]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 7 | Unit III: Servlets<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Understand when to use redirect vs forward
+- Explain browser behavior in each case
+- Pass data correctly during navigation
+- Avoid common mistakes in servlet navigation logic
+:::
+
+---
+
+## {data-menu-title="Simple Analogy"}
+
+[Simple Real-Life Analogy]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- **Redirect**: Teacher says, "Go to Room 205 for this work." You leave and go yourself.
+- **Forward**: Teacher sends your file internally to another faculty room. You stay in the same process.
+
+Same idea in web apps:
+
+- Redirect = browser gets a new URL and sends a new request.
+- Forward = server passes the same request internally.
+:::
+
+---
+
+## {data-menu-title="Redirect Basics"}
+
+[What is Redirect?]{.slide-title}
+
+<hr>
+
+```{.java}
+response.sendRedirect("login.jsp");
+```
+
+::: {.body-text-m}
+- Browser receives HTTP status (usually `302`)
+- Browser makes a **new request** to target URL
+- URL in address bar **changes**
+- Request attributes from old request are **not available**
+:::
+
+---
+
+## {data-menu-title="Forward Basics"}
+
+[What is RequestDispatcher Forward?]{.slide-title2}
+
+<hr>
+
+```{.java}
+RequestDispatcher rd = request.getRequestDispatcher("result.jsp");
+rd.forward(request, response);
+```
+
+::: {.body-text-m}
+- Happens **inside server**
+- Uses **same request and response** objects
+- URL in address bar usually **does not change**
+- Request attributes remain available
+:::
+
+---
+
+## {data-menu-title="Redirect vs Forward"}
+
+[Redirect vs Forward Comparison]{.slide-title2}
+
+<hr>
+
+| Feature | Redirect | Forward |
+|---|---|---|
+| Requests | 2 requests | 1 request |
+| URL change | Yes | No |
+| Request data | Lost | Preserved |
+| Use case | Post-success navigation, external pages | Internal JSP/servlet handoff |
+| Performance | Slightly slower | Faster |
+
+---
+
+## {data-menu-title="When to Redirect"}
+
+[When Redirect is Better]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Use redirect when:
+
+- You want user to see the new URL
+- You need to move user to another module/app
+- You are implementing PRG pattern (Post-Redirect-Get)
+- You want page refresh to avoid form resubmission
+:::
+
+```{.java}
+// After successful form save
+response.sendRedirect("success.jsp");
+```
+
+---
+
+## {data-menu-title="When to Forward"}
+
+[When Forward is Better]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Use forward when:
+
+- You want to show JSP with server-side processed data
+- You need request attributes in next resource
+- You are moving from controller servlet to view JSP
+:::
+
+```{.java}
+request.setAttribute("studentName", "Aditi");
+request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+```
+
+---
+
+## {data-menu-title="Common Flow"}
+
+[Common AKTU Exam Flow Pattern]{.slide-title}
+
+<hr>
+
+```{.java}
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+
+  String email = request.getParameter("email");
+  String password = request.getParameter("password");
+
+  if ("student@gcet.ac.in".equals(email) && "1234".equals(password)) {
+    request.getSession().setAttribute("userEmail", email);
+    response.sendRedirect("home.jsp");
+  } else {
+    request.setAttribute("error", "Invalid credentials");
+    request.getRequestDispatcher("login.jsp").forward(request, response);
+  }
+}
+```
+
+---
+
+## {data-menu-title="Passing Data"}
+
+[How to Pass Data Correctly]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+For **forward**:
+
+- use `request.setAttribute(...)`
+- read with `${attributeName}` in JSP
+
+For **redirect**:
+
+- use query string (`success.jsp?msg=ok`) for tiny data
+- or use session for temporary data
+:::
+
+```{.java}
+// Redirect with query parameter
+response.sendRedirect("success.jsp?status=ok");
+```
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes (Very Important)]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Calling `forward()` after response is already committed
+- Expecting request attributes after redirect
+- Writing output, then trying redirect/forward
+- Using relative paths incorrectly
+- Forgetting `return;` after redirect in complex methods
+:::
+
+---
+
+## {data-menu-title="Mini Practice"}
+
+[Mini Practice Question]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Scenario:
+
+1. Student submits registration form.
+2. If data valid, show confirmation page and new URL should appear.
+3. If data invalid, show same form with error message.
+
+Think:
+
+- Which case uses redirect?
+- Which case uses forward?
+:::
+
+::: {.fragment .body-text-m}
+Expected approach:
+
+- Valid: `sendRedirect("confirmation.jsp")`
+- Invalid: `forward(request, response)` to form JSP with error attribute
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+You should now be confident about:
+
+- redirect vs forward differences
+- selecting correct navigation type in servlet controllers
+- preserving/passing data without confusion
+- avoiding frequent beginner mistakes asked in AKTU exams
+:::

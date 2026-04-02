@@ -1,0 +1,347 @@
+---
+title: "Lecture 34: Design Patterns — Factory & Strategy"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 20, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 34]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Design Patterns: Factory & Strategy]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 9 | Unit IV: Spring Framework<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Define what a design pattern is and why patterns matter
+- Explain the Factory pattern and implement it in Java
+- Explain the Strategy pattern and implement it in Java
+- Relate Factory pattern to Spring's `BeanFactory` and `ApplicationContext`
+- Relate Strategy pattern to Spring's DI and polymorphism
+- Choose the right pattern for a given design problem
+:::
+
+---
+
+## {data-menu-title="What are Design Patterns"}
+
+[What Are Design Patterns?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Design patterns are **reusable solutions to commonly occurring problems** in software design.
+
+They are not code — they are **templates** describing how to solve a problem in a given context.
+:::
+
+| Category | Purpose | Examples |
+|---|---|---|
+| Creational | Object creation | Factory, Singleton, Builder |
+| Structural | Object composition | Adapter, Decorator, Proxy |
+| Behavioral | Object communication | Strategy, Observer, Template |
+
+---
+
+## {data-menu-title="Why Patterns Matter"}
+
+[Why Patterns Matter in Spring]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Spring itself is built on patterns
+- `BeanFactory` → Factory pattern
+- `ApplicationContext` → Context object pattern
+- AOP proxies → Proxy pattern
+- `JdbcTemplate` → Template Method pattern
+- `@Component` scanning → Factory + Strategy
+
+Understanding patterns helps you understand **why Spring is designed the way it is**.
+:::
+
+---
+
+## {data-menu-title="Factory Pattern Intent"}
+
+[Factory Pattern: Intent]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Problem:** The calling code should not need to know which concrete class to instantiate.
+
+**Solution:** Delegate object creation to a **Factory** — a dedicated class or method responsible for creating objects.
+
+**When to use:**
+- When object creation logic is complex
+- When the concrete type may change or vary
+- When you want to centralize creation logic
+:::
+
+---
+
+## {data-menu-title="Factory Pattern Example"}
+
+[Factory Pattern in Java]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1-7|9-16|18-22"}
+// Step 1: Define the interface
+public interface Notification {
+  void send(String message);
+}
+class EmailNotification  implements Notification { ... }
+class SMSNotification    implements Notification { ... }
+class PushNotification   implements Notification { ... }
+
+// Step 2: Create the factory
+public class NotificationFactory {
+  public static Notification create(String type) { // #<1>
+    return switch (type) {
+      case "email" -> new EmailNotification();
+      case "sms"   -> new SMSNotification();
+      default      -> new PushNotification();
+    };
+  }
+}
+
+// Step 3: Use the factory
+Notification n = NotificationFactory.create("email"); // #<2>
+n.send("Your order is confirmed!");
+```
+1. Factory method centralises creation; callers use only the interface
+2. Caller does not need to know which concrete class is used
+
+---
+
+## {data-menu-title="Factory in Spring"}
+
+[Factory Pattern in Spring]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Spring's `ApplicationContext` **is** a factory for beans.
+:::
+
+```{.java code-line-numbers="|1-2|4-5"}
+// Spring creates and returns the correct implementation
+ApplicationContext ctx =
+  new AnnotationConfigApplicationContext(AppConfig.class);
+
+Notification n = ctx.getBean(Notification.class); // #<1>
+n.send("Hello from Spring Factory!");
+```
+1. Spring resolves the correct implementation based on configuration — exactly Factory pattern
+
+```{mermaid}
+%%| fig-height: 2.5
+flowchart LR
+  A[ctx.getBean] --> B[ApplicationContext / BeanFactory]
+  B --> C{Configuration}
+  C --> D[EmailNotification bean]
+  C --> E[SMSNotification bean]
+```
+
+---
+
+## {data-menu-title="Strategy Pattern Intent"}
+
+[Strategy Pattern: Intent]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Problem:** An algorithm or behavior needs to change at runtime without changing the class that uses it.
+
+**Solution:** Define a **family of algorithms**, encapsulate each one, and make them interchangeable via a common interface.
+
+**When to use:**
+- When you have multiple algorithms for the same task
+- When you want to switch behavior without conditionals
+- When you want to isolate algorithm changes from client code
+:::
+
+---
+
+## {data-menu-title="Strategy Pattern Example"}
+
+[Strategy Pattern in Java]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3|5-8|10-15|17-20"}
+// Step 1: Strategy interface
+public interface SortStrategy {
+  void sort(int[] data);
+}
+
+// Step 2: Concrete strategies
+class BubbleSort implements SortStrategy { ... }
+class QuickSort  implements SortStrategy { ... }
+class MergeSort  implements SortStrategy { ... }
+
+// Step 3: Context that uses the strategy
+public class Sorter {
+  private SortStrategy strategy; // #<1>
+  public Sorter(SortStrategy s) { this.strategy = s; }
+  public void sort(int[] data)  { strategy.sort(data); }
+}
+
+// Step 4: Select strategy at runtime
+Sorter s = new Sorter(new QuickSort()); // #<2>
+s.sort(data);
+```
+1. Holds a reference to a strategy — can be swapped
+2. Concrete strategy chosen by the caller — no conditionals in `Sorter`
+
+---
+
+## {data-menu-title="Strategy in Spring"}
+
+[Strategy Pattern in Spring DI]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring DI naturally supports the Strategy pattern. Inject the correct strategy via configuration:
+:::
+
+```{.java code-line-numbers="|1-3|5-9"}
+@Service
+public class PaymentService {
+  private final PaymentStrategy strategy; // #<1>
+  @Autowired
+  public PaymentService(PaymentStrategy strategy) {
+    this.strategy = strategy;
+  }
+  public void pay(double amount) { strategy.execute(amount); }
+}
+
+@Component("creditCard")
+public class CreditCardStrategy implements PaymentStrategy { ... }
+
+@Component("upi")
+public class UPIStrategy implements PaymentStrategy { ... }
+```
+1. Inject the right strategy using `@Qualifier("upi")` or conditional config
+
+---
+
+## {data-menu-title="Comparison"}
+
+[Factory vs Strategy — Quick Comparison]{.slide-title2}
+
+<hr>
+
+| Aspect | Factory Pattern | Strategy Pattern |
+|---|---|---|
+| Category | Creational | Behavioral |
+| Goal | Manage object creation | Swap algorithms/behavior |
+| Key element | Factory class/method | Strategy interface |
+| When to switch | At creation time | At runtime |
+| Spring example | `BeanFactory` / `getBean()` | `@Autowired` strategy bean |
+
+---
+
+## {data-menu-title="Mini Exercise"}
+
+[Classroom Exercise]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Task:** Implement a simple discount system.
+
+1. Create `DiscountStrategy` interface with `apply(double price)` method
+2. Implement `FestiveDiscount` (10%) and `ClearanceDiscount` (30%)
+3. Create a `PriceCalculator` that uses the strategy
+4. Use a factory method to choose the strategy based on a string input
+
+Combine both patterns in one mini project.
+:::
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Confusing Factory (creational) with Strategy (behavioral)
+- Using long `if-else` chains instead of a factory method
+- Hardcoding strategy selection instead of injecting via DI
+- Making the factory too complex — keep creation logic minimal
+- Not using an interface — pattern requires programming to an abstraction
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[AKTU Exam-Oriented Checklist]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare these high-probability questions:
+
+1. Define design patterns and list the three categories with examples
+2. Explain Factory pattern with a Java example
+3. Explain Strategy pattern with a Java example
+4. How does Spring use the Factory pattern internally?
+5. Compare Factory and Strategy patterns with a table
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+You now understand:
+
+- Design patterns as reusable templated solutions
+- Factory pattern to centralise object creation
+- Strategy pattern to swap algorithms via a shared interface
+- How Spring implements both patterns in its core
+- How DI and Factory/Strategy work together naturally
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 35 - Spring IoC, Bean Scopes & Life Cycle Callbacks
+</div>
+</div>

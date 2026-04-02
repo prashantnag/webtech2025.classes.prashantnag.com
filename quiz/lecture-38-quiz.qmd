@@ -1,0 +1,56 @@
+---
+title: "Lecture 38 Quiz: Spring Boot Configuration, Annotations & Build Systems"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-38.qmd) | [Week 12 Content](/content/week-12.qmd) | [Lab 9](/labs/lab-09.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 38 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It removes Java from Spring applications", "B. It provides auto-configuration and starter dependencies to reduce boilerplate", "C. It replaces HTTP with a custom protocol", "D. It only works with Gradle and not Maven"]
+question = "Question 1: What is the primary advantage of Spring Boot over traditional Spring setup?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@ConfigurationProperties`", "B. `@PathVariable`", "C. `@ControllerAdvice`", "D. `@EnableScheduling`"]
+question = "Question 2: Which annotation is used to bind grouped external properties (e.g., `app.mail.*`) into a POJO?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. To enable server-side template rendering", "B. To isolate environment-specific settings such as `dev` and `prod`", "C. To reduce number of Java classes", "D. To disable bean scanning"]
+question = "Question 3: Why are Spring profiles used?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `spring-boot-starter-web`", "B. `spring-boot-starter-actuator`", "C. `spring-boot-starter-data-jpa`", "D. `spring-boot-starter-test`"]
+question = "Question 4: Which starter is specifically used to expose operational endpoints like `/actuator/health` and `/actuator/metrics`?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Keep `Application.java` under a top-level root package so component scanning covers subpackages", "B. Place `Application.java` inside the `entity` package only", "C. Disable component scanning for performance", "D. Put all classes in one default package with no namespace"]
+question = "Question 5: What is a recommended package-structure practice for Spring Boot projects?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

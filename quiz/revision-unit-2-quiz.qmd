@@ -1,0 +1,56 @@
+---
+title: "Revision Quiz: Unit II - JavaScript"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Revision Lecture](/lectures/revision-unit-2.qmd) | [Week 6 Content](/content/week-06.qmd) | [Week 4 Content](/content/week-04.qmd) | [Week 5 Content](/content/week-05.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Unit II Revision Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `var`", "B. `const`", "C. `define`", "D. `static`"]
+question = "Question 1: Which keyword is preferred when a JavaScript variable should not be reassigned?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `querySelector()`", "B. `console.log()`", "C. `parseInt()`", "D. `setTimeout()`"]
+question = "Question 2: Which method is commonly used to select an element from the DOM using a CSS selector?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `=`", "B. `==`", "C. `===`", "D. `:=`"]
+question = "Question 3: Which operator checks both value and type equality in JavaScript?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `forEach()`", "B. `filter()`", "C. `push()`", "D. `join()`"]
+question = "Question 4: Which array method returns a new array containing only elements that match a condition?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. To prevent the browser's default action for an event", "B. To automatically reload the page", "C. To remove the clicked element from the DOM", "D. To convert a string to JSON"]
+question = "Question 5: What does `event.preventDefault()` do in an event handler?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

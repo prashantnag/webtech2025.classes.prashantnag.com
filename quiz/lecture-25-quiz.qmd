@@ -1,0 +1,56 @@
+---
+title: "Lecture 25 Quiz: Handling HTTP GET & POST Requests"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-25.qmd) | [Week 9 Content](/content/week-09.qmd) | [Lab 7](/labs/lab-07.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 25 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. POST", "B. DELETE", "C. GET", "D. PATCH"]
+question = "Question 1: Which HTTP method is typically used for read-only retrieval and places parameters in the URL query string?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It supports only small payloads", "B. It is usually used to submit data in the request body", "C. It always returns cached responses", "D. It cannot be used with HTML forms"]
+question = "Question 2: Which statement best describes an HTTP POST request?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `doFetch()`", "B. `doBody()`", "C. `doRequest()`", "D. `doGet()`"]
+question = "Question 3: Which servlet method handles GET requests in `HttpServlet`?"
+answer = 4
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. GET always encrypts all data", "B. GET is preferred for sensitive data like passwords", "C. POST is generally preferred over GET for sensitive form fields", "D. GET cannot have query parameters"]
+question = "Question 4: Which security-related choice is aligned with lecture guidance?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. GET-POST-DELETE", "B. POST-REDIRECT-GET", "C. GET-FORWARD-POST", "D. REQUEST-RESPONSE-REDIRECT"]
+question = "Question 5: Which common pattern helps prevent duplicate form submissions after a successful POST?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

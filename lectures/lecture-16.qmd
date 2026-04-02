@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 16: Arrow Functions & Callbacks"
+title: "Lecture 16: Functions in JavaScript & Returning Data"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 19, 2026"

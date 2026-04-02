@@ -1,11 +1,11 @@
----
+﻿---
 title: "Lecture 15 Quiz: Objects & Scope"
 jupyter: julia-1.12
 ---
 
 ::: {.callout-note}
 Review before quiz:
-[Lectures](/lectures/lecture-15.qmd) | [Week 4 Content](/content/week-04.qmd) | [Lab 4](/labs/lab-04.qmd) | [Assignment 2](/assignment/02-assignment.qmd)
+[Lectures](/lectures/lecture-15.qmd) | [Week 4 Content](/content/week-04.qmd) | [Lab 4](/labs/lab-04.qmd) | [Home Assignment 2](/assignment/02-assignment.qmd)
 :::
 
 ```{julia cache=true}
@@ -54,3 +54,4 @@ question = "Question 5: Which keyword is generally preferred for values that sho
 answer = 1
 radioq(choices, answer; label=question, keep_order=true)
 ```
+

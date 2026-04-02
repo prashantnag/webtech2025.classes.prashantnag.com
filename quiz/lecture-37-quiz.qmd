@@ -1,0 +1,56 @@
+---
+title: "Lecture 37 Quiz: Revision & Hands-on (Spring Core)"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-37.qmd) | [Week 12 Content](/content/week-12.qmd) | [Lab 9](/labs/lab-09.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 37 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Dependency Injection", "B. Inversion of Control", "C. Aspect-Oriented Programming", "D. Object Relational Mapping"]
+question = "Question 1: Which concept means the framework controls object creation instead of application code calling `new` everywhere?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Field injection in all layers", "B. Constructor injection for mandatory dependencies", "C. Static utility methods for repository calls", "D. Creating service objects inside controller methods"]
+question = "Question 2: Which DI style is preferred in Spring for testability and explicit dependencies?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Controller -> Repository -> Service -> Database", "B. Service -> Controller -> Repository -> Database", "C. Controller -> Service -> Repository -> Database", "D. Repository -> Service -> Controller -> Database"]
+question = "Question 3: What is the correct layered flow for a typical Spring MVC request?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@PostConstruct`", "B. `@PreDestroy`", "C. `@Autowired`", "D. `@Primary`"]
+question = "Question 4: Which annotation is used for one-time setup after dependency injection is complete?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Multiple implementations of same interface without `@Qualifier`/`@Primary`", "B. Missing semicolon in Java file", "C. Using DTO classes in controllers", "D. Returning `ResponseEntity` from REST methods"]
+question = "Question 5: A Spring app fails with an 'ambiguous bean' error. What is the most likely cause?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

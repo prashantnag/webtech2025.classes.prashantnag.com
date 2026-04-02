@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 11: Bootstrap Framework"
+title: "Lecture 11: CSS Value Lengths, Percentages, Selectors"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 11, 2026"

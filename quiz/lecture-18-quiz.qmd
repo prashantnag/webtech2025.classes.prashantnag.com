@@ -1,0 +1,56 @@
+---
+title: "Lecture 18 Quiz: Conditions & Looping in JavaScript"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-18.qmd) | [Week 5 Content](/content/week-05.qmd) | [Lab 5](/labs/lab-05.qmd) | [Home Assignment 2](/assignment/02-assignment.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 18 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `placeholder`", "B. `required`", "C. `checked`", "D. `readonly`"]
+question = "Question 1: Which HTML attribute prevents form submission when a field is empty?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. CSS selectors", "B. SQL clauses", "C. Regular expressions", "D. JSON objects"]
+question = "Question 2: The `pattern` attribute in HTML form validation uses:"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It saves form data automatically", "B. It stops the browser's default submit action", "C. It resets all form fields", "D. It creates a new form element"]
+question = "Question 3: What does `e.preventDefault()` do in a submit handler?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `submit`", "B. `change`", "C. `blur`", "D. `load`"]
+question = "Question 4: Which event commonly fires when an input loses focus and is useful for real-time validation?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It checks if a value matches a required format", "B. It converts HTML into CSS", "C. It creates a database table", "D. It compresses JavaScript"]
+question = "Question 5: What is the main role of a validation regular expression for email input?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

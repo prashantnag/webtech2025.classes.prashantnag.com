@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 4: HTML Grouping - Div & Span"
+title: "Lecture 4: HTML Grouping: Div & Span"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "January 29, 2026"

@@ -1,11 +1,11 @@
----
+﻿---
 title: "Lecture 12 Quiz: JavaScript Variables & Data Types"
 jupyter: julia-1.12
 ---
 
 ::: {.callout-note}
 Review before quiz:
-[Lectures](/lectures/lecture-12.qmd) | [Week 3 Content](/content/week-03.qmd) | [Lab 3](/labs/lab-03.qmd) | [Assignment 3](/assignment/03-assignment.qmd)
+[Lectures](/lectures/lecture-12.qmd) | [Week 3 Content](/content/week-03.qmd) | [Lab 3](/labs/lab-03.qmd) | [Home Assignment 3](/assignment/03-assignment.qmd)
 :::
 
 ```{julia cache=true}
@@ -54,3 +54,4 @@ question = "Question 5: Which declaration follows JavaScript variable naming rul
 answer = 1
 radioq(choices, answer; label=question, keep_order=true)
 ```
+

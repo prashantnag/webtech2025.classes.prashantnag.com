@@ -1,0 +1,56 @@
+---
+title: "Lecture 36 Quiz: AOP, Autowiring, Annotations & Bean Configuration Styles"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-36.qmd) | [Week 11 Content](/content/week-11.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 36 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. A module that holds the cross-cutting logic and advice", "B. The rule that selects which methods to target", "C. The specific point during execution where advice can be applied", "D. The process of applying aspect code to target classes"]
+question = "Question 1: In Spring AOP, what is an **Aspect**?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@Before` — runs before the matched method only when no exception occurs", "B. `@After` — runs only if the method returns normally without an exception", "C. `@Around` — wraps the method and can intercept the return value or suppress exceptions", "D. `@AfterReturning` — runs even when the method throws an exception"]
+question = "Question 2: Which AOP advice type is the most powerful and can change or suppress the method's return value?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@Primary` selects a bean by its exact name; `@Qualifier` marks the default bean", "B. `@Primary` marks the default bean when multiple candidates exist; `@Qualifier(\"name\")` selects a specific bean by name and overrides `@Primary`", "C. Both `@Primary` and `@Qualifier` are required together on every bean", "D. `@Qualifier` is used on the bean class; `@Primary` is used on the injection point"]
+question = "Question 3: What is the correct relationship between `@Primary` and `@Qualifier`?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@Service`", "B. `@Controller`", "C. `@Repository`", "D. `@Component`"]
+question = "Question 4: Which stereotype annotation additionally enables Spring's persistence exception translation, converting low-level SQL exceptions to Spring's DataAccessException hierarchy?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. XML config — best type safety and IDE support", "B. Java Config (`@Configuration` + `@Bean`) — best for infrastructure beans like `DataSource` where you need full creation control", "C. Annotation config — best for third-party library beans you cannot annotate", "D. All three styles are completely identical in capability"]
+question = "Question 5: When should you prefer Java Config style over annotation-based config?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

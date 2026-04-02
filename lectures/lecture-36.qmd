@@ -1,0 +1,404 @@
+---
+title: "Lecture 36: AOP, Autowiring, Annotations & Bean Configuration Styles"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 24, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 36]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[AOP, Autowiring, Annotations & Bean Configuration Styles]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 9 | Unit IV: Spring Framework<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain Aspect-Oriented Programming (AOP) and its intent
+- Define aspect, pointcut, advice, join point, and weaving
+- Write simple `@Before`, `@After`, and `@Around` advice in Spring
+- Use `@Autowired`, `@Qualifier`, and `@Primary` for dependency resolution
+- Identify the role of Spring stereotype annotations
+- Compare XML, Java Config, and annotation-based configuration styles
+:::
+
+---
+
+## {data-menu-title="Cross-Cutting Concerns"}
+
+[The Problem AOP Solves]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Some behaviours appear repeatedly across many classes — these are **cross-cutting concerns**.
+:::
+
+::: {.incremental .body-text-m}
+- Logging every method entry/exit
+- Checking security before every service method
+- Starting/committing database transactions
+- Measuring execution time for performance monitoring
+:::
+
+::: {.body-text-m}
+Without AOP: copy-paste the same code everywhere.  
+With AOP: write it **once** and apply it everywhere with a rule.
+:::
+
+---
+
+## {data-menu-title="AOP Terminology"}
+
+[AOP Core Terminology]{.slide-title}
+
+<hr>
+
+| Term | Plain English Meaning |
+|---|---|
+| **Aspect** | Module holding cross-cutting logic (e.g., `LoggingAspect`) |
+| **Advice** | The actual code that runs (e.g., `logBefore()`) |
+| **Join Point** | A specific execution point (method call) |
+| **Pointcut** | A rule selecting which join points to target |
+| **Weaving** | Process of applying aspect code to target classes |
+
+```{mermaid}
+%%| fig-height: 2.5
+flowchart LR
+  A[Pointcut Rule] --> B[Matches Join Points]
+  B --> C[Advice Code Executes]
+  C --> D[Around Target Methods]
+```
+
+---
+
+## {data-menu-title="Advice Types"}
+
+[Spring AOP Advice Types]{.slide-title2}
+
+<hr>
+
+| Advice | When it Runs |
+|---|---|
+| `@Before` | **Before** the matched method runs |
+| `@After` | **After** the method (always, even on exception) |
+| `@AfterReturning` | After method returns **normally** |
+| `@AfterThrowing` | After method throws an **exception** |
+| `@Around` | Wraps the method — runs **before and after**, can intercept return value |
+
+::: {.body-text-s}
+`@Around` is the most powerful advice type.
+:::
+
+---
+
+## {data-menu-title="Aspect Example"}
+
+[Logging Aspect Example]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4-5|7-10|12-15"}
+@Aspect                                               // #<1>
+@Component
+public class LoggingAspect {
+
+  @Pointcut("execution(* com.example.service.*.*(..))")  // #<2>
+  public void serviceLayer() {}
+
+  @Before("serviceLayer()")                           // #<3>
+  public void logBefore(JoinPoint jp) {
+    System.out.println("Entering: " + jp.getSignature().getName());
+  }
+
+  @AfterReturning(pointcut = "serviceLayer()", returning = "result")
+  public void logAfter(Object result) {               // #<4>
+    System.out.println("Returned: " + result);
+  }
+}
+```
+1. Marks class as an aspect
+2. Pointcut matches all methods in `service` package
+3. Runs before every matched method
+4. Runs after successful return; captures return value
+
+---
+
+## {data-menu-title="Around Advice"}
+
+[@Around Advice]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-4|5|6-7"}
+@Around("execution(* com.example.service.*.*(..))")
+public Object measureTime(ProceedingJoinPoint pjp) throws Throwable {
+  long start = System.currentTimeMillis();          // #<1>
+  Object result = pjp.proceed();                    // #<2>
+  long elapsed = System.currentTimeMillis() - start;
+  System.out.println(pjp.getSignature() + " took " + elapsed + "ms");
+  return result;                                    // #<3>
+}
+```
+1. Code before target method executes
+2. Proceeds to actual method — must be called
+3. Code after method — must return the result
+
+::: {.callout-warning}
+Always call `pjp.proceed()` in `@Around` or the real method will never execute.
+:::
+
+---
+
+## {data-menu-title="Autowiring"}
+
+[Autowiring with @Autowired]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|3-5|7-10|12-15"}
+@Service
+public class PaymentProcessor {
+
+  // Constructor injection (preferred)
+  private final PaymentGateway gateway;
+  @Autowired
+  public PaymentProcessor(PaymentGateway gateway) {
+    this.gateway = gateway;
+  }
+
+  // Setter injection
+  @Autowired
+  public void setLogger(AuditLogger logger) {
+    this.logger = logger;
+  }
+}
+```
+
+::: {.body-text-s}
+As of Spring 4.3+, `@Autowired` is optional on single-constructor classes.
+:::
+
+---
+
+## {data-menu-title="Qualifier Primary"}
+
+[@Qualifier and @Primary]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|5-6|9-13"}
+@Component @Primary              // #<1>
+public class HdfcGateway implements PaymentGateway { ... }
+
+@Component
+public class PaypalGateway implements PaymentGateway { ... }
+
+@Service
+public class CheckoutService {
+  @Autowired
+  @Qualifier("paypalGateway")    // #<2>
+  private PaymentGateway gateway;
+}
+```
+1. `@Primary` — used when no `@Qualifier` is specified; acts as the default bean
+2. `@Qualifier` — selects a specific bean by name, overrides `@Primary`
+
+---
+
+## {data-menu-title="Stereotype Annotations"}
+
+[Spring Stereotype Annotations]{.slide-title}
+
+<hr>
+
+| Annotation | Layer | Purpose |
+|---|---|---|
+| `@Component` | Any | Generic Spring-managed component |
+| `@Service` | Business logic | Marks service layer beans |
+| `@Repository` | Data access | Marks DAO beans; enables exception translation |
+| `@Controller` | Web MVC | Marks Spring MVC controllers |
+| `@RestController` | REST API | `@Controller` + `@ResponseBody` combined |
+
+::: {.body-text-s}
+All are specialisations of `@Component` — they all trigger component scanning.
+:::
+
+---
+
+## {data-menu-title="XML Config"}
+
+[Bean Configuration Style 1: XML]{.slide-title2}
+
+<hr>
+
+```{.xml code-line-numbers="|1-2|4-7"}
+<!-- applicationContext.xml -->
+<bean id="userRepo" class="com.example.UserRepositoryImpl"/>
+
+<bean id="userService" class="com.example.UserService">
+  <constructor-arg ref="userRepo"/>         <!--#<1>-->
+  <property name="maxRetries" value="3"/>   <!--#<2>-->
+</bean>
+```
+1. Constructor injection via XML
+2. Property (setter) injection via XML
+
+::: {.body-text-s}
+XML config is verbose but explicit — still found in legacy enterprise projects.
+:::
+
+---
+
+## {data-menu-title="Java Config"}
+
+[Bean Configuration Style 2: Java Config]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-6|8-12"}
+@Configuration                               // #<1>
+public class AppConfig {
+
+  @Bean                                      // #<2>
+  public UserRepository userRepository() {
+    return new UserRepositoryImpl();
+  }
+
+  @Bean
+  public UserService userService() {         // #<3>
+    return new UserService(userRepository());
+  }
+}
+```
+1. Tells Spring this class contains bean definitions
+2. Return value registered as a bean; method name = default bean ID
+3. Spring ensures singleton — calls the cached singleton, not `new`
+
+---
+
+## {data-menu-title="Annotation Config"}
+
+[Bean Configuration Style 3: Annotation-Based]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1|4|7-9"}
+@Repository                                  // #<1>
+public class UserRepositoryImpl implements UserRepository { ... }
+
+@Service                                     // #<2>
+public class UserService {
+  @Autowired
+  private UserRepository repo;               // #<3>
+}
+
+@SpringBootApplication                       // #<4> — enables scan
+public class App { ... }
+```
+1. Auto-detected by component scan
+2. Auto-detected as service layer bean
+3. Spring injects matching bean automatically
+4. Triggers component scan from this package and below
+
+---
+
+## {data-menu-title="Config Comparison"}
+
+[Choosing a Configuration Style]{.slide-title}
+
+<hr>
+
+| Criteria | XML | Java Config | Annotations |
+|---|---|---|---|
+| Verbosity | High | Medium | Low |
+| Type safety | No | Yes | Yes |
+| IDE support | Average | Excellent | Excellent |
+| Third-party beans | Easy | Easy | Not possible |
+| Recommended for | Legacy | Libraries/Infra | Application beans |
+
+::: {.body-text-s}
+Modern Spring Boot projects use annotations for application classes and Java Config for infrastructure beans (DataSource, etc.).
+:::
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Forgetting `@EnableAspectJAutoProxy` in non-Boot projects
+- Calling `pjp.proceed()` zero or multiple times in `@Around` advice
+- Defining two beans of the same type without `@Primary` or `@Qualifier`
+- Applying `@Component` to a class Spring cannot instantiate (e.g., no default constructor)
+- Mixing XML and annotation config without understanding scan scope
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[AKTU Exam-Oriented Checklist]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare these high-probability questions:
+
+1. Explain AOP and its key terminology with a diagram
+2. Write a simple logging aspect using `@Before` and `@AfterReturning`
+3. Differentiate `@Qualifier` and `@Primary`
+4. List and explain Spring stereotype annotations
+5. Compare XML, Java Config, and annotation-based configuration
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+You now understand:
+
+- AOP separates cross-cutting concerns from business logic
+- Five advice types and when to use each
+- `@Autowired`, `@Qualifier`, `@Primary` for precise bean resolution
+- Stereotype annotations organising application layers
+- Three configuration styles and their trade-offs
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 37 - Revision & Hands-on (Spring Core)
+</div>
+</div>

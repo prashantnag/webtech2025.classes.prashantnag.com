@@ -1,0 +1,56 @@
+---
+title: "Lecture 28 Quiz: Session Tracking using HttpSession"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/index.qmd) | [Week 9 Content](/content/week-09.qmd) | [Lab 7](/labs/lab-07.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 28 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It always creates a new session", "B. It returns an existing session or creates one if missing", "C. It destroys the current session", "D. It reads session from database only"]
+question = "Question 1: What is the behavior of `request.getSession()` in servlet code?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `request.getSession(false)`", "B. `request.getSession()`", "C. `request.createSession()`", "D. `response.getSession()`"]
+question = "Question 2: Which call should you use when you want only an existing session and do not want to create a new one?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `session.setAttribute(\"user\", email)`", "B. `response.addCookie(\"user\", email)`", "C. `request.setParameter(\"user\", email)`", "D. `request.setHeader(\"user\", email)`"]
+question = "Question 3: Which API stores user data in server-side session state?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Session data is shared across all users by default", "B. Session data belongs to one client session and is isolated from others", "C. Session data is visible in URL", "D. Session data survives forever even after invalidation"]
+question = "Question 4: Which statement about `HttpSession` scope is correct?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `session.close()`", "B. `session.remove()`", "C. `session.destroy()`", "D. `session.invalidate()`"]
+question = "Question 5: Which method is used to terminate the current session and clear its attributes?"
+answer = 4
+radioq(choices, answer; label=question, keep_order=true)
+```

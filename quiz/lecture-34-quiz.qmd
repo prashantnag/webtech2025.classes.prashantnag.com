@@ -1,0 +1,56 @@
+---
+title: "Lecture 34 Quiz: Design Patterns — Factory & Strategy"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-34.qmd) | [Week 11 Content](/content/week-11.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 34 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Behavioral — it swaps algorithms at runtime", "B. Structural — it composes objects together", "C. Creational — it centralises and abstracts object creation", "D. Concurrency — it manages thread-safe object creation"]
+question = "Question 1: The Factory pattern belongs to which Gang of Four category?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. The caller decides which concrete class to instantiate using `new`", "B. A factory method or class handles object creation so the caller only uses the interface", "C. The database returns the correct object type based on a query", "D. Spring annotations automatically apply the factory pattern to all classes"]
+question = "Question 2: What is the core intent of the Factory pattern?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Creational — it manages how objects are created", "B. Structural — it adds new capabilities to existing objects", "C. Behavioral — it defines a family of algorithms that can be swapped at runtime", "D. Concurrency — it synchronises access to shared resources"]
+question = "Question 3: The Strategy pattern belongs to which Gang of Four category?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `JdbcTemplate` implements Factory; `@Autowired` implements Strategy", "B. `BeanFactory`/`ApplicationContext` implements Factory; injecting a strategy interface via DI implements Strategy", "C. `@Component` scanning implements Strategy; `@Bean` implements Factory", "D. Spring does not implement either pattern internally"]
+question = "Question 4: How do Spring's core features map to the Factory and Strategy patterns?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Factory pattern — it has multiple sort algorithms that can be selected at runtime", "B. Singleton pattern — only one sorter instance should exist", "C. Observer pattern — other objects are notified when sorting completes", "D. Template Method pattern — the sorting steps are fixed in a base class"]
+question = "Question 5: A `Sorter` class holds a reference to a `SortStrategy` interface and delegates `sort()` to it — `QuickSort` and `MergeSort` are interchangeable implementations. Which pattern is this?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

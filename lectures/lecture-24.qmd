@@ -1,0 +1,501 @@
+---
+title: "Lecture 24: Servlet Interface & Life Cycle"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 6, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 24]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Servlet Interface & Life Cycle]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 8 | Unit III: Servlets<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain the `Servlet` interface methods and lifecycle phases
+- Understand request, session, and application scopes
+- Describe the servlet container's thread model and why it matters
+- Implement thread-safe patterns (AtomicInteger, ThreadLocal, connection pooling)
+- Apply proper resource lifecycle management (init, service, destroy)
+- Identify and fix common concurrency bugs in servlets
+- Debug servlet lifecycle issues by tracing thread execution
+:::
+
+---
+
+## {data-menu-title="Servlet Interface"}
+
+[Servlet Interface Methods]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+The `Servlet` interface defines core methods:
+
+- `init(ServletConfig config)`
+- `service(ServletRequest req, ServletResponse res)`
+- `destroy()`
+- `getServletConfig()`
+- `getServletInfo()`
+
+In practice, we usually extend `HttpServlet` instead of implementing `Servlet` directly.
+:::
+
+---
+
+---
+
+## {data-menu-title="Request vs Session vs Application"}
+
+[Variable Scopes in Servlets]{.slide-title}
+
+<hr>
+
+| Scope | Lifetime | Shared | Use Case |
+|-------|----------|--------|----------|
+| **Request** | Single HTTP request | Just this request | Request parameters, data computed during handling |
+| **Session** | Multiple requests (user's session) | This user across requests | Shopping cart, login info, preferences |
+| **Application** | Server startup to shutdown | All users | Global constants, shared caches, thread pools |
+
+::: {.body-text-s}
+- **Request scope**: `ServletRequest`
+- **Session scope**: `HttpSession`
+- **Application scope**: `ServletContext`
+:::
+
+---
+
+## {data-menu-title="Thread Pool Architecture"}
+
+[Servlet Container Thread Model]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 3.5
+flowchart LR
+  subgraph Q["Request Queue"]
+    R1["Request 1"]
+    R2["Request 2"]
+    R3["Request 3"]
+  end
+  
+  subgraph T["Thread Pool"]
+    T1["Thread 1"]
+    T2["Thread 2"]
+    T3["Thread 3"]
+  end
+  
+  subgraph SI["Servlet Instance"]
+    S["Single Servlet<br/>(Shared)"]
+  end
+  
+  R1 --> T1
+  R2 --> T2
+  R3 --> T3
+  T1 --> S
+  T2 --> S
+  T3 --> S
+```
+
+::: {.body-text-s}
+Multiple threads execute the **same servlet instance** concurrently. Shared mutable fields = race conditions!
+:::
+
+---
+
+## {data-menu-title="init Example"}
+
+[`init()` Example: Resource Setup]{.slide-title}
+
+<hr>
+
+```{.java}
+@WebServlet("/app")
+public class AppServlet extends HttpServlet {
+  private DataSource dataSource;                                          // <1>
+  
+  @Override
+  public void init() throws ServletException {
+    try {
+      // Initialize database connection pool (one-time)
+      dataSource = new ComboPooledDataSource();
+      dataSource.setDriverClass("com.mysql.jdbc.Driver");
+      dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/myapp");
+      dataSource.setUser("root");
+      dataSource.setPassword("secret");
+      System.out.println("Database pool initialized");
+    } catch (Exception e) {
+      throw new ServletException("Failed to init dataSource", e);
+    }
+  }
+```
+
+::: {.annotations .body-text-s}
+1. **Shared field** - Database pool is initialized once and reused across all requests
+:::
+
+---
+
+## {data-menu-title="service & Thread Safety"}
+
+[`service()` Phase with Thread Safety]{.slide-title2}
+
+<hr>
+
+```{.java}
+  // Bad pattern: shared mutable state (race condition)
+  private int requestCount = 0;  // <-- Multiple threads will see stale values!
+  
+  // Good pattern 1: Use AtomicInteger
+  private final AtomicInteger requestCount = new AtomicInteger(0);        // <1>
+  
+  // Good pattern 2: Use ThreadLocal for per-thread data
+  private final ThreadLocal<UserContext> userContext = ThreadLocal.withInitial(
+    () -> new UserContext()
+  );                                                                       // <2>
+```
+
+::: {.body-text-m}
+When multiple threads access the servlet concurrently:
+
+- **Bad:** `requestCount++` causes race conditions (read-modify-write not atomic)
+- **Good:** `AtomicInteger.incrementAndGet()` is thread-safe
+- **Good:** `ThreadLocal` stores data per-thread (no shared state)
+:::
+
+---
+
+## {data-menu-title="doGet with DB"}
+
+[HTTP Method Implementation with DB Access]{.slide-title}
+
+<hr>
+
+```{.java}
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse res)
+      throws IOException, ServletException {
+    requestCount.incrementAndGet();                                        // <1>
+    
+    try (Connection conn = dataSource.getConnection()) {                   // <2>
+      String sql = "SELECT * FROM users WHERE id = ?";
+      PreparedStatement stmt = conn.prepareStatement(sql);
+      stmt.setInt(1, Integer.parseInt(req.getParameter("userId")));
+      
+      ResultSet rs = stmt.executeQuery();
+      if (rs.next()) {
+        res.setContentType("application/json");                            // <3>
+        res.getWriter().println("{\"id\":" + rs.getInt("id") + 
+          ",\"name\":\"" + rs.getString("name") + "\"}");
+      } else {
+        res.setStatus(404);
+      }
+    } catch (SQLException e) {
+      res.setStatus(500);
+      res.getWriter().println("{\"error\":\"Database error\"}");
+    }
+  }
+```
+
+::: {.annotations .body-text-s}
+1. **Thread-safe increment** - AtomicInteger handles concurrent updates
+2. **Try-with-resources** - Automatically closes connection when done
+3. **JSON response** - Safe content type for API
+:::
+
+---
+
+## {data-menu-title="destroy Example"}
+
+[`destroy()` Example: Resource Cleanup]{.slide-title2}
+
+<hr>
+
+```{.java}
+  @Override
+  public void destroy() {
+    if (dataSource != null) {
+      try {
+        dataSource.close();                                                // <1>
+        System.out.println("Database pool closed");
+      } catch (Exception e) {
+        System.err.println("Error closing dataSource: " + e.getMessage());
+      }
+    }
+  }
+}
+```
+
+::: {.annotations .body-text-s}
+1. **Clean shutdown** - All connections in pool are closed properly
+:::
+
+---
+
+## {data-menu-title="Session Management Example"}
+
+[Session Management: Shopping Cart]{.slide-title}
+
+<hr>
+
+```{.java}
+@WebServlet("/cart")
+public class CartServlet extends HttpServlet {
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse res)
+      throws IOException {
+    HttpSession session = req.getSession(true);                            // <1>
+    
+    String itemId = req.getParameter("itemId");
+    List<String> cart = (List<String>) session.getAttribute("cart");       // <2>
+    
+    if (cart == null) {                                                    // <3>
+      cart = new ArrayList<>();
+      session.setAttribute("cart", cart);
+    }
+    
+    cart.add(itemId);
+    session.setAttribute("cartSize", cart.size());                         // <4>
+    
+    res.setContentType("application/json");
+    res.getWriter().println("{\"cartSize\":" + cart.size() + "}");
+  }
+}
+```
+
+::: {.annotations .body-text-s}
+1. **getSession()** - Gets existing session or creates new one
+2. **getAttribute()** - Retrieve session-scoped data
+3. **Initialize if needed** - First time user adds to cart
+4. **setAttribute()** - Updates session data (persisted across requests)
+:::
+
+---
+
+## {data-menu-title="Thread Safety Patterns"}
+
+[Thread-Safe Patterns for Servlets]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+1. **Immutable objects** - Share without locks (best practice)
+
+2. **AtomicInteger/AtomicLong** - For simple counters
+
+3. **ThreadLocal** - Each thread gets its own copy (be careful about memory leaks!)
+
+4. **Synchronized methods** - Lock the whole method (can cause bottlenecks)
+
+5. **Connection/Resource pooling** - Allocate per-request, return to pool (most common)
+
+6. **Avoid shared mutable fields** - Best: Put state in request/session scope, not servlet fields
+:::
+
+---
+
+## {data-menu-title="Common Concurrency Bugs"}
+
+[Common Thread-Safety Mistakes]{.slide-title}
+
+<hr>
+
+**Bug #1: Shared counter without synchronization**
+```{.java}
+private int hits = 0;
+protected void doGet(...) { hits++; }  // Race condition!
+```
+
+**Bug #2: Non-atomic read-modify-write**
+```{.java}
+private int balance = 100;
+// Thread A: read (100), pause
+// Thread B: read (100), writes 50, continues
+// Thread A: writes 50 (should be 0)
+if (balance >= amount) balance -= amount;
+```
+
+**Bug #3: Holding locks too long**
+```{.java}
+synchronized void doSlowDatabaseQuery() { 
+  // Holds lock while DB query runs → blocks other threads
+}
+```
+
+---
+
+## {data-menu-title="Resource Management Lifecycle"}
+
+[Best Practice: Resource Lifecycle Management]{.slide-title2}
+
+<hr>
+
+```{.java}
+public class BestPracticeServlet extends HttpServlet {
+  private final ExecutorService executor = Executors.newFixedThreadPool(10); // <1>
+  
+  public void init() throws ServletException {
+    System.out.println("Executor pool created");                            // <2>
+  }
+  
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) {
+    executor.submit(() -> {                                                // <3>
+      // Work is queued, not blocking
+    });
+  }
+  
+  public void destroy() {
+    executor.shutdown();                                                   // <4>
+    try {
+      if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+        executor.shutdownNow();
+      }
+    } catch (InterruptedException e) {
+      executor.shutdownNow();
+    }
+  }
+}
+```
+
+::: {.annotations .body-text-s}
+1. **Create once** in init()
+2. **One-time setup** happens here
+3. **Reuse in service** across all requests
+4. **Clean shutdown** in destroy()
+:::
+
+---
+
+## {data-menu-title="Debugging Lifecycle"}
+
+[Debugging: Tracing Servlet Lifecycle]{.slide-title}
+
+<hr>
+
+```{.java}
+@WebServlet("/debug")
+public class DebugServlet extends HttpServlet {
+  @Override
+  public void init() {
+    System.out.println("[INIT] Thread: " + Thread.currentThread().getId() +   // <1>
+      " | Time: " + System.currentTimeMillis());
+  }
+  
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) {
+    long startTime = System.currentTimeMillis();
+    System.out.println("[SERVICE START] Thread: " + 
+      Thread.currentThread().getId());                                     // <2>
+    
+    // ... do work ...
+    
+    long elapsed = System.currentTimeMillis() - startTime;
+    System.out.println("[SERVICE END] Elapsed: " + elapsed + "ms");        // <3>
+  }
+  
+  @Override
+  public void destroy() {
+    System.out.println("[DESTROY] Shutting down");                         // <4>
+  }
+}
+```
+
+::: {.annotations .body-text-s}
+1. **init()** is called once by a single thread
+2. **doGet()** can be called concurrently by many threads
+3. **Track timing** to identify bottlenecks
+4. **destroy()** is called once during shutdown
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+You now understand the complete servlet lifecycle:
+
+- **Request/Session/Application scopes** for managing state
+- **Thread model** - one servlet, multiple concurrent threads
+- **Safe patterns** - AtomicInteger, ThreadLocal, connection pooling
+- **Lifecycle phases** - init (setup) → service (handle requests) → destroy (cleanup)
+- **Thread-safety** - avoid shared mutable state or use proper synchronization
+- **Resource management** - allocate in init, use in service, cleanup in destroy
+- **Debugging** - trace lifecycle and identify threading bottlenecks
+
+This is fundamental to building robust, production-ready Java web applications!
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Exercise]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Create a Thread-Safe User Preferences Servlet:
+
+1. Initialize a thread-safe counter for total requests in `init()`
+2. Use `AtomicInteger` to safely track request count
+3. Implement session-based user preferences storage
+4. Handle GET to retrieve preferences
+5. Handle POST to update preferences
+6. Use connection pooling for database access (pretend with mock data)
+7. Properly clean up resources in `destroy()`
+
+**Bonus**: Add logging to trace lifecycle events and concurrent thread execution
+:::
+
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [Jakarta Servlet Specification](https://jakarta.ee/specifications/servlet/)
+- [HttpSession Documentation](https://jakarta.ee/specifications/servlet/6.0/apidocs/jakarta/servlet/http/httpsession)
+- [Java Concurrency Best Practices](https://www.oracle.com/java/technologies/articles/javase/basics.html)
+- [Connection Pooling with HikariCP](https://github.com/brettwooldridge/HikariCP)
+- [Course content: Week 8](/content/week-08.qmd)
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lectures 25+ - Advanced Servlet Patterns & JSP
+</div>
+</div>

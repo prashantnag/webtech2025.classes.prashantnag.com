@@ -13,7 +13,7 @@ This week covers CSS fundamentals including selectors, properties, and the Box M
 
 ---
 
-## Lecture 9: CSS Units, Selectors & Advanced Styling {#lecture-9}
+## Lecture 9: CSS Introduction & CSS Syntax {#lecture-9}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -75,7 +75,7 @@ p {
 
 ---
 
-## Lecture 10: CSS Box Model & Positioning {#lecture-10}
+## Lecture 10: External Style Sheets, Multiple Style Sheets {#lecture-10}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -136,7 +136,7 @@ div {
 
 ---
 
-## Lecture 11: Bootstrap Framework Basics {#lecture-11}
+## Lecture 11: CSS Value Lengths, Percentages, Selectors {#lecture-11}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -186,7 +186,7 @@ div {
 
 ---
 
-## Lecture 12: JavaScript - Introduction & Variables {#lecture-12}
+## Lecture 12: CSS Box Model, Float & Clear {#lecture-12}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials

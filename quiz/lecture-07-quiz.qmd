@@ -1,11 +1,11 @@
----
+﻿---
 title: "Lecture 7 Quiz: HTML Forms & Form Elements"
 jupyter: julia-1.12
 ---
 
 ::: {.callout-note}
 Review before quiz:
-[Lectures](/lectures/lecture-07.qmd) | [Week 2 Content](/content/week-02.qmd) | [Lab 2](/labs/lab-02.qmd) | [Assignment 1](/assignment/01-assignment.qmd)
+[Lectures](/lectures/lecture-07.qmd) | [Week 2 Content](/content/week-02.qmd) | [Lab 2](/labs/lab-02.qmd) | [Home Assignment 1](/assignment/01-assignment.qmd)
 :::
 
 ```{julia cache=true}
@@ -54,3 +54,4 @@ question = "Question 5: Why should a `<label>` be associated with form inputs?"
 answer = 2
 radioq(choices, answer; label=question, keep_order=true)
 ```
+

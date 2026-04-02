@@ -18,7 +18,7 @@ This week introduces you to web development fundamentals, covering the history o
 
 ---
 
-## Lecture 1: Introduction to Web Designing {#lecture-1}
+## Lecture 1: Introduction to Web Page Designing & Web Development Strategies {#lecture-1}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -54,7 +54,7 @@ This week introduces you to web development fundamentals, covering the history o
 
 ---
 
-## Lecture 2: History of Web & Internet {#lecture-2}
+## Lecture 2: History of Web & Internet, Protocols Governing the Web {#lecture-2}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -97,7 +97,7 @@ This week introduces you to web development fundamentals, covering the history o
 
 ---
 
-## Lecture 3: HTML Basics & Structure {#lecture-3}
+## Lecture 3: HTML Introduction & Basic Structure, HTML Tags {#lecture-3}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -150,7 +150,7 @@ This week introduces you to web development fundamentals, covering the history o
 
 ---
 
-## Lecture 4: HTML Grouping - Div & Span, Semantic HTML {#lecture-4}
+## Lecture 4: HTML Grouping: Div & Span {#lecture-4}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials

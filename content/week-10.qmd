@@ -10,11 +10,15 @@ This week introduces the Spring Framework, covering dependency injection, beans,
 **Course Outcome:** CO-4 (K3-K4 - Application & Analysis)  
 **Duration:** 1 week (4 lectures + 1 lab)  
 **Lab:** Spring Framework Application  
-**Assignment 4 Due:** Apr 8
 
 ::: {.callout-tip icon=false}
 ## Quick Practice Quizzes (Lectures 29-32)
-Planned for this week. Use the [Quiz Hub](/quiz/index.qmd) for currently available quizzes.
+Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
+
+- [Lecture 29 Quiz](/quiz/lecture-29-quiz.qmd)
+- [Lecture 30 Quiz](/quiz/lecture-30-quiz.qmd)
+- [Lecture 31 Quiz](/quiz/lecture-31-quiz.qmd)
+- [Lecture 32 Quiz](/quiz/lecture-32-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -24,11 +28,12 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 29: Spring Framework & Dependency Injection {#lecture-29}
+## Lecture 29: JSP Introduction & JSP Overview {#lecture-29}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-29-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-29.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
   <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
@@ -106,11 +111,12 @@ UserService service = context.getBean(UserService.class);
 
 ---
 
-## Lecture 30: Spring Beans & Application Context {#lecture-30}
+## Lecture 30: JSP Implicit Objects & Scripting {#lecture-30}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-30-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-30.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
   <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
@@ -186,11 +192,12 @@ context.addApplicationListener(event -> {
 
 ---
 
-## Lecture 31: Aspect-Oriented Programming (AOP) {#lecture-31}
+## Lecture 31: JSP Directives, Standard Actions & Custom Tag Libraries {#lecture-31}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-31-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-31.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
   <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
@@ -247,11 +254,12 @@ public class LoggingAspect {
 
 ---
 
-## Lecture 32: Spring MVC Overview {#lecture-32}
+## Lecture 32: Revision & Practical (Servlets + JSP) {#lecture-32}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-32-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-32.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
   <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
@@ -314,7 +322,7 @@ public class UserController {
 
 ---
 
-## Lab 10: Spring Framework Application
+## Lab 8: Spring Framework Application
 
 ### Objectives
 - Create Spring beans

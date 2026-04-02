@@ -1,0 +1,56 @@
+---
+title: "Lecture 17 Quiz: UI Events & Event Handling"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-17.qmd) | [Week 5 Content](/content/week-05.qmd) | [Lab 5](/labs/lab-05.qmd) | [Home Assignment 2](/assignment/02-assignment.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 17 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `querySelectorAll()`", "B. `appendChild()`", "C. `innerHTML`", "D. `classList.add()`"]
+question = "Question 1: Which option returns all matching elements for a CSS selector?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `textValue`", "B. `innerHTML`", "C. `nodeText`", "D. `htmlValue`"]
+question = "Question 2: Which property can insert HTML markup inside an element?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `className.push()`", "B. `style.toggle()`", "C. `classList.toggle()`", "D. `toggleClassName()`"]
+question = "Question 3: Which method is commonly used to toggle a CSS class on an element?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `map()`", "B. `pop()`", "C. `shift()`", "D. `sort()`"]
+question = "Question 4: Which array method creates a new array by transforming each element?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `document.createNode()`", "B. `document.newElement()`", "C. `document.createElement()`", "D. `document.appendElement()`"]
+question = "Question 5: Which method creates a new DOM element in JavaScript?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```

@@ -1,89 +1,47 @@
----
+﻿---
 title: "Assignments"
 ---
 
 Assignments are an essential part of this course, giving you hands-on experience with web development concepts. Each assignment builds on previous knowledge and helps you develop practical skills.
 
-## Assignment Guidelines
 
-### General Instructions
+## Assignment Dashboard
 
-1. **Read the requirements carefully** before starting
-2. **Start early** - Don't wait until the last minute
-3. **Test your code** in multiple browsers
-4. **Validate your HTML and CSS** using W3C validators
-5. **Comment your code** to explain complex sections
-6. **Submit on time** - Late submissions are penalized
+Click any card to open the full assignment instructions.
 
-### Submission Format
+::: {.assignment-cards}
 
-All assignments must be submitted as:
+::: {.assignment-card}
+[Home Assignment 1: Frontend Fundamentals and Logic]{.assignment-title}
 
-- A ZIP file containing all project files
-- Properly organized folder structure
-- Include a README.txt file with:
-  - Your name and roll number
-  - Assignment number and title
-  - Brief description of your work
-  - Any special instructions for running your code
+[**Due:** February 11, 2026]{.assignment-due}
 
-### Naming Convention
+[4 focused tasks on HTML structure, CSS styling, form validation, and JavaScript loops.]{.assignment-desc}
 
-```
-RollNumber_AssignmentNumber_Name.zip
+[View Assignment ->](/assignment/01-assignment.html){.card-link}
+:::
 
-Example: MCA2345_Assignment1_JohnDoe.zip
-```
+::: {.assignment-card}
+[Home Assignment 2: Server-Side Processing and Spring Core]{.assignment-title}
 
-## Evaluation Criteria
+[**Due:** February 25, 2026]{.assignment-due}
 
-Assignments are graded based on:
+[Implement a Servlet/JSP login with session handling and a Spring IoC dependency injection example.]{.assignment-desc}
 
-| Criteria | Weightage |
-|----------|-----------|
-| Functionality | 40% |
-| Code Quality | 25% |
-| Design/Aesthetics | 20% |
-| Documentation | 10% |
-| Creativity | 5% |
+[View Assignment ->](/assignment/02-assignment.html){.card-link}
+:::
 
-## Assignments
+::: {.assignment-card}
+[Home Assignment 3: Modern Application Development]{.assignment-title}
 
-### Assignment 1: Basic HTML Website
-**Due Date: February 11, 2026**
+[**Due:** March 18, 2026]{.assignment-due}
 
-Create a multi-page personal or informational website using HTML5.
+[Build a Spring Boot Book Inventory REST API with Actuator, custom port configuration, and startup runner logging.]{.assignment-desc}
 
-[**View Details →**](/assignment/01-assignment.qmd)
+[View Assignment ->](/assignment/03-assignment.html){.card-link}
+:::
 
----
-
-### Assignment 2: Styled Web Page  
-**Due Date: February 25, 2026**
-
-Take your HTML website from Assignment 1 and add professional styling using CSS3.
-
-[**View Details →**](/assignment/02-assignment.qmd)
-
----
-
-### Assignment 3: Responsive Website
-**Due Date: March 18, 2026**
-
-Create a fully responsive website that works perfectly on mobile, tablet, and desktop devices.
-
-[**View Details →**](/assignment/03-assignment.qmd)
-
----
-
-### Assignment 4: Interactive Web Application
-**Due Date: April 8, 2026**
-
-Build an interactive web application using HTML, CSS, and JavaScript with DOM manipulation and event handling.
-
-[**View Details →**](/assignment/04-assignment.qmd)
-
----
+:::
 
 ## Academic Integrity
 
@@ -139,3 +97,4 @@ If you're stuck on an assignment:
 
 Examples of excellent work from previous semesters will be posted here as the course progresses.
 :::
+

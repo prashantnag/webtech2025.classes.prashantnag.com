@@ -1,0 +1,56 @@
+---
+title: "Lecture 31 Quiz: JSP Directives, Standard Actions & Custom Tag Libraries"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-31.qmd) | [Week 10 Content](/content/week-10.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 31 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Runtime execution instructions", "B. HTML rendering hints for the browser", "C. Translation-time instructions to the JSP container", "D. Database schema declarations"]
+question = "Question 1: What do JSP directives provide?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<%@ include file=\"header.jsp\" %>`", "B. `<jsp:include page=\"header.jsp\" />`", "C. Both are identical in behavior", "D. Neither works for including pages"]
+question = "Question 2: Which include approach is processed at translation time (static include)?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<jsp:redirect>`", "B. `<jsp:forward page=\"result.jsp\" />`", "C. `<jsp:goto>`", "D. `<jsp:send>`"]
+question = "Question 3: Which standard action forwards the current request to another JSP?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<%@ import=\"java.util.List\" %>`", "B. `<%@ page import=\"java.util.List\" %>`", "C. `<jsp:import class=\"java.util.List\" />`", "D. `<%@ lib import=\"java.util.List\" %>`"]
+question = "Question 4: Which directive syntax correctly imports a Java class in a JSP page?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. JSTL uses scriptlets for all logic", "B. JSTL requires no taglib declaration", "C. JSTL replaces Java scriptlets with HTML-like tags, improving readability", "D. JSTL is only for database operations"]
+question = "Question 5: What is the primary benefit of using JSTL in JSP pages?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```

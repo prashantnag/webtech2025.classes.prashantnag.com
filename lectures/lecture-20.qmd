@@ -1,5 +1,5 @@
 ---
-title: "Lecture 20: Revision - Units I & II"
+title: "Lecture 20: Objects & Object Literals"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 26, 2026"

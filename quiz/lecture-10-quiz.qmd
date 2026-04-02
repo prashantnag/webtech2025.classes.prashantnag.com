@@ -1,11 +1,11 @@
----
+﻿---
 title: "Lecture 10 Quiz: CSS Box Model & Positioning"
 jupyter: julia-1.12
 ---
 
 ::: {.callout-note}
 Review before quiz:
-[Lectures](/lectures/lecture-10.qmd) | [Week 3 Content](/content/week-03.qmd) | [Lab 3](/labs/lab-03.qmd) | [Assignment 3](/assignment/03-assignment.qmd)
+[Lectures](/lectures/lecture-10.qmd) | [Week 3 Content](/content/week-03.qmd) | [Lab 3](/labs/lab-03.qmd) | [Home Assignment 3](/assignment/03-assignment.qmd)
 :::
 
 ```{julia cache=true}
@@ -54,3 +54,4 @@ question = "Question 5: Why is `z-index` used in CSS positioning?"
 answer = 2
 radioq(choices, answer; label=question, keep_order=true)
 ```
+

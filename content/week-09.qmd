@@ -13,7 +13,12 @@ This week covers advanced JSP features, JSTL, MVC architecture, and database con
 
 ::: {.callout-tip icon=false}
 ## Quick Practice Quizzes (Lectures 25-28)
-Planned for this week. Use the [Quiz Hub](/quiz/index.qmd) for currently available quizzes.
+Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
+
+- [Lecture 25 Quiz](/quiz/lecture-25-quiz.qmd)
+- [Lecture 26 Quiz](/quiz/lecture-26-quiz.qmd)
+- [Lecture 27 Quiz](/quiz/lecture-27-quiz.qmd)
+- [Lecture 28 Quiz](/quiz/lecture-28-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -23,11 +28,12 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 25: JSP Implicit Objects & Directives {#lecture-25}
+## Lecture 25: Handling HTTP GET & POST Requests {#lecture-25}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-25-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-25.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
   <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
@@ -81,158 +87,90 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 26: JSP Standard Actions & JSTL {#lecture-26}
+## Lecture 26: Redirecting Requests & Request Dispatching {#lecture-26}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-26-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-26.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-26.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
 
-### JSP Standard Actions
-```jsp
-<!-- Include action (dynamic) -->
-<jsp:include page="footer.jsp" flush="true">
-  <jsp:param name="year" value="2026"/>
-</jsp:include>
+### Redirect vs Forward (Simple View)
 
-<!-- Forward action -->
-<jsp:forward page="success.jsp"/>
+- **Redirect**: browser gets new URL and sends new request
+- **Forward**: server internally sends same request to another resource
+- Redirect changes URL; forward usually keeps same URL
+- Redirect loses request attributes; forward keeps them
 
-<!-- Use bean -->
-<jsp:useBean id="user" class="com.example.User"/>
-
-<!-- Set bean property -->
-<jsp:setProperty name="user" property="name" value="John"/>
-
-<!-- Get bean property -->
-<jsp:getProperty name="user" property="email"/>
+### Servlet Example
+```java
+if (isValidUser) {
+  response.sendRedirect("home.jsp");
+} else {
+  request.setAttribute("error", "Invalid login");
+  request.getRequestDispatcher("login.jsp").forward(request, response);
+}
 ```
 
-### JSTL Core Tags
-```jsp
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+### When to Use Which
 
-<!-- Variable setting -->
-<c:set var="name" value="John"/>
-<c:out value="${name}"/>
-
-<!-- Conditionals -->
-<c:if test="${age >= 18}">
-  Adult
-</c:if>
-
-<c:choose>
-  <c:when test="${score >= 80}">Grade A</c:when>
-  <c:when test="${score >= 70}">Grade B</c:when>
-  <c:otherwise>Grade C</c:otherwise>
-</c:choose>
-
-<!-- Loop -->
-<c:forEach var="item" items="${list}">
-  <p><c:out value="${item}"/></p>
-</c:forEach>
-
-<!-- URL management -->
-<c:url var="link" value="/page.jsp">
-  <c:param name="id" value="123"/>
-</c:url>
-```
+- Use redirect after successful form submission (PRG pattern)
+- Use forward to show validation errors on same flow
+- Use forward when JSP needs request attributes
 
 ---
 
-## Lecture 27: MVC Architecture {#lecture-27}
+## Lecture 27: Cookies & Session Tracking {#lecture-27}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-27-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-27.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-27.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
 
-### MVC Pattern
-```
-User Request
-    ↓
-Controller (Servlet) - Process business logic
-    ↓
-Model (JavaBean/Database) - Data and operations
-    ↓
-View (JSP) - Display to user
-    ↓
-Response
-```
+### Why Session Tracking is Needed
 
-### Implementation Example
+- HTTP is stateless, so server does not remember old requests by default
+- We need tracking for login state, cart, and personalized pages
+
+### Cookie Example
 ```java
-// Controller (LoginController.java)
-public class LoginController extends HttpServlet {
-  protected void doPost(HttpServletRequest request, 
-                       HttpServletResponse response) {
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    
-    // Model - Business logic
-    UserModel user = new UserModel();
-    boolean isValid = user.authenticate(username, password);
-    
-    if (isValid) {
-      request.setAttribute("user", user);
-      // Forward to view
-      request.getRequestDispatcher("dashboard.jsp")
-             .forward(request, response);
-    } else {
-      // Forward to error view
-      request.getRequestDispatcher("login.jsp")
-             .forward(request, response);
-    }
-  }
-}
+Cookie c = new Cookie("user", "rahul");
+c.setMaxAge(3600);
+response.addCookie(c);
 ```
 
-### Model Layer (JavaBean)
+### HttpSession Example
 ```java
-public class UserModel {
-  private String username;
-  private String email;
-  private String role;
-  
-  // Getters and setters
-  public String getUsername() { return username; }
-  public void setUsername(String username) { this.username = username; }
-  
-  // Business logic
-  public boolean authenticate(String user, String pass) {
-    // Database query or validation
-    return true;
-  }
-}
+HttpSession session = request.getSession();
+session.setAttribute("loggedInUser", "rahul@gcet.ac.in");
 ```
 
-### View Layer (JSP)
-```jsp
-<!-- dashboard.jsp -->
-<h1>Welcome ${user.username}!</h1>
-<p>Email: ${user.email}</p>
-<p>Role: ${user.role}</p>
-```
+### Key Difference
+
+- Cookies are stored in browser (small data)
+- Session data is stored on server (safer for login state)
 
 ---
 
-## Lecture 28: Database Connectivity with JDBC {#lecture-28}
+## Lecture 28: Session Tracking using HttpSession {#lecture-28}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-28-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-28.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
   <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
@@ -284,7 +222,7 @@ int rows = pstmt.executeUpdate();  // Returns affected rows
 
 ---
 
-## Lab 9: JSP Pages & Database Integration
+## Lab 7: JSP Pages & Database Integration
 
 ### Objectives
 - Build JSP applications with database

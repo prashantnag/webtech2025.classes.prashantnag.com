@@ -1,6 +1,6 @@
----
+﻿---
 title: "Interactive Quizzes"
-subtitle: "Practice Quizzes for Lectures 1-16"
+subtitle: "Practice Quizzes for Lectures 1-40 and Week 6 Revision"
 ---
 
 Use these quick quizzes after watching slides and reading weekly content. Each quiz gives instant scoring so students can self-check understanding before lab and assignment work.
@@ -33,10 +33,58 @@ Use these quick quizzes after watching slides and reading weekly content. Each q
 - [Lecture 15 Quiz: Objects & Scope](/quiz/lecture-15-quiz.qmd)
 - [Lecture 16 Quiz: Arrow Functions & Callbacks](/quiz/lecture-16-quiz.qmd)
 
+## Quiz Set (Week 5)
+
+- [Lecture 17 Quiz: UI Events & Event Handling](/quiz/lecture-17-quiz.qmd)
+- [Lecture 18 Quiz: Conditions & Looping in JavaScript](/quiz/lecture-18-quiz.qmd)
+- [Lecture 19 Quiz: Block Scope Variables (let, const)](/quiz/lecture-19-quiz.qmd)
+- [Lecture 20 Quiz: Objects & Object Literals](/quiz/lecture-20-quiz.qmd)
+
+## Quiz Set (Week 6)
+
+- [Revision Quiz: Unit I - Web Page Designing](/quiz/revision-unit-1-quiz.qmd)
+- [Revision Quiz: Unit II - JavaScript](/quiz/revision-unit-2-quiz.qmd)
+
+## Quiz Set (Week 8)
+
+- [Lecture 21 Quiz: DOM Manipulation using JavaScript](/quiz/lecture-21-quiz.qmd)
+- [Lecture 22 Quiz: Revision & Mini Project (JavaScript & DOM)](/quiz/lecture-22-quiz.qmd)
+- [Lecture 23 Quiz: Servlet Overview & Architecture](/quiz/lecture-23-quiz.qmd)
+
+## Quiz Set (Week 9)
+
+- [Lecture 24 Quiz: Servlet Interface & Life Cycle](/quiz/lecture-24-quiz.qmd)
+- [Lecture 25 Quiz: Handling HTTP GET & POST Requests](/quiz/lecture-25-quiz.qmd)
+- [Lecture 26 Quiz: Redirecting Requests & Request Dispatching](/quiz/lecture-26-quiz.qmd)
+- [Lecture 27 Quiz: Cookies & Session Tracking](/quiz/lecture-27-quiz.qmd)
+- [Lecture 28 Quiz: Session Tracking using HttpSession](/quiz/lecture-28-quiz.qmd)
+
+## Quiz Set (Week 10)
+
+- [Lecture 29 Quiz: JSP Introduction & JSP Overview](/quiz/lecture-29-quiz.qmd)
+- [Lecture 30 Quiz: JSP Implicit Objects & Scripting](/quiz/lecture-30-quiz.qmd)
+- [Lecture 31 Quiz: JSP Directives, Standard Actions & Custom Tag Libraries](/quiz/lecture-31-quiz.qmd)
+- [Lecture 32 Quiz: Revision & Practical (Servlets + JSP)](/quiz/lecture-32-quiz.qmd)
+
+## Quiz Set (Week 11)
+
+- [Lecture 33 Quiz: Spring Core Basics & Dependency Injection](/quiz/lecture-33-quiz.qmd)
+- [Lecture 34 Quiz: Design Patterns — Factory & Strategy](/quiz/lecture-34-quiz.qmd)
+- [Lecture 35 Quiz: Spring IoC, Bean Scopes & Life Cycle Callbacks](/quiz/lecture-35-quiz.qmd)
+- [Lecture 36 Quiz: AOP, Autowiring, Annotations & Bean Configuration Styles](/quiz/lecture-36-quiz.qmd)
+
+## Quiz Set (Week 12)
+
+- [Lecture 37 Quiz: Revision & Hands-on (Spring Core)](/quiz/lecture-37-quiz.qmd)
+- [Lecture 38 Quiz: Spring Boot Configuration, Annotations & Build Systems](/quiz/lecture-38-quiz.qmd)
+- [Lecture 39 Quiz: RESTful Web Services - Controllers, Request Mapping, CRUD APIs](/quiz/lecture-39-quiz.qmd)
+- [Lecture 40 Quiz: Spring Boot Actuator, Logger, Web App Build & Final Revision](/quiz/lecture-40-quiz.qmd)
+
 ## Study Flow
 
 1. Review slides in [Lectures](/lectures/index.qmd)
-2. Read explanations and examples in [Week 1 Content](/content/week-01.qmd), [Week 2 Content](/content/week-02.qmd), [Week 3 Content](/content/week-03.qmd), and [Week 4 Content](/content/week-04.qmd)
-3. Attempt [Lab 1](/labs/lab-01.qmd), [Lab 2](/labs/lab-02.qmd), [Lab 3](/labs/lab-03.qmd), and [Lab 4](/labs/lab-04.qmd)
-4. Solve [Assignment 1](/assignment/01-assignment.qmd), [Assignment 2](/assignment/02-assignment.qmd), and [Assignment 3](/assignment/03-assignment.qmd)
+2. Read explanations and examples in [Week 1 Content](/content/week-01.qmd), [Week 2 Content](/content/week-02.qmd), [Week 3 Content](/content/week-03.qmd), [Week 4 Content](/content/week-04.qmd), [Week 5 Content](/content/week-05.qmd), and [Week 6 Content](/content/week-06.qmd)
+3. Attempt [Lab 1](/labs/lab-01.qmd), [Lab 2](/labs/lab-02.qmd), [Lab 3](/labs/lab-03.qmd), [Lab 4](/labs/lab-04.qmd), [Lab 5](/labs/lab-05.qmd), and [Lab 6](/labs/lab-06.qmd)
+4. Solve [Home Assignment 1](/assignment/01-assignment.qmd), [Home Assignment 2](/assignment/02-assignment.qmd), and [Home Assignment 3](/assignment/03-assignment.qmd)
 5. Re-attempt quizzes for revision
+

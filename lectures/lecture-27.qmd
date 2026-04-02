@@ -1,0 +1,276 @@
+---
+title: "Lecture 27: Cookies & Session Tracking"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 11, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 27]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Cookies & Session Tracking]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 7 | Unit III: Servlets<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Understand why HTTP alone cannot remember users
+- Explain cookies and sessions in simple terms
+- Implement basic login tracking in servlet apps
+- Compare cookies, URL rewriting, and HttpSession
+:::
+
+---
+
+## {data-menu-title="Stateless HTTP"}
+
+[Why Session Tracking is Needed]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+HTTP is **stateless**.
+
+That means each request is independent.
+
+Without session tracking:
+
+- server cannot remember who logged in
+- cart items disappear between pages
+- personalized data cannot continue
+:::
+
+---
+
+## {data-menu-title="Cookie Basics"}
+
+[What is a Cookie?]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+A cookie is a small key-value text data stored in browser.
+
+- Set by server
+- Sent back by browser in later requests
+- Useful for preferences, user id tokens, language, etc.
+:::
+
+```{.java}
+Cookie c = new Cookie("username", "rahul");
+c.setMaxAge(60 * 60); // 1 hour
+response.addCookie(c);
+```
+
+---
+
+## {data-menu-title="Read Cookies"}
+
+[How to Read Cookies]{.slide-title2}
+
+<hr>
+
+```{.java}
+Cookie[] cookies = request.getCookies();
+if (cookies != null) {
+  for (Cookie c : cookies) {
+    if ("username".equals(c.getName())) {
+      String user = c.getValue();
+    }
+  }
+}
+```
+
+::: {.body-text-m}
+Always check `cookies != null` to avoid null pointer errors.
+:::
+
+---
+
+## {data-menu-title="Cookie Limits"}
+
+[Cookie Limitations]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Limited size (around 4 KB per cookie)
+- User can delete/disable cookies
+- Not safe for passwords or sensitive data
+- Sent with requests, so too many cookies can slow traffic
+:::
+
+---
+
+## {data-menu-title="Session Basics"}
+
+[What is HttpSession?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+`HttpSession` stores user data on server side.
+
+You can store attributes per user login session.
+
+Example data:
+
+- user id
+- role
+- cart items
+- temporary messages
+:::
+
+```{.java}
+HttpSession session = request.getSession();
+session.setAttribute("user", "rahul");
+```
+
+---
+
+## {data-menu-title="Read Session"}
+
+[Reading Session Values]{.slide-title}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession(false);
+if (session != null) {
+  String user = (String) session.getAttribute("user");
+}
+```
+
+::: {.body-text-m}
+Use `getSession(false)` when you only want existing session, not a new one.
+:::
+
+---
+
+## {data-menu-title="Login Example"}
+
+[Simple Login Tracking Flow]{.slide-title2}
+
+<hr>
+
+```{.java}
+// Login servlet (success case)
+HttpSession session = request.getSession();
+session.setAttribute("loggedInUser", email);
+response.sendRedirect("dashboard.jsp");
+```
+
+```{.jsp}
+<!-- dashboard.jsp -->
+<%
+  HttpSession s = request.getSession(false);
+  String user = (s == null) ? null : (String) s.getAttribute("loggedInUser");
+  if (user == null) {
+    response.sendRedirect("login.jsp");
+    return;
+  }
+%>
+<h2>Welcome, <%= user %></h2>
+```
+
+---
+
+## {data-menu-title="Logout"}
+
+[How Logout Works]{.slide-title}
+
+<hr>
+
+```{.java}
+HttpSession session = request.getSession(false);
+if (session != null) {
+  session.invalidate();
+}
+response.sendRedirect("login.jsp");
+```
+
+::: {.body-text-m}
+`invalidate()` clears all session data and marks session invalid.
+:::
+
+---
+
+## {data-menu-title="Tracking Methods"}
+
+[Session Tracking Techniques]{.slide-title2}
+
+<hr>
+
+| Method | Where data stored | Good for | Caution |
+|---|---|---|---|
+| Cookies | Browser | Preferences, simple tokens | User can disable/edit |
+| HttpSession | Server | Auth state, per-user data | Memory usage on server |
+| URL Rewriting | URL query/path | Fallback when cookies disabled | URL can expose data |
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Storing password in cookie
+- Forgetting session null checks
+- Not invalidating session on logout
+- Sending sensitive data in URL parameters
+- Assuming cookies are always enabled
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[AKTU Exam-Oriented Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Prepare these short-answer points:
+
+1. Define cookie and session
+2. Difference between cookie and HttpSession
+3. How to create, read, and delete cookie
+4. How to create session and invalidate on logout
+5. Why HTTP needs session tracking
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+You are now ready to:
+
+- explain session tracking in beginner-friendly language
+- write cookie and session code in servlet projects
+- build basic login-logout flows
+- answer common AKTU theory and practical questions
+:::

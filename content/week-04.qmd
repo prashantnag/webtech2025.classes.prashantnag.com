@@ -13,7 +13,7 @@ This week covers JavaScript functions, event handling, and begins control flow s
 
 ---
 
-## Lecture 13: JavaScript Functions & Event Handling {#lecture-13}
+## Lecture 13: Introduction to Bootstrap {#lecture-13}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -75,7 +75,7 @@ button.addEventListener('click', function(event) {
 
 ---
 
-## Lecture 14: Conditional Statements & Looping {#lecture-14}
+## Lecture 14: Revision & Practical Exercise (HTML + CSS + Bootstrap) {#lecture-14}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -141,7 +141,7 @@ for (const key in object) {
 
 ---
 
-## Lecture 15: Objects & Scope {#lecture-15}
+## Lecture 15: Introduction to JavaScript & Variables {#lecture-15}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -199,7 +199,7 @@ console.log(blockVar);      // Error: not defined
 
 ---
 
-## Lecture 16: Arrow Functions & Callbacks {#lecture-16}
+## Lecture 16: Functions in JavaScript & Returning Data {#lecture-16}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials

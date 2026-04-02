@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 5: HTML Lists & Images"
+title: "Lecture 5: HTML Lists (Ordered, Unordered, Description)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 2, 2026"

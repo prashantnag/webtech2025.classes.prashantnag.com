@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 13: JavaScript Functions & Event Handling"
+title: "Lecture 13: Introduction to Bootstrap"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 16, 2026"

@@ -1,0 +1,380 @@
+---
+title: "Lecture 33: Spring Core Basics & Dependency Injection"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 19, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 33]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Spring Core Basics & Dependency Injection]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 9 | Unit IV: Spring Framework<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain what the Spring Framework is and why it is used
+- Describe Inversion of Control (IoC) in plain English
+- Differentiate constructor injection, setter injection, and field injection
+- Write a basic Spring configuration using Java annotations
+- Use `ApplicationContext` to retrieve and use beans
+- Recognize when Spring DI reduces tight coupling in code
+:::
+
+---
+
+## {data-menu-title="What is Spring"}
+
+[What is the Spring Framework?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Spring is a **lightweight Java application framework** for building enterprise-grade applications.
+
+Core goals:
+- Remove tight coupling between classes
+- Manage object creation and wiring automatically
+- Provide clean structure for large applications
+:::
+
+::: {.body-text-s}
+Spring offers a complete ecosystem: Core, MVC, Data, Security, Boot, Cloud.
+:::
+
+---
+
+## {data-menu-title="The Problem DI Solves"}
+
+[Tight Coupling Problem]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1-5|7-13"}
+// Without DI — tightly coupled
+public class OrderService {
+  private PaymentService payment = new PaymentService(); // #<1>
+  private EmailService email = new EmailService();       // #<2>
+}
+
+// With DI — loosely coupled
+public class OrderService {
+  private PaymentService payment; // #<3>
+  private EmailService email;     // #<4>
+  public OrderService(PaymentService p, EmailService e) {
+    this.payment = p; this.email = e;
+  }
+}
+```
+1. Hard-coded dependency — cannot swap implementation
+2. Hard-coded dependency — cannot mock in tests
+3. Injected from outside — any implementation works
+4. Injected from outside — testable and flexible
+
+---
+
+## {data-menu-title="IoC Container"}
+
+[Inversion of Control (IoC)]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**IoC** means the framework controls object creation, not your code.
+
+Without IoC → **you** create objects  
+With IoC → **Spring** creates objects and injects dependencies
+
+The Spring IoC container is called the **ApplicationContext**.
+:::
+
+```{mermaid}
+%%| fig-height: 3.0
+flowchart LR
+  A[Configuration Metadata] --> B[Spring IoC Container]
+  C[POJO Classes] --> B
+  B --> D[Ready-to-use Application Objects]
+```
+
+---
+
+## {data-menu-title="ApplicationContext"}
+
+[ApplicationContext vs BeanFactory]{.slide-title}
+
+<hr>
+
+| Feature | BeanFactory | ApplicationContext |
+|---|---|---|
+| Bean initialization | Lazy (on demand) | Eager at startup |
+| Event publishing | No | Yes |
+| i18n support | No | Yes |
+| Annotation support | Limited | Full |
+| Recommended for | Unit testing | All applications |
+
+::: {.body-text-s}
+In practice, always use `ApplicationContext` — `BeanFactory` is rarely used directly.
+:::
+
+---
+
+## {data-menu-title="Constructor Injection"}
+
+[Constructor Injection]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-4|6-10"}
+@Component
+public class OrderService {
+  private final PaymentService paymentService; // #<1>
+  private final EmailService emailService;
+
+  @Autowired                                   // #<2>
+  public OrderService(PaymentService p, EmailService e) {
+    this.paymentService = p;
+    this.emailService   = e;
+  }
+}
+```
+1. `final` fields — guarantees immutability after creation
+2. `@Autowired` tells Spring to inject matching beans here
+
+::: {.body-text-s}
+Constructor injection is preferred — makes dependencies explicit and supports immutability.
+:::
+
+---
+
+## {data-menu-title="Setter Injection"}
+
+[Setter Injection]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-6"}
+@Component
+public class ReportService {
+  private DataSource dataSource;
+
+  @Autowired
+  public void setDataSource(DataSource ds) { // #<1>
+    this.dataSource = ds;
+  }
+}
+```
+1. Spring calls this setter with the matching bean after construction
+
+::: {.body-text-m}
+Use setter injection for **optional** dependencies or when circular dependency exists.
+:::
+
+---
+
+## {data-menu-title="Field Injection"}
+
+[Field Injection (and Why to Avoid It)]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-2"}
+@Component
+public class UserService {
+  @Autowired
+  private UserRepository repo; // #<1>
+}
+```
+1. Spring injects directly into the field — no constructor or setter needed
+
+::: {.incremental .body-text-m}
+**Appears simple but has problems:**
+
+- Cannot make fields `final`
+- Hard to test without Spring container
+- Hides dependencies (not visible from outside)
+
+**Prefer constructor injection in production code.**
+:::
+
+---
+
+## {data-menu-title="Spring Config Styles"}
+
+[Three Configuration Styles]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring supports three ways to define beans:
+:::
+
+| Style | How | When to Use |
+|---|---|---|
+| XML | `<bean id="..." class="..."/>` | Legacy projects |
+| Java Config | `@Configuration` + `@Bean` | Full control over creation |
+| Annotation | `@Component` + `@Autowired` | Most modern projects |
+
+::: {.body-text-s}
+All three styles can coexist in the same project.
+:::
+
+---
+
+## {data-menu-title="Java Config Example"}
+
+[Java Configuration Example]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-6|8-13"}
+@Configuration                              // #<1>
+public class AppConfig {
+
+  @Bean                                     // #<2>
+  public UserRepository userRepository() {
+    return new UserRepositoryImpl();
+  }
+
+  @Bean
+  public UserService userService() {
+    return new UserService(userRepository()); // #<3>
+  }
+}
+```
+1. Marks this class as Spring configuration source
+2. Method return value is registered as a Spring bean
+3. Spring calls this for the injected dependency
+
+---
+
+## {data-menu-title="Annotation Config Example"}
+
+[Annotation-Based Configuration]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1|7|9|11-13"}
+@SpringBootApplication                      // #<1>
+public class App {
+  public static void main(String[] args) {
+    SpringApplication.run(App.class, args);
+  }
+}
+
+@Repository                                 // #<2>
+public class UserRepositoryImpl implements UserRepository { ... }
+
+@Service                                    // #<3>
+public class UserService {
+  @Autowired UserRepository repo;
+}
+```
+1. Component scan + auto-configuration enabled
+2. Spring detects and registers this as a bean
+3. Registers as service bean; repo injected automatically
+
+---
+
+## {data-menu-title="Using ApplicationContext"}
+
+[Retrieving Beans from ApplicationContext]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4-5|7-8"}
+// XML-based context
+ApplicationContext ctx =
+  new ClassPathXmlApplicationContext("beans.xml");
+
+// Java config context
+ApplicationContext ctx =
+  new AnnotationConfigApplicationContext(AppConfig.class);
+
+// Retrieve bean
+UserService svc = ctx.getBean(UserService.class); // #<1>
+svc.processOrder();
+```
+1. Spring returns the fully-wired bean instance
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Using `new` to create beans instead of letting Spring manage them
+- Mixing field injection everywhere instead of constructor injection
+- Forgetting `@Component` or `@Bean` so Spring cannot find the class
+- Using `BeanFactory` directly when `ApplicationContext` is available
+- Circular dependency due to two beans injecting each other via constructors
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[AKTU Exam-Oriented Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Prepare these high-probability questions:
+
+1. Define Spring Framework and list its core modules
+2. Explain IoC with a diagram
+3. Differentiate constructor injection, setter injection, and field injection
+4. Compare `ApplicationContext` and `BeanFactory`
+5. Write a simple Spring Java configuration example
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+You now understand:
+
+- Spring as an IoC container managing object lifecycle
+- How dependency injection decouples components
+- Three injection styles and when to use each
+- Three configuration approaches (XML, Java, Annotation)
+- How to retrieve and use beans from `ApplicationContext`
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 34 - Design Patterns: Factory & Strategy
+</div>
+</div>

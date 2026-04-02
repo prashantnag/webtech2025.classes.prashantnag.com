@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 1: Introduction to Web Designing"
+title: "Lecture 1: Introduction to Web Page Designing & Web Development Strategies"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "January 26, 2026"

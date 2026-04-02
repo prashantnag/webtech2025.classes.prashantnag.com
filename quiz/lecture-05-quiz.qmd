@@ -1,11 +1,11 @@
----
+﻿---
 title: "Lecture 5 Quiz: HTML Lists & Images"
 jupyter: julia-1.12
 ---
 
 ::: {.callout-note}
 Review before quiz:
-[Lectures](/lectures/lecture-05.qmd) | [Week 2 Content](/content/week-02.qmd) | [Lab 2](/labs/lab-02.qmd) | [Assignment 1](/assignment/01-assignment.qmd)
+[Lectures](/lectures/lecture-05.qmd) | [Week 2 Content](/content/week-02.qmd) | [Lab 2](/labs/lab-02.qmd) | [Home Assignment 1](/assignment/01-assignment.qmd)
 :::
 
 ```{julia cache=true}
@@ -54,3 +54,4 @@ question = "Question 5: Which format is a scalable vector image format?"
 answer = 3
 radioq(choices, answer; label=question, keep_order=true)
 ```
+

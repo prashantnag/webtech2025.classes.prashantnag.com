@@ -1,5 +1,5 @@
 ---
-title: "Lecture 17: DOM Manipulation & Array Methods"
+title: "Lecture 17: UI Events & Event Handling"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 23, 2026"

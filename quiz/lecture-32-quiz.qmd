@@ -1,0 +1,56 @@
+---
+title: "Lecture 32 Quiz: Revision & Practical (Servlets + JSP)"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-32.qmd) | [Week 10 Content](/content/week-10.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 32 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Both redirect and forward share the same request object", "B. Redirect sends a new request from the browser; forward passes the same request internally", "C. Forward changes the URL in the browser; redirect does not", "D. Both redirect and forward keep request attributes intact"]
+question = "Question 1: What is the key difference between redirect and forward in servlet/JSP flow?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `session.removeSession()`", "B. `session.clear()`", "C. `session.invalidate()`", "D. `request.destroySession()`"]
+question = "Question 2: Which method is used to log out a user by ending their HttpSession?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. JSP acts as Controller and Servlet as View", "B. Servlet handles business logic (Controller); JSP handles presentation (View)", "C. Both Servlet and JSP are the Model layer", "D. JSP handles both Model and Controller"]
+question = "Question 3: In a typical MVC pattern with Servlets and JSP, what is the correct role assignment?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `request.getSession(false)` always creates a new session", "B. `request.getSession()` creates a session if none exists; `request.getSession(false)` returns null if none exists", "C. Both `getSession()` and `getSession(false)` behave identically", "D. `getSession(true)` returns null if no session exists"]
+question = "Question 4: What is the difference between `request.getSession()` and `request.getSession(false)`?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Missing taglib declaration JAR or URI", "B. Too many scriptlets in JSP", "C. Using `jsp:include` instead of `jsp:forward`", "D. Session not invalidated on logout"]
+question = "Question 5: A JSTL `<c:if>` tag is not rendering and throws an error. What is the most likely cause?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

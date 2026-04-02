@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 15: Objects & Scope"
+title: "Lecture 15: Introduction to JavaScript & Variables"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 18, 2026"

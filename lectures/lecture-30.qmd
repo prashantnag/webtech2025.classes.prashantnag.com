@@ -1,0 +1,210 @@
+---
+title: "Lecture 30: JSP Implicit Objects & Scripting"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 24, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 30]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[JSP Implicit Objects & Scripting]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 10 | Unit III: JSP<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Identify all key JSP implicit objects and their purpose
+- Use `request`, `response`, `session`, and `application` correctly
+- Apply scriptlets, expressions, and declarations with safe scope awareness
+- Compare page/request/session/application attribute scopes
+- Avoid common beginner mistakes while mixing Java and JSP markup
+:::
+
+---
+
+## {data-menu-title="Implicit Objects"}
+
+[What Are Implicit Objects?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+JSP provides built-in objects automatically. You can use them without declaring them.
+
+Most used objects:
+- `request`, `response`, `session`
+- `application`, `out`, `pageContext`
+- `config`, `page`, `exception`
+:::
+
+---
+
+## {data-menu-title="Objects Table"}
+
+[Core Implicit Objects and Use]{.slide-title}
+
+<hr>
+
+| Object | Type | Typical Use |
+|---|---|---|
+| `request` | `HttpServletRequest` | Read query/form input |
+| `response` | `HttpServletResponse` | Set headers/status/redirect |
+| `session` | `HttpSession` | Per-user state |
+| `application` | `ServletContext` | App-wide shared data |
+| `out` | `JspWriter` | Write output |
+| `pageContext` | `PageContext` | Access all scopes |
+
+---
+
+## {data-menu-title="Request Example"}
+
+[Using request and response]{.slide-title2}
+
+<hr>
+
+```{.jsp code-line-numbers="|1|2|3|5"}
+<%
+  String city = request.getParameter("city");
+  if (city == null || city.isBlank()) city = "Lucknow";
+%>
+<p>Selected city: <%= city %></p>
+<% response.setHeader("X-Course", "BMC201"); %>
+```
+
+---
+
+## {data-menu-title="Session Example"}
+
+[Using session safely]{.slide-title}
+
+<hr>
+
+```{.jsp code-line-numbers="|1-3|5-6"}
+<%
+  session.setAttribute("user", "student01");
+  String user = (String) session.getAttribute("user");
+%>
+<h3>Welcome, <%= user %></h3>
+<p>Session ID: <%= session.getId() %></p>
+```
+
+::: {.body-text-s}
+Store only minimal, non-sensitive state in session.
+:::
+
+---
+
+## {data-menu-title="Scripting"}
+
+[Scriptlet, Expression, Declaration]{.slide-title2}
+
+<hr>
+
+```{.jsp code-line-numbers="|1|3|5"}
+<%! int visitCount = 0; %>
+<% visitCount++; %>
+<p>Visits to this JSP instance: <%= visitCount %></p>
+```
+
+::: {.body-text-m}
+- Declaration (`<%! %>`) creates class-level members
+- Scriptlet (`<% %>`) runs Java statements
+- Expression (`<%= %>`) prints evaluated result
+:::
+
+---
+
+## {data-menu-title="Scope"}
+
+[Attribute Scopes in JSP]{.slide-title}
+
+<hr>
+
+```{.jsp}
+<%
+  pageContext.setAttribute("p", "page-value", PageContext.PAGE_SCOPE);
+  request.setAttribute("r", "request-value");
+  session.setAttribute("s", "session-value");
+  application.setAttribute("a", "app-value");
+%>
+```
+
+::: {.body-text-s}
+Use the smallest scope needed for better clarity and performance.
+:::
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Heavy business logic inside JSP scriptlets
+- Using declaration variables for shared mutable state carelessly
+- Assuming `session` always exists in every page flow
+- Printing unvalidated input directly to output
+- Overusing scriptlets instead of moving logic to servlet/controller
+:::
+
+---
+
+## {data-menu-title="Quick Practice"}
+
+[Classroom Practice Task]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Build a small `profile.jsp` page that:
+
+1. Reads `name` and `city` from request
+2. Stores `name` in session
+3. Prints values using expression tags
+4. Adds one `application` attribute for course name
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implicit objects simplify JSP development
+- Scripting elements are useful but should stay minimal
+- Correct scope choice prevents bugs and confusion
+- MVC approach keeps JSP clean and maintainable
+:::
+
+---
+
+## Questions
+
+[Thank You]{.slide-title}
+
+::: {.body-text-l}
+Questions or doubts before we move to JSP directives and actions?
+:::

@@ -14,6 +14,9 @@ These are revision weeks focused on consolidating understanding of Units I and I
 ::: {.callout-tip icon=false}
 ## Quick Practice Quizzes (Revision Weeks)
 Use the [Quiz Hub](/quiz/index.qmd) to re-attempt available quizzes before the mid-sem exam.
+
+- [Revision Quiz: Unit I - Web Page Designing](/quiz/revision-unit-1-quiz.qmd)
+- [Revision Quiz: Unit II - JavaScript](/quiz/revision-unit-2-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}

@@ -66,3 +66,97 @@ button:focus {
   }
 
 }
+
+/* Assignment dashboard cards */
+.assignment-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.assignment-card {
+  display: block;
+  padding: 1rem 1.1rem;
+  border: 1px solid #d6dee8;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.assignment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  border-color: #9fb6d1;
+}
+
+.assignment-card .assignment-title {
+  display: block;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.assignment-due {
+  margin: 0 0 0.45rem 0;
+  color: #334e68;
+  font-size: 0.92rem;
+}
+
+.assignment-desc {
+  margin: 0 0 0.8rem 0;
+  color: #243b53;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.assignment-card .card-link {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0b63ce;
+  border: 1px solid #c5d4e6;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  background: #fff;
+}
+
+.assignment-card .card-link:hover {
+  color: #084b9a;
+  border-color: #9fb6d1;
+}
+
+body.quarto-dark .assignment-card,
+body[data-bs-theme="dark"] .assignment-card,
+html.quarto-dark body .assignment-card {
+  border-color: #3d4f63;
+  background: linear-gradient(180deg, #1f2a36 0%, #1a232e 100%);
+}
+
+body.quarto-dark .assignment-card .assignment-title,
+body[data-bs-theme="dark"] .assignment-card .assignment-title,
+html.quarto-dark body .assignment-card .assignment-title {
+  color: #d9e2ec;
+}
+
+body.quarto-dark .assignment-due,
+body[data-bs-theme="dark"] .assignment-due,
+html.quarto-dark body .assignment-due {
+  color: #9fb3c8;
+}
+
+body.quarto-dark .assignment-desc,
+body[data-bs-theme="dark"] .assignment-desc,
+html.quarto-dark body .assignment-desc {
+  color: #bcccdc;
+}
+
+body.quarto-dark .assignment-card .card-link,
+body[data-bs-theme="dark"] .assignment-card .card-link,
+html.quarto-dark body .assignment-card .card-link {
+  color: #d6e4ff;
+  border-color: #4b6178;
+  background: #223142;
+}

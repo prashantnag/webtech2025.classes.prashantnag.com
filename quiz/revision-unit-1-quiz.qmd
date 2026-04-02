@@ -1,0 +1,56 @@
+---
+title: "Revision Quiz: Unit I - Web Page Designing"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Revision Lecture](/lectures/revision-unit-1.qmd) | [Week 6 Content](/content/week-06.qmd) | [Week 1 Content](/content/week-01.qmd) | [Week 2 Content](/content/week-02.qmd) | [Week 3 Content](/content/week-03.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Unit I Revision Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<section>`", "B. `<div>`", "C. `<span>`", "D. `<b>`"]
+question = "Question 1: Which HTML element is semantic and commonly used to group a thematic section of content?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `padding + border + margin`", "B. `content + padding + border + margin`", "C. `content + margin`", "D. `content + border`"]
+question = "Question 2: The CSS box model includes which four layers?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `href`", "B. `action`", "C. `method`", "D. `target`"]
+question = "Question 3: Which form attribute specifies where submitted form data should be sent?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. It defines the page title in the browser tab", "B. It creates the largest page heading", "C. It links an external stylesheet", "D. It inserts metadata into the body"]
+question = "Question 4: What is the main purpose of the HTML `<title>` element?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Bootstrap is only used for databases", "B. Bootstrap provides predefined CSS components and a responsive grid", "C. Bootstrap replaces HTML", "D. Bootstrap is a JavaScript runtime"]
+question = "Question 5: Which statement correctly describes Bootstrap?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

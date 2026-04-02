@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 2: History of Web & Internet"
+title: "Lecture 2: History of Web & Internet, Protocols Governing the Web"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "January 27, 2026"

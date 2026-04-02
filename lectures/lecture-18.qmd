@@ -1,5 +1,5 @@
 ---
-title: "Lecture 18: Form Validation"
+title: "Lecture 18: Conditions & Looping in JavaScript"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 24, 2026"

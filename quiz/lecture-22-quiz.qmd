@@ -1,0 +1,56 @@
+---
+title: "Lecture 22 Quiz: Revision & Mini Project (JavaScript & DOM)"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-22.qmd) | [Week 8 Content](/content/week-08.qmd) | [Lab 6](/labs/lab-06.qmd) | [Home Assignment 3](/assignment/03-assignment.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 22 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Database backup tool", "B. Single-page task tracker", "C. CSS animation engine", "D. Servlet deployment server"]
+question = "Question 1: What mini project is proposed in this lecture?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Add tasks", "B. Mark tasks complete", "C. Filter by status", "D. All of these"]
+question = "Question 2: Which capabilities are part of the Smart Task Tracker brief?"
+answer = 4
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `trim()`", "B. `sort()`", "C. `split()`", "D. `concat()`"]
+question = "Question 3: Which string method is used before validating that task input is not empty?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `document.createElement('li')`", "B. `new listItem()`", "C. `taskList.make('li')`", "D. `appendChild('li')`"]
+question = "Question 4: Which statement correctly creates a new list item element for rendering tasks?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. To block all keyboard input", "B. To display a validation message when the task input is empty", "C. To store tasks in the database", "D. To hide the task list permanently"]
+question = "Question 5: What is the purpose of the `errorBox` element in the project example?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

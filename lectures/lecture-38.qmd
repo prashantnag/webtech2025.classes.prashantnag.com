@@ -1,0 +1,265 @@
+---
+title: "Lecture 38: Spring Boot Configuration, Annotations & Build Systems"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 26, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 38]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Spring Boot Configuration, Annotations & Build Systems]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 12 | Unit V: Spring Boot<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain why Spring Boot is preferred over classic Spring setup
+- Configure app settings using `application.properties` and profiles
+- Use core Spring Boot annotations correctly
+- Compare Maven and Gradle build systems
+- Structure a Boot project using clean package conventions
+- Use actuator basics for environment and health visibility
+:::
+
+---
+
+## {data-menu-title="Why Spring Boot"}
+
+[Why Spring Boot?]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Auto-configuration reduces boilerplate
+- Embedded server (Tomcat/Jetty/Undertow)
+- Starter dependencies simplify build files
+- Production-ready defaults with actuator support
+- Quick setup for REST and microservices
+:::
+
+---
+
+## {data-menu-title="Project Structure"}
+
+[Recommended Project Structure]{.slide-title}
+
+<hr>
+
+```text
+src/main/java/com/example/app/
+  Application.java
+  controller/
+  service/
+  repository/
+  entity/
+src/main/resources/
+  application.properties
+  application-dev.properties
+  application-prod.properties
+pom.xml or build.gradle
+```
+
+::: {.body-text-s}
+Keep `Application.java` at top package so component scan covers subpackages.
+:::
+
+---
+
+## {data-menu-title="Main Annotations"}
+
+[Core Spring Boot Annotations]{.slide-title2}
+
+<hr>
+
+| Annotation | Purpose |
+|---|---|
+| `@SpringBootApplication` | Enables auto-config + component scan + config |
+| `@Configuration` | Bean definition class |
+| `@Bean` | Registers method return as bean |
+| `@ConfigurationProperties` | Binds external config to POJO |
+| `@Value` | Injects individual property values |
+
+---
+
+## {data-menu-title="Properties Config"}
+
+[application.properties Example]{.slide-title}
+
+<hr>
+
+```{.properties}
+server.port=8081
+spring.application.name=task-service
+spring.datasource.url=jdbc:mysql://localhost:3306/taskdb
+spring.datasource.username=root
+spring.datasource.password=secret
+spring.jpa.hibernate.ddl-auto=update
+logging.level.com.example=DEBUG
+management.endpoints.web.exposure.include=health,info,metrics
+```
+
+---
+
+## {data-menu-title="Profiles"}
+
+[Environment Profiles]{.slide-title2}
+
+<hr>
+
+```{.properties}
+# application-dev.properties
+logging.level.root=DEBUG
+spring.jpa.show-sql=true
+
+# application-prod.properties
+logging.level.root=INFO
+spring.jpa.show-sql=false
+```
+
+```bash
+# Run with dev profile
+java -jar app.jar --spring.profiles.active=dev
+```
+
+---
+
+## {data-menu-title="Configuration Binding"}
+
+[@ConfigurationProperties Demo]{.slide-title}
+
+<hr>
+
+```{.java code-line-numbers="|1|3-6"}
+@ConfigurationProperties(prefix = "app.mail")
+@Component
+public class MailProps {
+  private String host;
+  private int port;
+  private String sender;
+}
+```
+
+```{.properties}
+app.mail.host=smtp.example.com
+app.mail.port=587
+app.mail.sender=noreply@example.com
+```
+
+---
+
+## {data-menu-title="Maven vs Gradle"}
+
+[Build Systems: Maven vs Gradle]{.slide-title2}
+
+<hr>
+
+| Feature | Maven | Gradle |
+|---|---|---|
+| Format | XML (`pom.xml`) | Groovy/Kotlin DSL |
+| Learning Curve | Easier initially | Higher initially |
+| Performance | Good | Better with incremental builds |
+| Convention | Strong conventions | More flexible customization |
+
+---
+
+## {data-menu-title="Starter Dependencies"}
+
+[Starter Dependency Example]{.slide-title}
+
+<hr>
+
+```{.xml}
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+```
+
+::: {.body-text-s}
+Starter artifacts include compatible transitive dependencies automatically.
+:::
+
+---
+
+## {data-menu-title="Actuator Basics"}
+
+[Actuator Essentials]{.slide-title2}
+
+<hr>
+
+```{.properties}
+management.endpoints.web.exposure.include=health,info,metrics
+management.endpoint.health.show-details=always
+```
+
+```text
+/actuator/health
+/actuator/info
+/actuator/metrics
+```
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Keeping secrets hard-coded in `application.properties`
+- Using same profile settings for local and production
+- Placing `Application.java` in wrong package (scan misses beans)
+- Managing dependency versions manually for Spring starters
+- Exposing all actuator endpoints in production without security
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Spring Boot accelerates development with opinionated defaults
+- Profiles keep configuration environment-specific and clean
+- Build tools and starter dependencies reduce setup friction
+- Proper structure and configuration are key for scalable apps
+:::
+
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 39 - RESTful Web Services: Controllers, Request Mapping, CRUD APIs
+</div>
+</div>

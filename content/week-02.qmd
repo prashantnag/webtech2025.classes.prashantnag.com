@@ -10,11 +10,11 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 **Course Outcome:** CO-1 (K3 - Application)  
 **Duration:** 1 week (4 lectures + 1 lab)  
 **Lab:** HTML Forms & Multimedia  
-**Assignment 1 Due:** Feb 11
+**Home Assignment 1 Due:** Feb 11
 
 ---
 
-## Lecture 5: HTML Lists & Images {#lecture-5}
+## Lecture 5: HTML Lists (Ordered, Unordered, Description) {#lecture-5}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -85,7 +85,7 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 ---
 
-## Lecture 6: HTML Hyperlinks & Tables {#lecture-6}
+## Lecture 6: HTML Images & Hyperlinks {#lecture-6}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -159,7 +159,7 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 ---
 
-## Lecture 7: HTML Forms & Form Elements {#lecture-7}
+## Lecture 7: HTML Tables & Iframes {#lecture-7}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -220,7 +220,7 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 ---
 
-## Lecture 8: Introduction to CSS {#lecture-8}
+## Lecture 8: HTML Forms & Form Elements {#lecture-8}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -340,5 +340,6 @@ In the coming weeks, we'll:
 - Learn CSS Box Model and positioning
 - Introduction to Bootstrap responsive framework
 - Begin JavaScript for interactivity
+
 
 

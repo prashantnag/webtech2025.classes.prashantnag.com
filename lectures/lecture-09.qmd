@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 9: CSS Units & Advanced Selectors"
+title: "Lecture 9: CSS Introduction & CSS Syntax"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 9, 2026"

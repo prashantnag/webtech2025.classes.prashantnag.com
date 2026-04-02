@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 7: HTML Forms & Form Elements"
+title: "Lecture 7: HTML Tables & Iframes"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 4, 2026"

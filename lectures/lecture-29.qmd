@@ -1,0 +1,278 @@
+---
+title: "Lecture 29: JSP Introduction & JSP Overview"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 24, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 29]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[JSP Introduction & JSP Overview]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 10 | Unit III: JSP<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Define JSP and explain why it is used in Java web applications
+- Understand how a JSP is translated and executed by a servlet container
+- Differentiate JSP from servlets for presentation and controller responsibilities
+- Use basic JSP elements: directives, scriptlets, expressions, and declarations
+- Recognize common implicit objects used inside JSP pages
+- Follow beginner-safe practices for JSP coding in exam and lab scenarios
+:::
+
+---
+
+## {data-menu-title="Why JSP"}
+
+[Why JSP Was Introduced]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Writing full HTML in servlets quickly becomes difficult to read and maintain.
+
+JSP solves this by allowing HTML-first pages with embedded Java when needed.
+
+- Servlet focus: request handling and business logic
+- JSP focus: rendering UI/view
+:::
+
+---
+
+## {data-menu-title="What is JSP"}
+
+[What is JSP?]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**JSP (JavaServer Pages)** is a server-side technology used to generate dynamic web pages.
+
+- File extension: `.jsp`
+- Processed on server, output sent as HTML to browser
+- Runs inside servlet containers like Tomcat
+:::
+
+---
+
+## {data-menu-title="Lifecycle"}
+
+[JSP Lifecycle in Container]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+%%| fig-height: 4.0
+flowchart LR
+  A[Browser requests JSP] --> B[Container translates JSP to servlet]
+  B --> C[Compiles servlet class]
+  C --> D[Creates servlet instance]
+  D --> E[jspInit called once]
+  E --> F[_jspService called per request]
+  F --> G[jspDestroy at unload]
+```
+
+::: {.body-text-s}
+Translation + compilation happens first time (or after change), then normal request handling continues.
+:::
+
+---
+
+## {data-menu-title="JSP vs Servlet"}
+
+[JSP vs Servlet]{.slide-title}
+
+<hr>
+
+| Aspect | JSP | Servlet |
+|---|---|---|
+| Main role | View/presentation | Controller/request processing |
+| Authoring style | HTML with JSP tags/code | Java class with response writing |
+| Maintainability for UI | Better | Harder for large HTML |
+| Compilation | Auto-translated to servlet | Already Java servlet class |
+
+---
+
+## {data-menu-title="JSP Elements"}
+
+[Core JSP Elements]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Common JSP syntax forms:
+
+- **Directive**: `<%@ ... %>`
+- **Scriptlet**: `<% ... %>`
+- **Expression**: `<%= ... %>`
+- **Declaration**: `<%! ... %>`
+
+In modern apps, use EL/JSTL where possible and keep Java code minimal in JSP.
+:::
+
+---
+
+## {data-menu-title="Directive Example"}
+
+[Page Directive Example]{.slide-title}
+
+<hr>
+
+```{.jsp code-line-numbers="|1|2|3"}
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page errorPage="error.jsp" %>
+```
+
+::: {.body-text-s}
+The `page` directive configures the JSP page-level behavior.
+:::
+
+---
+
+## {data-menu-title="Scriptlet Expression"}
+
+[Scriptlet and Expression Example]{.slide-title2}
+
+<hr>
+
+```{.jsp code-line-numbers="|1-3|5|7"}
+<%
+  String name = request.getParameter("name");
+  if (name == null || name.isBlank()) name = "Student";
+%>
+
+<h2>Welcome, <%= name %></h2>
+<p>Today is <%= java.time.LocalDate.now() %></p>
+```
+
+::: {.body-text-s}
+Scriptlet runs Java code; expression prints evaluated value into HTML output.
+:::
+
+---
+
+## {data-menu-title="Implicit Objects"}
+
+[Important JSP Implicit Objects]{.slide-title}
+
+<hr>
+
+| Object | Type | Use |
+|---|---|---|
+| `request` | `HttpServletRequest` | Read form/query input |
+| `response` | `HttpServletResponse` | Set headers/status |
+| `session` | `HttpSession` | Per-user session state |
+| `application` | `ServletContext` | App-wide shared context |
+| `out` | `JspWriter` | Write output stream |
+| `pageContext` | `PageContext` | Access scoped attributes |
+
+---
+
+## {data-menu-title="MVC Flow"}
+
+[Servlet + JSP MVC Flow]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-2|4|5"}
+String name = request.getParameter("name");
+request.setAttribute("userName", name);
+
+RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
+rd.forward(request, response);
+```
+
+```{.jsp code-line-numbers="|1"}
+<h2>Hello, ${userName}</h2>
+```
+
+::: {.body-text-s}
+Controller servlet prepares data; JSP renders it.
+:::
+
+---
+
+## {data-menu-title="Best Practices"}
+
+[Best Practices for Beginners]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Keep business logic in servlets/services, not in JSP pages
+- Prefer EL/JSTL over heavy scriptlets
+- Never print sensitive data directly in responses
+- Validate request parameters before use
+- Use forwarding from servlet to JSP for clean MVC structure
+:::
+
+---
+
+## {data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title2}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Writing full database logic inside JSP
+- Using scriptlets everywhere instead of EL/JSTL
+- Forgetting null checks for `request.getParameter(...)`
+- Mixing redirect and forward without clear control flow
+- Ignoring character encoding (`UTF-8`) in page setup
+:::
+
+---
+
+## {data-menu-title="Exam Focus"}
+
+[AKTU Exam-Oriented Checklist]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Prepare these high-probability questions:
+
+1. Define JSP and explain why it is needed
+2. Explain JSP lifecycle steps in container
+3. Differentiate JSP and servlet with examples
+4. List and explain JSP implicit objects
+5. Explain directive, scriptlet, expression, declaration
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+You are now ready to:
+
+- explain JSP fundamentals clearly
+- write basic JSP pages with proper structure
+- connect servlet controller flow to JSP views
+- avoid common beginner mistakes in labs and exams
+:::

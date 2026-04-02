@@ -1,0 +1,56 @@
+---
+title: "Lecture 30 Quiz: JSP Implicit Objects & Scripting"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-30.qmd) | [Week 10 Content](/content/week-10.qmd) | [Lab 8](/labs/lab-08.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 30 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Objects declared in JSP imports", "B. Built-in objects available in every JSP without explicit declaration", "C. Java classes added manually by the developer", "D. Database connection objects"]
+question = "Question 1: What are JSP implicit objects?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `out`", "B. `application`", "C. `request`", "D. `pageContext`"]
+question = "Question 2: Which implicit object is used to read form/query parameters in a JSP?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<%! ... %>`", "B. `<% ... %>`", "C. `<%= ... %>`", "D. `<%@ ... %>`"]
+question = "Question 3: Which JSP syntax is used to evaluate and print a Java expression directly in the page output?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Page scope — widest, available to all users", "B. Application scope — shared across all users and requests", "C. Request scope — persists across browser sessions", "D. Session scope — shared across all servlet contexts"]
+question = "Question 4: Which attribute scope is correct?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `<%! int count = 0; %>`", "B. `<% int count = 0; %>`", "C. `<%= int count = 0; %>`", "D. `<%@ int count = 0; %>`"]
+question = "Question 5: Which syntax creates a class-level declaration variable in JSP?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

@@ -9,12 +9,17 @@ This week focuses on DOM (Document Object Model) manipulation, form validation, 
 
 **Course Outcome:** CO-2 (K3 - Application)  
 **Duration:** 1 week (4 lectures + 1 lab)  
-**Assignment 2 Due:** Feb 25  
+**Home Assignment 2 Due:** Feb 25  
 **Lab:** DOM Manipulation & Interactive Pages
 
 ::: {.callout-tip icon=false}
 ## Quick Practice Quizzes (Lectures 17-20)
-Planned for this week. Use the [Quiz Hub](/quiz/index.qmd) for currently available quizzes.
+Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
+
+- [Lecture 17 Quiz](/quiz/lecture-17-quiz.qmd)
+- [Lecture 18 Quiz](/quiz/lecture-18-quiz.qmd)
+- [Lecture 19 Quiz](/quiz/lecture-19-quiz.qmd)
+- [Lecture 20 Quiz](/quiz/lecture-20-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -24,7 +29,7 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 17: DOM Manipulation & Array Methods {#lecture-17}
+## Lecture 17: UI Events & Event Handling {#lecture-17}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -83,7 +88,7 @@ arr.reverse();                 // [5, 4, 3, 2, 1]
 
 ---
 
-## Lecture 18: Form Validation {#lecture-18}
+## Lecture 18: Conditions & Looping in JavaScript {#lecture-18}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -144,7 +149,7 @@ emailInput.addEventListener('blur', function() {
 
 ---
 
-## Lecture 19: ES6+ Features {#lecture-19}
+## Lecture 19: Block Scope Variables (let, const) {#lecture-19}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -205,7 +210,7 @@ y = 20; // Error
 
 ---
 
-## Lecture 20: Revision - Units I & II {#lecture-20}
+## Lecture 20: Objects & Object Literals {#lecture-20}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -275,5 +280,6 @@ Study these topics:
 - DOM manipulation
 - Event handling
 - Form validation
+
 
 

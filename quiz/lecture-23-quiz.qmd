@@ -1,0 +1,56 @@
+---
+title: "Lecture 23 Quiz: Servlet Overview & Architecture"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-23.qmd) | [Week 8 Content](/content/week-08.qmd) | [Lab 6](/labs/lab-06.qmd) | [Home Assignment 3](/assignment/03-assignment.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 23 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. A CSS file", "B. A Java class that handles HTTP requests and responses", "C. A database table", "D. A client-side JavaScript library"]
+question = "Question 1: What is a servlet in a Java web application?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Servlet container", "B. Browser cache", "C. CSS engine", "D. PDF renderer"]
+question = "Question 2: Which component is responsible for loading and managing servlet lifecycle?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `HttpServletRequest` and `HttpServletResponse`", "B. `ArrayList` and `HashMap`", "C. `Scanner` and `File`", "D. `StringBuilder` and `Optional`"]
+question = "Question 3: Which two objects are central to servlet request-response handling?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `doLoop()`", "B. `doHtml()`", "C. `doGet()`", "D. `doPage()`"]
+question = "Question 4: Which `HttpServlet` method typically handles an HTTP GET request?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `@WebServlet(\"/hello\")`", "B. `@RequestBody(\"/hello\")`", "C. `@Route(\"/hello\")`", "D. `@ServletPath(\"/hello\")`"]
+question = "Question 5: Which annotation-based mapping syntax is shown for exposing a servlet at `/hello`?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```

@@ -14,7 +14,12 @@ This final week covers REST API best practices, testing strategies, production d
 
 ::: {.callout-tip icon=false}
 ## Quick Practice Quizzes (Lectures 37-40)
-Planned for this week. Use the [Quiz Hub](/quiz/index.qmd) for currently available quizzes.
+Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
+
+- [Lecture 37 Quiz](/quiz/lecture-37-quiz.qmd)
+- [Lecture 38 Quiz](/quiz/lecture-38-quiz.qmd)
+- [Lecture 39 Quiz](/quiz/lecture-39-quiz.qmd)
+- [Lecture 40 Quiz](/quiz/lecture-40-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -24,14 +29,15 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 37: REST API Best Practices {#lecture-37}
+## Lecture 37: Revision & Hands-on (Spring Core) {#lecture-37}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-37-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-37.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-37.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -147,14 +153,15 @@ public User getUser(@ApiParam("User ID") @PathVariable Long id) {}
 
 ---
 
-## Lecture 38: Testing in Spring Boot {#lecture-38}
+## Lecture 38: Spring Boot Configuration, Annotations & Build Systems {#lecture-38}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-38-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-38.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-38.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -223,14 +230,15 @@ public void testWithMock() {
 
 ---
 
-## Lecture 39: Deployment & Production {#lecture-39}
+## Lecture 39: RESTful Web Services: Controllers, Request Mapping, CRUD APIs {#lecture-39}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-39-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-39.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-39.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -294,14 +302,15 @@ logging.level.com.example=INFO
 
 ---
 
-## Lecture 40: Final Project Discussion & Course Revision {#lecture-40}
+## Lecture 40: Spring Boot Actuator, Logger, Web App Build & Final Revision {#lecture-40}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/index.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-40-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-40.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-40.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::

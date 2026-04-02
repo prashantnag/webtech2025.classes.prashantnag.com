@@ -1,0 +1,56 @@
+---
+title: "Lecture 24 Quiz: Servlet Interface & Life Cycle"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-24.qmd) | [Week 8 Content](/content/week-08.qmd) | [Lab 6](/labs/lab-06.qmd) | [Home Assignment 3](/assignment/03-assignment.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 24 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `service()`", "B. `destroy()`", "C. `init()`", "D. `getServletInfo()`"]
+question = "Question 1: Which servlet lifecycle method is used for one-time resource setup such as creating a DB connection pool?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Request scope", "B. Session scope", "C. Application scope", "D. Page scope"]
+question = "Question 2: Which scope is shared across all users from server startup to shutdown?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. One servlet instance per request", "B. One thread per servlet class permanently", "C. Multiple threads handle requests on the same servlet instance", "D. Browser executes servlet code directly"]
+question = "Question 3: What is the core servlet container thread model behavior discussed in this lecture?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `requestCount++`", "B. `AtomicInteger.incrementAndGet()`", "C. `requestCount = requestCount + 1`", "D. `synchronized(this)` on every line"]
+question = "Question 4: Which approach is recommended for thread-safe counting of requests?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. In `service()` after every request", "B. In `destroy()` when the servlet is being unloaded", "C. In `doGet()` only", "D. In JSP page directives"]
+question = "Question 5: Where should long-lived resources be cleaned up to avoid leaks during shutdown?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

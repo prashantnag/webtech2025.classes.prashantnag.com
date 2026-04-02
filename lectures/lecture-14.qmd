@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 14: Conditional Statements & Looping"
+title: "Lecture 14: Revision & Practical Exercise (HTML + CSS + Bootstrap)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 17, 2026"

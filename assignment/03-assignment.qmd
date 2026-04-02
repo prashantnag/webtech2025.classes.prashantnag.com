@@ -1,34 +1,110 @@
 ---
-title: "Assignment 3: Responsive Website"
+title: "Home Assignment 3: Modern Application Development"
 date: "2026-02-19"
 due: "2026-03-18"
 ---
 
 ## Overview
 
-Create a fully responsive website that works perfectly on mobile, tablet, and desktop devices.
+Build scalable web services using Spring Boot and RESTful architecture.
 
 **Due Date**: March 18, 2026, 11:59 PM  
-**Points**: 100
+**Points**: 100  
+**Target Audience**: CO5 (Spring Boot and REST)
 
-## Requirements
+## Objective
 
-Build a multi-page responsive website using HTML5 and CSS3 with:
+Build scalable web services using Spring Boot and RESTful architecture.
 
-- Mobile-first approach
-- Flexbox or CSS Grid layout
-- Media queries for different screen sizes
-- Responsive navigation menu
-- Responsive images
-- Touch-friendly interface
+## Learning Objectives
 
-## Testing
+By completing this assignment, you will:
 
-Test your website on:
-- Mobile (< 768px)
-- Tablet (768px - 1024px)
-- Desktop (> 1024px)
+- Create RESTful endpoints using Spring MVC annotations.
+- Handle request payload and path parameters with proper mappings.
+- Configure Spring Boot properties for runtime behavior.
+- Use Spring Boot Actuator and startup runners for operational visibility.
 
-## Submission
+## Question 1: Building a RESTful CRUD API (CO5)
 
-**Due: March 18, 2026**
+Create a Spring Boot application to manage a Book Inventory.
+
+### Requirements
+
+- Use Spring Initializr to set up the project structure.
+- Create a `RestController` named `BookController`.
+- Implement these API endpoints using proper annotations:
+  - `GET /books`: return list of all books.
+  - `POST /books`: add a new book (use `@RequestBody`).
+  - `GET /books/{id}`: return a specific book (use `@PathVariable`).
+
+### Deliverable
+
+Controller class code and a screenshot of the project structure.
+
+## Question 2: Actuator and Configuration (CO5)
+
+Enhance the Spring Boot application from Question 1 with monitoring and custom configuration.
+
+### Requirements
+
+- Add Spring Boot Actuator dependency in `pom.xml` or `build.gradle`.
+- In `application.properties`, change server port from `8080` to `9090`.
+- Implement a `CommandLineRunner` bean that logs: Server Started Successfully for Book Inventory.
+
+### Deliverable
+
+`application.properties` content and runner class code.
+
+::: {.callout-note}
+## Assignment Guidelines
+
+- Build Question 2 on top of Question 1 in the same Spring Boot project.
+- Use proper REST naming and annotation usage consistently.
+- Keep configuration files and source packages clean and organized.
+- Test each endpoint before final submission.
+:::
+
+## Deliverables
+
+- Spring Boot source code with controller and model/helper classes.
+- Build file (`pom.xml` or `build.gradle`) showing required dependencies.
+- `application.properties` and runner class implementation.
+- Project structure screenshot.
+- `README.txt` with:
+  - Your name and roll number
+  - How to run the Spring Boot app
+  - API test examples for each endpoint
+  - Any assumptions or limitations
+
+::: {.callout-tip}
+## Submission Format
+
+1. Verify all required endpoints are running and return expected output.
+2. Confirm POST request accepts JSON body with `@RequestBody`.
+3. Confirm `GET /books/{id}` works correctly for valid IDs.
+4. Verify application runs on port 9090.
+5. Confirm startup log from `CommandLineRunner` appears in console.
+6. Include screenshot and all required source/config files.
+7. Zip and submit as `RollNumber_Assignment3_YourName.zip` before deadline.
+:::
+
+::: {.callout-important}
+## Evaluation Criteria
+
+| Criteria | Points | Description |
+|----------|--------|-------------|
+| REST API Implementation | 45 | Correct endpoints, annotations, request handling, and path variable use |
+| Actuator and Configuration | 25 | Dependency setup, port configuration, and operational setup |
+| CommandLineRunner Execution | 10 | Runner implementation and correct startup log behavior |
+| Code Quality and Structure | 15 | Organized code, naming, readability, and project structure |
+| Documentation and Evidence | 5 | README quality and project structure screenshot |
+| **Total** | **100** | |
+:::
+
+## Resources
+
+- [Spring Initializr](https://start.spring.io/)
+- [Building REST Services with Spring](https://spring.io/guides/tutorials/rest/)
+- [Spring Boot Actuator](https://docs.spring.io/spring-boot/reference/actuator/index.html)
+- [Spring Boot Externalized Configuration](https://docs.spring.io/spring-boot/reference/features/external-config.html)

@@ -1,0 +1,56 @@
+---
+title: "Lecture 26 Quiz: Redirecting Requests & Request Dispatching"
+jupyter: julia-1.12
+---
+
+::: {.callout-note}
+Review before quiz:
+[Lectures](/lectures/lecture-26.qmd) | [Week 9 Content](/content/week-09.qmd) | [Lab 7](/labs/lab-07.qmd)
+:::
+
+```{julia cache=true}
+#| echo: false
+using QuizQuestions
+```
+
+## Lecture 26 Self-Check
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. `response.sendRedirect(...)`", "B. `request.getRequestDispatcher(...).forward(...)`", "C. `session.invalidate()`", "D. `response.getWriter().println(...)`"]
+question = "Question 1: Which approach causes the browser to make a brand-new request to a new URL?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Two requests and URL change", "B. One request and URL change", "C. One request and URL usually unchanged", "D. Two requests and no server involvement"]
+question = "Question 2: Which behavior matches request forwarding with `RequestDispatcher`?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. They are always preserved", "B. They are available only after redirect", "C. They are lost across redirect because a new request is created", "D. They are copied automatically into cookies"]
+question = "Question 3: What happens to request attributes when a redirect is used?"
+answer = 3
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. PRG = Post-Redirect-Get", "B. PRG = Page-Request-Generate", "C. PRG = Post-Request-Generate", "D. PRG = Process-Render-Graph"]
+question = "Question 4: What does PRG stand for in servlet flow design?"
+answer = 1
+radioq(choices, answer; label=question, keep_order=true)
+```
+
+```{julia cache=true}
+#| echo: false
+choices = ["A. Use redirect so request attributes stay available in JSP", "B. Use forward when you need request attributes in a JSP view", "C. Use redirect and forward in the same branch without return", "D. Write full response body before any redirect/forward decision"]
+question = "Question 5: Which decision is recommended in controller-to-view handoff?"
+answer = 2
+radioq(choices, answer; label=question, keep_order=true)
+```

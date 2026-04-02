@@ -1,5 +1,5 @@
 ﻿---
-title: "Lecture 10: CSS Box Model & Positioning"
+title: "Lecture 10: External Style Sheets, Multiple Style Sheets"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 10, 2026"

@@ -775,7 +775,6 @@ Here are excellent resources for learning more:
 
 ### Course Resources
 
-- **[BMC201 Schedule](/schedule.qmd)** - Course schedule and all materials
 - **[BMC201 Content](/content/index.qmd)** - Lecture notes and materials
 - **[Course Resources](/resource/index.qmd)** - Additional learning materials
 
