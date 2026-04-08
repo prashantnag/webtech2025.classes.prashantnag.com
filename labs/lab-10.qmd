@@ -1,0 +1,46 @@
+---
+title: "Lab 10: Capstone Integration and Final Project Workshop"
+date: "2026-04-10"
+due: "2026-04-03"
+---
+
+This lab is a guided workshop to integrate all course units into the final project.
+
+## Learning Objectives
+
+By the end of this lab, you will be able to:
+
+- connect frontend forms to backend endpoints
+- validate user input on both client and server sides
+- structure your project for maintainability
+- document your application for submission
+
+## Scope
+
+Use this lab to complete and review your final project implementation:
+
+- HTML, CSS, and JavaScript UI components
+- servlet or Spring Boot backend modules
+- REST endpoints for CRUD operations
+- session handling, validation, and error responses
+
+## Checklist
+
+1. Verify all required features from assignment guidelines are implemented.
+2. Run full end-to-end testing for core workflows.
+3. Capture screenshots and short notes for documentation.
+4. Clean project structure and remove unused files.
+5. Prepare final submission archive.
+
+## Deliverables
+
+Submit a zip file that includes:
+
+- source code
+- README with setup steps
+- screenshots of working output
+- brief testing notes
+
+## Support
+
+Bring unresolved blockers to this workshop and get targeted feedback before final submission.

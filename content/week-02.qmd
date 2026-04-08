@@ -1,20 +1,20 @@
 ﻿---
 title: "Week 2: Feb 2 - Feb 8, 2026"
-subtitle: "Unit I: Web Page Designing - HTML Elements & CSS Introduction"
+subtitle: "Unit I: Web Page Designing - HTML Elements (Advanced) & CSS Introduction"
 ---
 
 ## Week Overview
 
-This week covers essential HTML elements (lists, images, tables, forms) and introduces CSS fundamentals for styling web pages.
+This week covers the remaining HTML elements (lists, images, hyperlinks, tables, iframes, forms) and introduces CSS fundamentals including the CSS Box Model and Bootstrap.
 
 **Course Outcome:** CO-1 (K3 - Application)  
 **Duration:** 1 week (4 lectures + 1 lab)  
-**Lab:** HTML Forms & Multimedia  
+**Lab:** Lists, Frames, and Media Embedding
 **Home Assignment 1 Due:** Feb 11
 
 ---
 
-## Lecture 5: HTML Lists (Ordered, Unordered, Description) {#lecture-5}
+## Lecture 5: HTML Lists, Images & Hyperlinks {#lecture-5}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -30,8 +30,8 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 ### Learning Objectives
 - Create ordered, unordered, and description lists
-- Insert and optimize images in HTML
-- Understand alt text and accessibility
+- Insert images with proper alt text and accessibility
+- Create internal and external hyperlinks using the anchor tag
 
 ### HTML Lists
 
@@ -85,7 +85,7 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 ---
 
-## Lecture 6: HTML Images & Hyperlinks {#lecture-6}
+## Lecture 6: HTML Tables, Iframes & Forms {#lecture-6}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -100,9 +100,9 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 
 ### Learning Objectives
-- Create and use hyperlinks effectively
-- Build structured data tables
-- Understand link types and attributes
+- Build structured HTML tables with thead, tbody, and tfoot
+- Embed external pages using the iframe element
+- Create accessible HTML forms with various input types
 
 ### Hyperlinks (`<a>` tag)
 
@@ -159,7 +159,7 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 ---
 
-## Lecture 7: HTML Tables & Iframes {#lecture-7}
+## Lecture 7: CSS Introduction, Syntax & Selectors {#lecture-7}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -174,53 +174,43 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 
 ### Learning Objectives
-- Create functional HTML forms
-- Use various input types
-- Understand form submission and validation
+- Understand what CSS is and how it works with HTML
+- Write correct CSS rule syntax (selector, property, value)
+- Apply element, class, ID, and pseudo-class selectors
 
-### Form Structure
+### What is CSS?
+- Controls visual presentation and layout of HTML elements
+- Separates content (HTML) from styling (CSS)
+- Three ways to apply: inline, internal, external stylesheet
 
-```html
-<form action="/submit" method="POST">
-  <!-- Form fields go here -->
-  <button type="submit">Submit</button>
-</form>
+### CSS Rule Syntax
+```css
+selector {
+  property: value;
+}
+/* Examples */
+p { color: blue; }
+.highlight { background: yellow; }
+#logo { width: 120px; }
 ```
 
-### Common Input Types
-```html
-<input type="text" placeholder="Enter text">
-<input type="password">
-<input type="email" required>
-<input type="number" min="1" max="10">
-<input type="date">
-<input type="checkbox">
-<input type="radio">
-<input type="file">
-<textarea rows="4" cols="50"></textarea>
-<select>
-  <option value="">Select option</option>
-  <option value="1">Option 1</option>
-</select>
+### Key Selectors
+```css
+h1       { color: navy; }          /* element */
+.btn     { padding: 8px 16px; }    /* class */
+#logo    { width: 120px; }         /* ID */
+a:hover  { color: red; }           /* pseudo-class */
+div > p  { margin: 0; }            /* child combinator */
 ```
 
-### Form Attributes
-- `name`: Identifier for the field
-- `value`: Default value
-- `required`: Field must be filled
-- `placeholder`: Hint text
-- `disabled`: Disable the field
-- `readonly`: Cannot be edited
-
-### Labels & Accessibility
-```html
-<label for="name">Name:</label>
-<input type="text" id="name" name="name">
-```
+### Common CSS Properties
+- **Text**: `color`, `font-size`, `font-family`, `text-align`
+- **Box**: `margin`, `padding`, `border`, `width`, `height`
+- **Display**: `display: block | inline | flex | grid`
 
 ---
 
-## Lecture 8: HTML Forms & Form Elements {#lecture-8}
+## Lecture 8: CSS Box Model, Float/Clear, Bootstrap & Revision {#lecture-8}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -235,111 +225,92 @@ This week covers essential HTML elements (lists, images, tables, forms) and intr
 
 
 ### Learning Objectives
-- Understand what CSS does
-- Learn CSS syntax and selectors
-- Apply CSS to HTML elements
+- Understand the CSS Box Model (content, padding, border, margin)
+- Apply float and clear for multi-column layouts
+- Use Bootstrap's responsive grid and utility classes
 
-### What is CSS?
-- **Cascading Style Sheets**: Controls presentation and layout
-- Separates content (HTML) from styling (CSS)
-- Makes responsive, maintainable designs
-
-### CSS Syntax
+### CSS Box Model
+Every element is a rectangular box with four layers:
+- **Content**: text or image area
+- **Padding**: space between content and border (inside)
+- **Border**: visible edge around the element
+- **Margin**: space outside the border (between elements)
 
 ```css
-selector {
-  property: value;
-  property: value;
+div {
+  margin: 20px;           /* space outside */
+  border: 2px solid #333;
+  padding: 15px;          /* space inside */
+  width: 300px;
+  box-sizing: border-box; /* width includes border + padding */
 }
 ```
 
-### Ways to Apply CSS
-
-#### 1. Inline Styles
-```html
-<p style="color: blue; font-size: 20px;">Styled text</p>
-```
-
-#### 2. Internal Stylesheet
-```html
-<head>
-  <style>
-    p { color: blue; }
-  </style>
-</head>
-```
-
-#### 3. External Stylesheet (Recommended)
-```html
-<head>
-  <link rel="stylesheet" href="styles.css">
-</head>
-```
-
-### Basic Selectors
+### Float & Clear
 ```css
-/* Element selector */
-p { color: blue; }
-
-/* Class selector */
-.highlight { background: yellow; }
-
-/* ID selector */
-#main { width: 100%; }
-
-/* Attribute selector */
-input[type="text"] { border: 1px solid gray; }
+img  { float: left; margin-right: 10px; }  /* text wraps around */
+.col { float: left; width: 50%; }
+.clearfix::after { content: ""; display: block; clear: both; }
 ```
 
-### Common Properties
-- **Text**: `color`, `font-size`, `font-family`, `text-align`
-- **Background**: `background-color`, `background-image`
-- **Box**: `margin`, `padding`, `border`, `width`, `height`
-- **Display**: `display`, `position`, `z-index`
+### Bootstrap Grid (Responsive)
+```html
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">Left (1/3)</div>
+    <div class="col-md-8">Right (2/3)</div>
+  </div>
+</div>
+```
+
+### Useful Bootstrap Classes
+- Layout: `.container`, `.row`, `.col-*`
+- Typography: `.text-center`, `.fw-bold`, `.text-muted`
+- Buttons: `.btn .btn-primary`, `.btn-outline-secondary`
+- Cards: `.card`, `.card-body`, `.card-title`
 
 ---
 
-## Lab 2: HTML Forms & Multimedia
+## Lab 2: Lists, Frames, and Media Embedding
 
 ### Objectives
-- Create a functional HTML form
-- Add images and multimedia
-- Practice linking and navigation
+- Create various types of HTML lists
+- Embed media content using iframes
+- Practice table building and form creation
 
 ### Activities
-1. Create a contact form with all input types
-2. Add form validation attributes
-3. Insert images with proper alt text
-4. Create internal navigation with anchor links
-5. Build a data table with proper structure
-6. Create a navigation menu using lists
+1. Create a navigation menu using ordered and unordered lists
+2. Embed a YouTube video or Google Map using `<iframe>`
+3. Build a structured data table with `<thead>` and `<tbody>`
+4. Add a contact form with labels and HTML5 validation attributes
+5. Apply basic CSS to style the page (external stylesheet)
 
 ### Deliverables
-- index.html with forms, images, and tables
-- styles.css (basic styling)
+- index.html with lists, iframe, table, and form
+- styles.css with external stylesheet
 - GitHub commit with changes
 
 ---
 
 ## Key Takeaways
 
-✅ HTML provides semantic elements for all content types  
-✅ Lists organize information hierarchically  
-✅ Images need alt text for accessibility  
-✅ Tables structure tabular data  
-✅ Forms collect user input  
-✅ CSS controls how content looks  
-✅ External CSS files are the professional standard
+✅ Lists, images, hyperlinks, tables, iframes, and forms are core HTML elements  
+✅ Semantic tables use `<thead>`, `<tbody>`, `<tfoot>` for accessibility  
+✅ CSS separates styling from content — always prefer external stylesheets  
+✅ The CSS Box Model (margin, border, padding, content) governs element spacing  
+✅ Bootstrap's grid system enables responsive multi-column layouts
 
 ---
 
 ## Next Steps
 
-In the coming weeks, we'll:
-- Master CSS selectors and properties
-- Learn CSS Box Model and positioning
-- Introduction to Bootstrap responsive framework
-- Begin JavaScript for interactivity
+Next week we begin JavaScript programming:
+- Lecture 9: JavaScript Introduction & Variables
+- Lecture 10: Functions in JavaScript & Returning Data
+- Lecture 11: UI Events & Event Handling
+- Lecture 12: Conditions & Looping in JavaScript
 
 
 

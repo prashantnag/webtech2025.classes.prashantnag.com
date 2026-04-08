@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 10: External Style Sheets, Multiple Style Sheets"
+---
+title: "Lecture 10: Functions in JavaScript & Returning Data"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 10, 2026"
@@ -14,11 +14,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[CSS Box Model & Positioning]{.white-text}
+[Functions in JavaScript & Returning Data]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 3 | Unit II: CSS Styling & JavaScript<br>
+Week 3 | Unit II: Scripting with JavaScript<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -402,7 +402,7 @@ display: none;       /* Hidden, no space taken */
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[Functions in JavaScript & Returning Data]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 11 - Bootstrap Framework

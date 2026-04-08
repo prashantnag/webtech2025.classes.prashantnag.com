@@ -1,24 +1,24 @@
 ﻿---
-title: "Week 10: Mar 30 - Apr 5, 2026"
-subtitle: "Unit IV: Spring Framework Fundamentals"
+title: "Unit IV Block 1: Spring Core Foundations"
+subtitle: "Lectures 25-28 - dependency injection, IoC, bean scope, and annotations"
 ---
 
-## Week Overview
+## Block Overview
 
-This week introduces the Spring Framework, covering dependency injection, beans, and application context configuration.
+This block starts Unit IV with the core ideas that define Spring applications: inversion of control, dependency injection, lifecycle management, bean scopes, and annotation-driven wiring.
 
 **Course Outcome:** CO-4 (K3-K4 - Application & Analysis)  
-**Duration:** 1 week (4 lectures + 1 lab)  
-**Lab:** Spring Framework Application  
+**Lectures Covered:** 25-28  
+**Theme:** Spring Core basics  
 
 ::: {.callout-tip icon=false}
-## Quick Practice Quizzes (Lectures 29-32)
+## Quick Practice Quizzes (Lectures 25-28)
 Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
 
-- [Lecture 29 Quiz](/quiz/lecture-29-quiz.qmd)
-- [Lecture 30 Quiz](/quiz/lecture-30-quiz.qmd)
-- [Lecture 31 Quiz](/quiz/lecture-31-quiz.qmd)
-- [Lecture 32 Quiz](/quiz/lecture-32-quiz.qmd)
+- [Lecture 25 Quiz](/quiz/lecture-25-quiz.qmd)
+- [Lecture 26 Quiz](/quiz/lecture-26-quiz.qmd)
+- [Lecture 27 Quiz](/quiz/lecture-27-quiz.qmd)
+- [Lecture 28 Quiz](/quiz/lecture-28-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -28,15 +28,15 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 29: JSP Introduction & JSP Overview {#lecture-29}
+## Lecture 25: Spring Core Basics & Dependency Injection {#lecture-25}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-29-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-29.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-25-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-25.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-25.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -111,27 +111,23 @@ UserService service = context.getBean(UserService.class);
 
 ---
 
-## Lecture 30: JSP Implicit Objects & Scripting {#lecture-30}
+## Lecture 26: Spring IoC & Bean Life Cycle {#lecture-26}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-30-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-30.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-26-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-26.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-26.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
 
 ### Bean Lifecycle
-```
-1. Instantiation: Create bean instance
-2. Populate Properties: Set bean properties
-3. Initialization: Call init method
-4. Use: Bean is ready to use
-5. Destruction: Call destroy method
+```text
+Instantiate -> Inject dependencies -> Initialize -> Use -> Destroy
 ```
 
 ### Bean Scopes
@@ -192,174 +188,83 @@ context.addApplicationListener(event -> {
 
 ---
 
-## Lecture 31: JSP Directives, Standard Actions & Custom Tag Libraries {#lecture-31}
+## Lecture 27: Bean Scopes: Singleton, Prototype, Request, Session, Application {#lecture-27}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-31-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-31.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-27-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-27.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-27.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### Scope Summary
+- `singleton`: one bean per container
+- `prototype`: new bean each request to the container
+- `request`: one bean per HTTP request
+- `session`: one bean per HTTP session
+- `application`: one bean per servlet context
 
-### What is AOP?
-- Separates cross-cutting concerns
-- Common concerns: logging, security, transactions
-- Advice executes around method calls
-
-### AOP Concepts
-- **Aspect**: Module for cross-cutting concern
-- **Pointcut**: Where advice applies
-- **Advice**: Action taken at pointcut
-- **Join point**: Potential execution point
-
-### AOP Example
-```java
-@Component
-@Aspect
-public class LoggingAspect {
-  
-  // Define pointcut
-  @Pointcut("execution(* com.example..*.*(..))")
-  public void applicationPackagePointcut() {}
-  
-  // Before advice
-  @Before("applicationPackagePointcut()")
-  public void logBefore(JoinPoint jp) {
-    System.out.println("Method: " + jp.getSignature());
-  }
-  
-  // After returning advice
-  @AfterReturning(pointcut = "applicationPackagePointcut()", 
-                  returning = "result")
-  public void logAfter(Object result) {
-    System.out.println("Result: " + result);
-  }
-  
-  // Around advice
-  @Around("applicationPackagePointcut()")
-  public Object around(ProceedingJoinPoint jp) throws Throwable {
-    long start = System.currentTimeMillis();
-    Object result = jp.proceed();
-    long elapsed = System.currentTimeMillis() - start;
-    System.out.println("Time: " + elapsed + "ms");
-    return result;
-  }
-}
-```
+### Why Scope Matters
+- Controls shared state
+- Helps avoid lifecycle bugs
+- Decides whether a bean is safe to reuse broadly
 
 ---
 
-## Lecture 32: Revision & Practical (Servlets + JSP) {#lecture-32}
+## Lecture 28: Autowiring & Annotations in Spring {#lecture-28}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-32-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-32.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-28-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-28.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-28.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### Common Annotations
+- `@Component`
+- `@Service`
+- `@Repository`
+- `@Controller`
+- `@Autowired`
+- `@Qualifier`
+- `@Primary`
 
-### MVC in Spring
-```
-Request → DispatcherServlet → Controller → Service → DAO → Database
-Response ← View ← Response Object ← Controller ← Data
-```
-
-### Basic Controller
+### Example
 ```java
-@Controller
-public class UserController {
-  
-  @Autowired
-  private UserService userService;
-  
-  @GetMapping("/users")
-  public String listUsers(Model model) {
-    model.addAttribute("users", userService.findAll());
-    return "users";  // returns users.jsp
-  }
-  
-  @GetMapping("/users/{id}")
-  public String getUser(@PathVariable Long id, Model model) {
-    model.addAttribute("user", userService.findById(id));
-    return "user-detail";
-  }
-  
-  @PostMapping("/users")
-  public String addUser(@ModelAttribute User user) {
-    userService.save(user);
-    return "redirect:/users";
+@Service
+public class UserService {
+
+  private final UserRepository userRepository;
+
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
 }
 ```
 
-### View (JSP)
-```jsp
-<%@ page language="java" %>
-<html>
-<body>
-  <h1>Users</h1>
-  <table>
-    <c:forEach var="user" items="${users}">
-      <tr>
-        <td>${user.id}</td>
-        <td>${user.name}</td>
-      </tr>
-    </c:forEach>
-  </table>
-</body>
-</html>
-```
-
----
-
-## Lab 8: Spring Framework Application
-
-### Objectives
-- Create Spring beans
-- Configure application context
-- Implement dependency injection
-- Build basic Spring MVC app
-
-### Activities
-1. Create beans and wire dependencies
-2. Configure XML/annotation application context
-3. Implement UserService and UserDAO
-4. Create Spring MVC controller
-5. Build view (JSP) for display
-
-### Deliverables
-- Spring application with DI
-- Working controllers and services
-- Basic MVC application
+### Why This Matters
+- Annotation-based configuration reduces XML boilerplate
+- Constructor injection makes dependencies explicit and testable
 
 ---
 
 ## Key Takeaways
 
-✅ DI promotes loose coupling  
-✅ Beans are managed objects in Spring  
-✅ ApplicationContext manages bean lifecycle  
-✅ Autowiring simplifies configuration  
-✅ AOP handles cross-cutting concerns  
-✅ Spring MVC follows separation of concerns
+- Spring manages object creation through the IoC container  
+- Dependency injection reduces tight coupling  
+- Bean scope and lifecycle affect correctness and performance  
+- Annotation-based configuration is central to modern Spring apps
 
----
+## Next Block
 
-## Next Week
-
-Unit IV-V:
-- Spring Data JPA
-- Spring Boot introduction
-- REST APIs
+Unit IV continues with design patterns, AOP, and bean configuration styles.
 
 

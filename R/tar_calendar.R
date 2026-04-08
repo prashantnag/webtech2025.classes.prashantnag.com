@@ -6,6 +6,22 @@ library(dplyr)
 library(purrr)
 library(tidyr)
 
+read_schedule_csv <- function(path) {
+  normalise_date <- function(x) {
+    # Accept DD-MM-YYYY or YYYY-MM-DD; return YYYY-MM-DD string (or NA)
+    dplyr::case_when(
+      grepl("^\\d{2}-\\d{2}-\\d{4}$", x) ~ format(as.Date(x, format = "%d-%m-%Y"), "%Y-%m-%d"),
+      grepl("^\\d{4}-\\d{2}-\\d{2}$", x) ~ x,
+      TRUE ~ NA_character_
+    )
+  }
+  df <- utils::read.csv(path, stringsAsFactors = FALSE, na.strings = c("", "NA")) |>
+    tibble::as_tibble()
+  df$date     <- normalise_date(df$date)
+  df$end_date <- normalise_date(df$end_date)
+  df
+}
+
 save_ical <- function(df, path) {
   calendar::ic_write(df, path)
   path
@@ -24,19 +40,25 @@ icon_link <- function(path, icon_class, anchor = "", placeholder = FALSE) {
 }
 
 build_schedule_for_page <- function(schedule_file) {
-  schedule <- read_csv(schedule_file, show_col_types = FALSE) |>
+  schedule <- read_schedule_csv(schedule_file) |>
     mutate(
       date = as.Date(date),
       end_date = as.Date(end_date),
+      deadline_time = suppressWarnings(hms(deadline)),
       date_range = case_when(
         !is.na(date) & !is.na(end_date) ~ glue('{format(date, "%B %e")}–{format(end_date, "%B %e")}'),
         !is.na(date) ~ format(date, "%B %e"),
         TRUE ~ ""
       ),
       deadline_actual = if_else(
-        is.na(deadline) | is.na(date),
+        is.na(deadline_time) | is.na(date),
         as.POSIXct(NA),
-        update(date, hour = hour(deadline), minute = minute(deadline))
+        update(
+          as.POSIXct(date),
+          hour = hour(deadline_time),
+          minute = minute(deadline_time),
+          second = second(deadline_time)
+        )
       ),
       deadline_nice = if_else(is.na(deadline_actual), "", format(deadline_actual, "%I:%M %p"))
     ) |>
@@ -59,7 +81,20 @@ build_schedule_for_page <- function(schedule_file) {
       )
     )
 
-  group_levels <- unique(schedule$group)
+  schedule <- schedule |>
+    mutate(
+      group_order = case_when(
+        grepl("^Week \\d+$", group) ~ as.integer(sub("^Week ", "", group)),
+        group == "Assessment" ~ 999L,
+        TRUE ~ 1000L
+      )
+    ) |>
+    arrange(group_order, date, end_date, session)
+
+  group_levels <- schedule |>
+    distinct(group, group_order) |>
+    arrange(group_order, group) |>
+    pull(group)
 
   schedule |>
     mutate(
@@ -96,7 +131,7 @@ build_schedule_for_page <- function(schedule_file) {
 build_ical <- function(schedule_file, base_url, page_suffix, course_number) {
   dtstamp <- ic_char_datetime(now("UTC"), zulu = TRUE)
 
-  schedule <- read_csv(schedule_file, show_col_types = FALSE) |>
+  schedule <- read_schedule_csv(schedule_file) |>
     mutate(
       date = as.Date(date),
       end_date = as.Date(end_date),

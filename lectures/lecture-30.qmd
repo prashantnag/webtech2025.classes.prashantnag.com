@@ -1,8 +1,8 @@
----
-title: "Lecture 30: JSP Implicit Objects & Scripting"
+﻿---
+title: "Lecture 30: Factory Design Pattern in Spring"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
-date: "March 24, 2026"
+date: "March 16, 2026"
 code-annotations: below
 ---
 
@@ -13,16 +13,18 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[JSP Implicit Objects & Scripting]{.white-text}
+[Factory Design Pattern in Spring]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 10 | Unit III: JSP<br>
+Week 8 | Unit IV: Spring Framework Basics<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
+
+
 
 ## {data-menu-title="Learning Objectives"}
 
@@ -31,180 +33,798 @@ Week 10 | Unit III: JSP<br>
 <hr>
 
 ::: {.incremental .body-text-m}
-- Identify all key JSP implicit objects and their purpose
-- Use `request`, `response`, `session`, and `application` correctly
-- Apply scriptlets, expressions, and declarations with safe scope awareness
-- Compare page/request/session/application attribute scopes
-- Avoid common beginner mistakes while mixing Java and JSP markup
+- Understand Factory pattern intent
+- Locate factory behavior in Spring container
+- Apply a simple factory example
 :::
 
 ---
 
-## {data-menu-title="Implicit Objects"}
+## {data-menu-title="Prerequisites"}
 
-[What Are Implicit Objects?]{.slide-title2}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-JSP provides built-in objects automatically. You can use them without declaring them.
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 29 before moving into Factory Design Pattern in Spring
+:::
+---
 
-Most used objects:
-- `request`, `response`, `session`
-- `application`, `out`, `pageContext`
-- `config`, `page`, `exception`
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Unit IV topic focus: Factory Design Pattern in Spring
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
+:::
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- 5-minute recap from previous lecture
+- Concept deep dive: Factory Design Pattern in Spring
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Factory pattern delegates object creation to dedicated logic.
 :::
 
 ---
 
-## {data-menu-title="Objects Table"}
+## {data-menu-title="Think About It"}
 
-[Core Implicit Objects and Use]{.slide-title}
+[Think About It]{.slide-title2}
 
 <hr>
 
-| Object | Type | Typical Use |
+::: {.body-text-m}
+How can clients avoid hardcoded constructors?
+:::
+
+---
+
+## {data-menu-title="What Is Factory Pattern"}
+
+[What Is Factory Pattern?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Factory Pattern** is a creational design pattern that provides an interface for creating objects without specifying their exact classes.
+
+**Key Principles:**
+
+- Encapsulate object creation logic
+- Client code depends on abstractions, not concrete classes
+- Easy to extend with new types without modifying client code
+
+[The factory centralizes and controls object instantiation.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Factory Pattern Intent"}
+
+[Intent of Factory Pattern]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Problem:** When you have multiple classes implementing the same interface and the client needs to choose which one to instantiate.
+
+**Solution:** Create a factory that decides which class to instantiate based on input parameters.
+
+**Benefits:**
+
+- Loose coupling between client and concrete classes
+- Single place to change instantiation logic
+- Easy to add new types without changing client code
+:::
+
+---
+
+## {data-menu-title="Factory Variants"}
+
+[Factory Pattern Variants]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Three common factory pattern variants:
+
+| Pattern | Description | Complexity |
 |---|---|---|
-| `request` | `HttpServletRequest` | Read query/form input |
-| `response` | `HttpServletResponse` | Set headers/status/redirect |
-| `session` | `HttpSession` | Per-user state |
-| `application` | `ServletContext` | App-wide shared data |
-| `out` | `JspWriter` | Write output |
-| `pageContext` | `PageContext` | Access all scopes |
+| **Simple Factory** | Static method creates objects | Low |
+| **Factory Method** | Subclasses decide which class to instantiate | Medium |
+| **Abstract Factory** | Creates families of related objects | High |
 
----
-
-## {data-menu-title="Request Example"}
-
-[Using request and response]{.slide-title2}
-
-<hr>
-
-```{.jsp code-line-numbers="|1|2|3|5"}
-<%
-  String city = request.getParameter("city");
-  if (city == null || city.isBlank()) city = "Lucknow";
-%>
-<p>Selected city: <%= city %></p>
-<% response.setHeader("X-Course", "BMC201"); %>
-```
-
----
-
-## {data-menu-title="Session Example"}
-
-[Using session safely]{.slide-title}
-
-<hr>
-
-```{.jsp code-line-numbers="|1-3|5-6"}
-<%
-  session.setAttribute("user", "student01");
-  String user = (String) session.getAttribute("user");
-%>
-<h3>Welcome, <%= user %></h3>
-<p>Session ID: <%= session.getId() %></p>
-```
-
-::: {.body-text-s}
-Store only minimal, non-sensitive state in session.
+[Spring primarily uses Simple Factory and Factory Method patterns.]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="Scripting"}
+## {data-menu-title="Without Factory"}
 
-[Scriptlet, Expression, Declaration]{.slide-title2}
+[Code Without Factory Pattern]{.slide-title2}
 
 <hr>
 
-```{.jsp code-line-numbers="|1|3|5"}
-<%! int visitCount = 0; %>
-<% visitCount++; %>
-<p>Visits to this JSP instance: <%= visitCount %></p>
+```java
+// Client code tightly coupled to concrete classes
+public class PaymentProcessor {
+    public void processPayment(String method, double amount) {
+        if (method.equals("CREDIT_CARD")) {
+            CreditCardGateway gateway = new CreditCardGateway();
+            gateway.charge(amount);
+        } else if (method.equals("UPI")) {
+            UpiGateway gateway = new UpiGateway();
+            gateway.transfer(amount);
+        } else if (method.equals("WALLET")) {
+            WalletGateway gateway = new WalletGateway();
+            gateway.deduct(amount);
+        }
+        // Adding new payment method requires modifying this code
+    }
+}
 ```
+
+::: {.body-text-m .topbr}
+This violates Open-Closed Principle and creates tight coupling.
+:::
+
+---
+
+## {data-menu-title="With Factory"}
+
+[Code With Factory Pattern]{.slide-title2}
+
+<hr>
+
+```java
+// Common interface
+public interface PaymentGateway {
+    void process(double amount);
+}
+
+// Factory
+public class PaymentGatewayFactory {
+    public static PaymentGateway create(String method) {
+        switch (method) {
+            case "CREDIT_CARD": return new CreditCardGateway();
+            case "UPI": return new UpiGateway();
+            case "WALLET": return new WalletGateway();
+            default: throw new IllegalArgumentException("Unknown method");
+        }
+    }
+}
+
+// Client code
+PaymentGateway gateway = PaymentGatewayFactory.create("UPI");
+gateway.process(amount);
+```
+
+::: {.body-text-m .topbr}
+Client depends only on interface; factory handles concrete instantiation.
+:::
+
+---
+
+## {data-menu-title="BeanFactory"}
+
+[BeanFactory in Spring]{.slide-title}
+
+<hr>
 
 ::: {.body-text-m}
-- Declaration (`<%! %>`) creates class-level members
-- Scriptlet (`<% %>`) runs Java statements
-- Expression (`<%= %>`) prints evaluated result
+**BeanFactory** is Spring's core container interface for accessing beans.
+
+Key characteristics:
+
+- Lazy initialization — beans created on first request
+- Basic DI support
+- Lightweight container
+- Foundation for ApplicationContext
+
+```java
+BeanFactory factory = new XmlBeanFactory(
+    new ClassPathResource("beans.xml"));
+UserService service = factory.getBean(UserService.class);
+```
+
+[BeanFactory is the root interface of Spring's IoC container.]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="Scope"}
+## {data-menu-title="ApplicationContext"}
 
-[Attribute Scopes in JSP]{.slide-title}
+[ApplicationContext in Spring]{.slide-title}
 
 <hr>
 
-```{.jsp}
-<%
-  pageContext.setAttribute("p", "page-value", PageContext.PAGE_SCOPE);
-  request.setAttribute("r", "request-value");
-  session.setAttribute("s", "session-value");
-  application.setAttribute("a", "app-value");
-%>
+::: {.body-text-m}
+**ApplicationContext** extends BeanFactory with enterprise features:
+
+- Eager bean initialization (by default)
+- Automatic BeanPostProcessor registration
+- Event publication mechanism
+- MessageSource for i18n
+- Application-layer specific contexts (WebApplicationContext)
+
+```java
+ApplicationContext ctx = 
+    new AnnotationConfigApplicationContext(AppConfig.class);
+OrderService orderService = ctx.getBean(OrderService.class);
 ```
 
-::: {.body-text-s}
-Use the smallest scope needed for better clarity and performance.
+[ApplicationContext is the preferred container for most applications.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="BeanFactory vs ApplicationContext"}
+
+[BeanFactory vs ApplicationContext]{.slide-title2}
+
+<hr>
+
+| Feature | BeanFactory | ApplicationContext |
+|---|---|---|
+| Bean Instantiation | Lazy | Eager (default) |
+| BeanPostProcessor | Manual registration | Automatic |
+| Event Handling | Not supported | Supported |
+| i18n Support | Not supported | Supported |
+| AOP Integration | Limited | Full support |
+| Use Case | Resource-constrained apps | Enterprise apps |
+
+::: {.body-text-m .topbr}
+**Recommendation:** Use ApplicationContext unless you have specific constraints.
+:::
+
+---
+
+## {data-menu-title="FactoryBean Interface"}
+
+[FactoryBean Interface]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**FactoryBean<T>** allows custom bean creation logic.
+
+```java
+public interface FactoryBean<T> {
+    T getObject() throws Exception;      // Create instance
+    Class<?> getObjectType();            // Type of object
+    boolean isSingleton();               // Singleton or prototype
+}
+```
+
+Use when:
+
+- Bean creation is complex
+- Initialization requires multiple steps
+- You need to create third-party objects that aren't Spring-aware
+
+[FactoryBean is itself a bean that produces other beans.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="FactoryBean Example"}
+
+[FactoryBean Implementation Example]{.slide-title2}
+
+<hr>
+
+```java
+@Component
+public class ConnectionPoolFactoryBean 
+    implements FactoryBean<DataSource> {
+    
+    @Value("${db.url}") private String url;
+    @Value("${db.username}") private String username;
+    @Value("${db.password}") private String password;
+    
+    @Override
+    public DataSource getObject() throws Exception {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(url);
+        config.setUsername(username);
+        config.setPassword(password);
+        config.setMaximumPoolSize(10);
+        return new HikariDataSource(config);
+    }
+    
+    @Override
+    public Class<?> getObjectType() {
+        return DataSource.class;
+    }
+    
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
+}
+```
+
+---
+
+## {data-menu-title="@Bean Factory Methods"}
+
+[@Bean as Factory Method]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**@Bean methods** in `@Configuration` classes act as factory methods:
+
+```java
+@Configuration
+public class AppConfig {
+    
+    @Bean
+    public DataSource dataSource() {  // Factory method
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:mysql://localhost/mydb");
+        config.setUsername("user");
+        config.setPassword("pass");
+        return new HikariDataSource(config);
+    }
+    
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+}
+```
+
+[Each @Bean method is a factory that Spring calls to create beans.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Static Factory"}
+
+[Static Factory Method Pattern]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+In XML configuration, you can reference static factory methods:
+
+```xml
+<bean id="calendar" 
+      class="java.util.Calendar"
+      factory-method="getInstance"/>
+```
+
+In Java Config:
+
+```java
+@Configuration
+public class CalendarConfig {
+    @Bean
+    public Calendar calendar() {
+        return Calendar.getInstance();  // Static factory
+    }
+}
+```
+:::
+
+---
+
+## {data-menu-title="Instance Factory"}
+
+[Instance Factory Method Pattern]{.slide-title2}
+
+<hr>
+
+```java
+// Factory class
+public class ReportGeneratorFactory {
+    public ReportGenerator createPdfGenerator() {
+        return new PdfReportGenerator();
+    }
+    
+    public ReportGenerator createExcelGenerator() {
+        return new ExcelReportGenerator();
+    }
+}
+
+// Configuration
+@Configuration
+public class ReportConfig {
+    @Bean
+    public ReportGeneratorFactory reportFactory() {
+        return new ReportGeneratorFactory();
+    }
+    
+    @Bean
+    public ReportGenerator pdfGenerator(
+            ReportGeneratorFactory factory) {
+        return factory.createPdfGenerator();
+    }
+}
+```
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[Factory Pattern in Spring]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart TD
+    A["Client Code"] --> B["Factory\n(ApplicationContext)"]
+    B --> C{Bean Type?}
+    C -->|Service| D["ServiceBean"]
+    C -->|Repository| E["RepositoryBean"]
+    C -->|Controller| F["ControllerBean"]
+    D --> G["Return Bean Instance"]
+    E --> G
+    F --> G
+    G --> A
+```
+
+::: {.body-text-m .topbr}
+Spring's container acts as a universal factory for all beans in your application.
+:::
+
+---
+
+## {data-menu-title="Factory Benefits"}
+
+[Benefits of Factory in Spring]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Why factory pattern is essential in Spring:
+
+1. **Centralized Creation** — All beans created in one place
+2. **Consistent Lifecycle** — Initialization callbacks applied uniformly
+3. **Dependency Resolution** — Factory wires dependencies automatically
+4. **Scope Management** — Factory controls singleton/prototype behavior
+5. **Proxy Creation** — Factory wraps beans with AOP proxies transparently
+6. **Configuration Externalization** — Creation details outside business code
+
+[The factory pattern is the foundation of Spring's IoC container.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Real World Factory"}
+
+[Real-World Factory Example]{.slide-title2}
+
+<hr>
+
+```java
+// Strategy interface
+public interface NotificationStrategy {
+    void send(String recipient, String message);
+}
+
+// Implementations
+@Component("email")
+public class EmailNotification implements NotificationStrategy { }
+
+@Component("sms")
+public class SmsNotification implements NotificationStrategy { }
+
+// Factory
+@Component
+public class NotificationFactory {
+    @Autowired
+    private Map<String, NotificationStrategy> strategies;
+    
+    public NotificationStrategy getStrategy(String channel) {
+        NotificationStrategy strategy = strategies.get(channel);
+        if (strategy == null) {
+            throw new IllegalArgumentException("Unknown channel: " + channel);
+        }
+        return strategy;
+    }
+}
+```
+
+---
+
+## {data-menu-title="Advanced Factory"}
+
+[Advanced Factory Techniques]{.slide-title2}
+
+<hr>
+
+```java
+@Component
+public class PaymentGatewayFactory {
+    
+    @Autowired
+    private ApplicationContext context;
+    
+    public PaymentGateway createGateway(String type) {
+        // Create prototype bean dynamically
+        return context.getBean(type + "Gateway", PaymentGateway.class);
+    }
+}
+
+// Usage
+@Configuration
+public class PaymentConfig {
+    @Bean
+    @Scope("prototype")
+    public PaymentGateway creditCardGateway() {
+        return new CreditCardGateway();
+    }
+    
+    @Bean
+    @Scope("prototype")
+    public PaymentGateway upiGateway() {
+        return new UpiGateway();
+    }
+}
+```
+
+---
+
+## {data-menu-title="Factory Best Practices"}
+
+[Factory Pattern Best Practices]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Guidelines for using factories in Spring:
+
+1. **Prefer @Bean methods** over FactoryBean for simple cases
+2. **Use FactoryBean** when creation is complex or multi-step
+3. **Inject ApplicationContext** sparingly (creates coupling)
+4. **Document factory logic** — explain why custom factory is needed
+5. **Keep factories stateless** — avoid mutable state in factory beans
+6. **Return interfaces** — factories should return abstractions, not concrete classes
+
+[Factories should simplify creation, not complicate it.]{.teal-text}
 :::
 
 ---
 
 ## {data-menu-title="Common Mistakes"}
 
-[Common Mistakes to Avoid]{.slide-title2}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Heavy business logic inside JSP scriptlets
-- Using declaration variables for shared mutable state carelessly
-- Assuming `session` always exists in every page flow
-- Printing unvalidated input directly to output
-- Overusing scriptlets instead of moving logic to servlet/controller
-:::
-
----
-
-## {data-menu-title="Quick Practice"}
-
-[Classroom Practice Task]{.slide-title}
+[Common Factory Pattern Mistakes]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Build a small `profile.jsp` page that:
+**Mistake 1: Returning null from factory**
 
-1. Reads `name` and `city` from request
-2. Stores `name` in session
-3. Prints values using expression tags
-4. Adds one `application` attribute for course name
+```java
+// BAD: Can cause NullPointerException
+@Bean
+public DataSource dataSource() {
+    return null;  // Spring still registers bean as null
+}
+```
+
+**Mistake 2: Service Locator anti-pattern**
+
+```java
+// AVOID: Defeats DI purpose
+public class OrderService {
+    public void process() {
+        PaymentService service = 
+            context.getBean(PaymentService.class);  // Service Locator
+    }
+}
+```
+
+[Use dependency injection instead of manual bean lookups.]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="Summary"}
+## {data-menu-title="Code Walkthrough"}
 
-[Summary]{.slide-title2}
+[Code Walkthrough: Complete Factory]{.slide-title2}
+
+<hr>
+
+```java
+// Step 1: Define interface
+public interface ReportGenerator {
+    byte[] generate(ReportData data);
+}
+
+// Step 2: Implementations
+@Component("pdf")
+public class PdfReportGenerator implements ReportGenerator { }
+
+@Component("excel")
+public class ExcelReportGenerator implements ReportGenerator { }
+
+// Step 3: Factory
+@Component
+public class ReportGeneratorFactory {
+    @Autowired
+    private Map<String, ReportGenerator> generators;
+    
+    public ReportGenerator get(String format) {
+        return generators.get(format);
+    }
+}
+
+// Step 4: Client
+@Service
+public class ReportService {
+    @Autowired private ReportGeneratorFactory factory;
+    
+    public byte[] createReport(String format, ReportData data) {
+        return factory.get(format).generate(data);
+    }
+}
+```
+
+---
+
+## {data-menu-title="Core Concept"}
+## Memory Booster {data-menu-title="Memory Booster"}
 
 <hr>
 
 ::: {.body-text-m}
-- Implicit objects simplify JSP development
-- Scripting elements are useful but should stay minimal
-- Correct scope choice prevents bugs and confusion
-- MVC approach keeps JSP clean and maintainable
-:::
+Syllabus memory points for **Factory Design Pattern in Spring**:
 
+- Core recall: BeanFactory/ApplicationContext object creation
+- Exam compare: Direct new object creation vs factory-managed creation
+- Practical anchor: Implement factory-style bean creation flow
+:::
 ---
 
-## Questions
+## {data-menu-title="Live Demo"}
 
-[Thank You]{.slide-title}
+[Live Demo]{.slide-title2}
 
-::: {.body-text-l}
-Questions or doubts before we move to JSP directives and actions?
+<hr>
+
+::: {.body-text-m}
+**Live implementation for Factory Design Pattern in Spring:**
+
+?? **[Open Demo: Lecture 30 - Factory Design Pattern in Spring](../demos/lecture-30-demo.html){target="_blank"}**
+
+Demo checklist:
+- implement the key flow for this lecture
+- verify expected output for one success case
+- trigger one failure case and explain the fix
 :::
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
+- [Spring Guides](https://spring.io/guides)
+- Classroom notes + lecture demo file for Lecture 30
+:::
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **Factory Design Pattern in Spring** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **Factory Design Pattern in Spring** with one practical use case.
+- Write/identify the key API or construct: **BeanFactory/ApplicationContext object creation**.
+- Differentiate: **Direct new object creation vs factory-managed creation**.
+- Mention one common implementation error and correction.
+:::
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **Factory Design Pattern in Spring** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+:::
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implement: **Implement factory-style bean creation flow**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
+:::
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain **Factory Design Pattern in Spring** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
+:::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 31 - Strategy Design Pattern in Spring
+- Preparation required: revise this lecture summary and code walkthrough
+:::
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 31
+</div>
+</div>
+
+

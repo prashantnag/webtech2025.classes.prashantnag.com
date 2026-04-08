@@ -13,12 +13,13 @@ Each class session has lecture materials, readings, and videos covering the week
 | Week 3-5 | [CSS Styling & JavaScript](/content/week-03.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
 | Week 4 | [JavaScript Functions & Events](/content/week-04.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
 | Week 5 | [DOM & ES6+](/content/week-05.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
-| Week 6-7 | [Revision & Mid-Sem](/content/week-06.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
-| Week 8 | [Servlets & JSP Intro](/content/week-08.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
-| Week 9 | [JSP Advanced & MVC](/content/week-09.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
-| Week 10 | [Spring Framework](/content/week-10.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
-| Week 11 | [Spring Boot & Data](/content/week-11.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
-| Week 12 | [REST & Final Project](/content/week-12.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
+| Week 6 | [Revision & Mid-Sem Prep](/content/week-06.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
+| Week 7 | [Servlet Request Flow & Cookies](/content/week-07.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
+| Week 8 | [Servlet Foundations](/content/week-08.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
+| Week 9 | [Sessions & JSP](/content/week-09.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
+| Week 10 | [Spring Core Foundations](/content/week-10.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
+| Week 11 | [Spring Patterns & AOP](/content/week-11.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
+| Week 12 | [Spring Boot & REST APIs](/content/week-12.qmd) | [{{< fa desktop >}}](/lectures/index.qmd) |
 
 ## How to Use This Section
 
@@ -74,32 +75,39 @@ For each week:
 
 ### Module 4: Server-Side Development (Weeks 8-9)
 
-- [**Week 8-9**: Servlets, JSP & MVC](/content/week-08.qmd)
-  - Servlet Architecture & Life Cycle
-  - HTTP GET & POST Requests
-  - Session Tracking & Cookies
-  - Java Server Pages (JSP) Basics
-  - JSP Implicit Objects & Actions
+- [**Week 7**: Servlet Request Flow & Cookies](/content/week-07.qmd)
+  - Handling HTTP GET and POST requests
+  - Redirecting requests and request dispatching
+  - Session tracking with cookies
 
-### Module 5: Spring Framework (Weeks 10-12)
+- [**Week 8**: Servlet Foundations](/content/week-08.qmd)
+  - Servlet architecture and container flow
+  - Servlet lifecycle methods
+  - HTTP GET and POST processing
+  - Request dispatching and redirects
 
-- [**Week 10**: Spring Framework Fundamentals](/content/week-10.qmd)
-  - Spring Core & Dependency Injection
-  - Inversion of Control (IoC) Container
-  - Bean Scopes & Auto-wiring
-  - Aspect-Oriented Programming (AOP)
+- [**Week 9**: Session Tracking & JSP](/content/week-09.qmd)
+  - Cookies and `HttpSession`
+  - JSP introduction and implicit objects
+  - JSP directives, actions, and custom tags
 
-- [**Week 11**: Spring Boot & Spring Data](/content/week-11.qmd)
-  - Spring Boot Configuration
-  - Spring Data JPA
-  - Spring Security Basics
-  - Building REST APIs
+### Module 5: Spring Framework and Spring Boot (Weeks 10-12)
 
-- [**Week 12**: REST APIs & Deployment](/content/week-12.qmd)
-  - RESTful Web Services
-  - REST Best Practices
-  - Testing & Deployment
-  - Final Project
+- [**Week 10**: Spring Core Foundations](/content/week-10.qmd)
+  - Spring Core and dependency injection
+  - IoC container and bean lifecycle
+  - Bean scopes and annotation-based wiring
+
+- [**Week 11**: Spring Patterns & Configuration](/content/week-11.qmd)
+  - Design patterns in Spring
+  - Factory and Strategy pattern usage
+  - AOP and bean configuration styles
+
+- [**Week 12**: Spring Boot & REST APIs](/content/week-12.qmd)
+  - Spring Boot setup and annotations
+  - REST controllers and request mapping
+  - CRUD APIs and code structure
+  - Final integration and revision
 
 ## Tips for Success
 

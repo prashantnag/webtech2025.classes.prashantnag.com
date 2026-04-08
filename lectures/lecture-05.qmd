@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 5: HTML Lists (Ordered, Unordered, Description)"
+---
+title: "Lecture 5: HTML Lists, Images & Hyperlinks"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 2, 2026"
@@ -14,33 +14,141 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[HTML Lists & Images]{.white-text}
+[HTML Lists, Images & Hyperlinks]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 2 | Unit I: HTML Forms & CSS Introduction<br>
+Week 2 | Unit I: Web Page Designing<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
+[Learning Outcomes]{.slide-title}
 
 <hr>
 
-::: {.incremental .body-text-m}
-- Understand ordered, unordered, and definition lists
-- Learn when to use each list type
-- Insert and optimize images in web pages
-- Implement responsive image techniques
+::: {.body-text-m}
+After this lecture, students will be able to:
+
+- explain ordered, unordered, and description lists
+- choose appropriate list type for specific content
+- insert and optimize images in web pages
+- apply responsive image techniques
 :::
 
 ::: {.notes}
 Lists are fundamental HTML structures used for navigation, content organization, and data presentation. Images make pages visually engaging but require optimization.
 :::
+
+---
+
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Basic HTML tags and structure
+- Understanding of grouping elements and attributes
+- Familiarity with browser preview and DevTools basics
+:::
+
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus mapping:
+
+- HTML lists (ordered, unordered, description)
+- image elements and attributes
+- semantic figure and figcaption usage
+
+Prerequisites used:
+
+- HTML semantic structure from Lectures 3-4
+- understanding of attributes
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Types of HTML lists
+- List syntax and use cases
+- Image tags and attributes
+- Paths, responsive images, and best practices
+- Summary and exam preparation
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Lists and images are the two most frequent content patterns on real websites everywhere.
+- Navigation menus, recipe steps, feature lists, photo galleries - all built with HTML lists and images.
+- Incorrect image handling causes broken layouts, slow pages, and accessibility failures.
+- Semantic list markup improves screen reader support and search engine indexing significantly.
+- This lecture gives you the tools to add rich, organized, visual content to any web page.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Before we dive into details, think about these:**
+
+- Look at any cooking recipe website - which HTML list type would you use for ingredients vs steps?
+- What happens to a page when an image file is missing or the path is wrong?
+- Why would you use `<figure>` and `<figcaption>` instead of just `<img>` alone?
+- How does a screen reader know what an image is about if a user cannot see it?
+:::
+
+---
+
+## {data-menu-title="List Types Diagram"}
+
+[HTML List Types at a Glance]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  Lists["HTML Lists"]
+  UL["ul - Unordered\nBullet Points"]
+  OL["ol - Ordered\nNumbered Steps"]
+  DL["dl - Description\nTerm + Definition"]
+  Lists --> UL
+  Lists --> OL
+  Lists --> DL
+  UL --> EX1["Shopping list\nNavigation menu"]
+  OL --> EX2["Recipe steps\nRanking"]
+  DL --> EX3["Glossary\nFAQ pairs"]
+```
 
 ---
 
@@ -348,6 +456,174 @@ Or using attributes:
 - [Image Optimization Guide](https://web.dev/image-optimization/)
 - [Course content: Week 2](/content/week-02.qmd)
 :::
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist for Lists & Images]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Investigation order when images don't display:
+
+1. verify image file path is correct
+2. check file extension matches (jpg, png, webp)
+3. test absolute vs relative paths
+4. inspect alt text attribute presence
+5. check file permissions and accessibility
+6. validate image format using browser DevTools
+7. test image in new browser tab directly
+
+For lists not displaying correctly:
+
+- check list type (ul, ol, dl) matches intent
+- verify all items wrapped in li tags
+- inspect CSS list-style-type properties
+:::
+
+---
+
+## {data-menu-title="Memory Booster"}
+
+[Memory Booster: Real World Connections]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+HTML list types match their real-world counterparts:
+
+- **`<ul>`** = **Shopping bag** - items tossed in, no particular order (groceries, features, links)
+- **`<ol>`** = **Step-by-step manual** - sequence matters, skipping a step causes errors (recipes, instructions)
+- **`<dl>`** = **Dictionary entry** - term followed by its definition (glossaries, FAQs, metadata)
+- **`<img>`** = **Picture frame** - the frame (tag) holds the picture (src) and the caption (alt) explains it
+- **`alt` text** = **Audio description** for people who cannot see the image
+
+Choose the list that matches the real-world meaning of your content!
+:::
+
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo: Lists & Images in Action]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Interactive demonstration showing HTML lists, images, and figure elements:**
+
+?? **[Open Interactive Demo: HTML Lists & Images](../demos/lecture-05-demo.html){target="_blank"}**
+
+**What you'll see:**
+
+- All three list types rendered side by side
+- Nested list example with visual indentation
+- Image tags with correct and missing alt text
+- Figure/figcaption semantic usage
+- Responsive image sizing demonstration
+
+?? **Key insight:** Always write `alt` text as if you were describing the image to someone on the phone!
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, you should understand:
+
+- Three list types and their semantic meaning
+- Image element attributes and accessibility
+- Responsive image techniques
+- Figure/figcaption semantic grouping
+- List styling preparation for CSS
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- What is an unordered list?
+- What is an ordered list?
+- What is a description list?
+- Which tag is used for list items?
+- Why is `alt` text required for images?
+- What is the purpose of `<figure>`?
+- What is the purpose of `<figcaption>`?
+- What does responsive image sizing mean?
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Differentiate `<ul>`, `<ol>`, and `<dl>` with examples.
+- Explain image element attributes and accessibility requirements.
+- Explain figure and figcaption with suitable use case.
+- Explain responsive image strategies for modern websites.
+- Design a sample HTML page using multiple list types and images.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- create one page with `<ul>`, `<ol>`, and `<dl>`
+- insert at least two images with meaningful `alt` text
+- use `<figure>` and `<figcaption>` for one image
+- test image responsiveness on different viewport widths
+- validate HTML in browser and DevTools
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- choose correct list type for content?
+- use image tags with proper attributes?
+- explain accessibility importance of alt text?
+- answer short and long exam questions?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: HTML Hyperlinks and Tables
+- Preparation required: revise list/image structure and path handling
+:::
 
 ---
 
@@ -355,12 +631,13 @@ Or using attributes:
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[HTML Lists, Images & Hyperlinks]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 6 - HTML Hyperlinks & Tables
 </div>
 </div>
+
 
 
 

@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 9: CSS Introduction & CSS Syntax"
+---
+title: "Lecture 9: JavaScript Introduction & Variables"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 9, 2026"
@@ -14,11 +14,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[CSS Units & Advanced Selectors]{.white-text}
+[JavaScript Introduction & Variables]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 3 | Unit II: CSS Styling & JavaScript<br>
+Week 3 | Unit II: Scripting with JavaScript<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -138,11 +138,11 @@ padding: 2vh;        /* 2% of viewport height */
 <hr>
 
 ```
-px (pixels)     → Fixed size, precise
-em             → Relative to parent element
-rem            → Relative to root (html)
-%              → Relative to parent
-vw/vh          → Relative to viewport
+px (pixels)     ? Fixed size, precise
+em             ? Relative to parent element
+rem            ? Relative to root (html)
+%              ? Relative to parent
+vw/vh          ? Relative to viewport
 ```
 
 **Example:**
@@ -294,14 +294,14 @@ Create virtual elements:
 p::first-letter { font-size: 2em; } /* First letter */
 p::first-line { font-weight: bold; } /* First line */
 a::before { content: "[Link] "; }  /* Before content */
-a::after { content: " →"; }        /* After content */
+a::after { content: " ?"; }        /* After content */
 ```
 
 **Common use:**
 ```css
 /* Add decorative content */
 li::before {
-    content: "→ ";
+    content: "? ";
     color: blue;
 }
 ```
@@ -317,9 +317,9 @@ li::before {
 How CSS decides which rule wins:
 
 ```
-ID selectors        → 100 points  (#header)
-Class selectors     → 10 points   (.highlight)
-Element selectors   → 1 point     (p, h1)
+ID selectors        ? 100 points  (#header)
+Class selectors     ? 10 points   (.highlight)
+Element selectors   ? 1 point     (p, h1)
 ```
 
 **Example:**
@@ -406,7 +406,7 @@ nav a:first-child { font-weight: bold; }
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[JavaScript Introduction & Variables]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 10 - CSS Box Model & Positioning

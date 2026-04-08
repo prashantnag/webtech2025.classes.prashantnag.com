@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Lecture 2: History of Web & Internet, Protocols Governing the Web"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
@@ -14,7 +14,7 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[History of Web & Internet]{.white-text}
+[History of Web & Internet, Protocols Governing the Web]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
@@ -25,16 +25,18 @@ Week 1 | Unit I: Web Page Designing<br>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
+[Learning Outcomes]{.slide-title}
 
 <hr>
 
-::: {.incremental .body-text-m}
-- Understand the evolution of the internet and web
-- Learn about key internet protocols and technologies
-- Explore how the web works behind the scenes
+::: {.body-text-m}
+After this lecture, students will be able to:
+
+- explain the evolution of the internet and web
+- identify key internet protocols and technologies
+- describe how the web works behind the scenes
 :::
 
 ::: {.notes}
@@ -43,28 +45,110 @@ Start with the importance of understanding the history to appreciate the current
 
 ---
 
-## {data-menu-title="ARPANET"}
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Basic computer knowledge
+- Familiarity with internet and web browsing
+- Understanding of URLs and browser usage
+- Basic awareness of client and server terms
+:::
+
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus mapping:
+
+- History of the web and internet
+- Key protocols and their roles
+- How the web works end-to-end
+
+Prerequisites used:
+
+- Basic network concepts
+- Understanding of URLs and browsers
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Internet history timeline
+- Web evolution phases
+- Protocols and request-response model
+- DNS and client-server workflow
+- Standards and governance of the web
+- Summary and exam-focused preparation
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- The modern web did not appear overnight; it evolved across decades of networking innovation.
+- Understanding this evolution helps students connect protocols with practical web behavior.
+- Historical milestones explain why standards, interoperability, and security matter today.
+- This lecture builds conceptual clarity for upcoming HTML, CSS, and full request lifecycle topics.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Before diving deeper, reflect on these:
+
+- Why does a domain name work even when we do not know the IP address?
+- What would happen if DNS did not exist?
+- Why does HTTPS matter more today than in the early web?
+- Which part of the web flow is handled by your browser, and which by the server?
+:::
+
+---
+
+## {data-menu-title="Internet History"}
 
 [History of the Internet]{.slide-title}
 
 <hr>
 
+```{mermaid}
+timeline
+        title Internet and Web Milestones
+        1969 : ARPANET launched
+        1983 : TCP/IP standardized
+        1989 : World Wide Web proposed
+        1991 : First web page published
+        1993 : Mosaic browser popularized access
+```
+
 ::: {.body-text-m}
-::: {.fragment}
-**1969**: ARPANET - First packet-switching network
-:::
-::: {.fragment}
-**1983**: TCP/IP protocol standardized
-:::
-::: {.fragment}
-**1989**: Tim Berners-Lee proposes World Wide Web
-:::
-::: {.fragment}
-**1991**: First web page goes live
-:::
-::: {.fragment}
-**1993**: Mosaic browser released - made web accessible
-:::
+- The internet infrastructure evolved first, followed by web standards and browsers.
+- Each milestone improved interoperability, accessibility, and global adoption.
 :::
 
 ::: {.notes}
@@ -233,19 +317,19 @@ This is the fundamental workflow. Every interaction on the web follows this basi
 
 ```
 User enters: www.example.com
-        ↓
+        ?
 Browser queries DNS resolver
-        ↓
+        ?
 Resolver asks Root nameserver
-        ↓
+        ?
 Root responds with TLD nameserver
-        ↓
+        ?
 Resolver queries TLD nameserver
-        ↓
+        ?
 TLD responds with Authoritative nameserver
-        ↓
+        ?
 Resolver gets IP address
-        ↓
+        ?
 Browser connects to 93.184.216.34
 ```
 
@@ -361,14 +445,37 @@ Living standards for HTML
 :::
 
 ::: {.fragment .body-text-m .center-text .topbr}
-[✓ This openness enabled global web growth]{.magenta-text}
+[? This openness enabled global web growth]{.magenta-text}
+:::
+
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo: DNS + HTTP Request Journey]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Interactive classroom walkthrough to connect lecture concepts with observable browser behavior:
+
+?? **[Open Interactive Demo: Web Request Journey](../demos/lecture-02-demo.html){target="_blank"}**
+
+What this demo shows:
+
+- URL input and DNS resolution steps (visualized)
+- HTTP request and response with status code examples
+- secure vs non-secure protocol comparison (HTTP vs HTTPS)
+- where client actions end and server actions begin
+
+Use this during class while discussing protocol flow and troubleshooting logic.
 :::
 
 ---
 
 ## {data-menu-title="Resources"}
 
-[Resources]{.slide-title}
+[Resources & References]{.slide-title}
 
 <hr>
 
@@ -381,16 +488,138 @@ Living standards for HTML
 
 ---
 
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist for Web Connections]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Investigation order when a website won't load:
+
+1. verify URL is correctly typed and accessible
+2. check browser network tab for HTTP status codes
+3. inspect DNS resolution (nslookup, ping)
+4. verify server is responding (check status pages)
+5. check browser console for JavaScript errors
+6. validate SSL/HTTPS certificate (if HTTPS issue)
+7. test from different network to isolate issue
+
+This approach separates client vs server vs network issues.
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, you should understand:
+
+- Internet history from ARPANET to modern web
+- How HTTP and HTTPS power web communication
+- The role of DNS in translating domain names
+- Client-server architecture fundamentals
+- Standards organizations maintaining web openness
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- What is ARPANET?
+- Define HTTP and HTTPS.
+- What is DNS?
+- State one difference between Web 1.0 and Web 2.0.
+- What is the role of TCP/IP?
+- What is a client in web architecture?
+- What is a server in web architecture?
+- What does a browser do after receiving HTML?
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain the evolution of the internet from ARPANET to modern web.
+- Explain HTTP request-response cycle with a suitable flow.
+- Differentiate HTTP and HTTPS with practical examples.
+- Explain DNS resolution process in detail.
+- Discuss web standards bodies and their role in interoperability.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- use `nslookup` or `dig` to resolve a domain name
+- inspect HTTP requests in browser DevTools
+- compare one HTTP page and one HTTPS page
+- capture status code and headers for both
+- write a short comparison summary
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain internet history milestones?
+- differentiate HTTP, HTTPS, DNS, and TCP/IP?
+- describe DNS lookup and request-response flow?
+- answer short and long exam questions confidently?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: HTML Introduction and Basic Structure
+- Preparation required: revise tags, attributes, and document structure basics
+:::
+
+---
+
 ## {#end-slide data-menu-title="End Slide" background="#053660"}
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[History of Web & Internet, Protocols Governing the Web]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 3 - HTML Basics & Structure
 </div>
 </div>
+
 
 
 

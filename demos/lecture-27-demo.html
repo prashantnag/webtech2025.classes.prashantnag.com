@@ -1,0 +1,50 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 27 Demo - Bean Scopes</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 980px; margin: 2rem auto; padding: 1rem; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+    .card { background:#fff; border:1px solid #d9dde3; border-radius:10px; padding:1rem; }
+    button { background:#053660; color:#fff; border:0; padding:.55rem .9rem; border-radius:8px; cursor:pointer; margin-right:.4rem; }
+    pre { background:#0f172a; color:#e2e8f0; border-radius:8px; padding:.8rem; overflow:auto; }
+    @media (max-width: 800px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<main class="shell">
+  <h1>Lecture 27 Demo: Scope Behavior</h1>
+  <section class="grid">
+    <article class="card">
+      <p>
+        <button id="singleton">Request Singleton Twice</button>
+        <button id="prototype">Request Prototype Twice</button>
+        <button id="session">Two Session Users</button>
+      </p>
+    </article>
+    <article class="card">
+      <pre id="trace">Select a scope test.</pre>
+    </article>
+  </section>
+</main>
+<script>
+  const trace = document.getElementById('trace');
+  const id = () => Math.floor(Math.random()*10000);
+  document.getElementById('singleton').addEventListener('click', () => {
+    const one = 501; const two = 501;
+    trace.textContent = `Singleton request #1 id=${one}\nSingleton request #2 id=${two}\nSame instance: true`;
+  });
+  document.getElementById('prototype').addEventListener('click', () => {
+    const one = id(); const two = id();
+    trace.textContent = `Prototype request #1 id=${one}\nPrototype request #2 id=${two}\nSame instance: false`;
+  });
+  document.getElementById('session').addEventListener('click', () => {
+    const s1 = id(); const s2 = id();
+    trace.textContent = `User-A session bean id=${s1}\nUser-B session bean id=${s2}\nCross-user isolation: true`;
+  });
+</script>
+</body>
+</html>

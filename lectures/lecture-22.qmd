@@ -1,5 +1,5 @@
----
-title: "Lecture 22: Revision & Mini Project (JavaScript & DOM)"
+﻿---
+title: "Lecture 22: Session Tracking with HttpSession"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 26, 2026"
@@ -13,242 +13,341 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Revision & Mini Project (JavaScript & DOM)]{.white-text}
+[Session Tracking with HttpSession]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 8 | Unit II: JavaScript & DOM<br>
+Week 8 | Unit III: Web App Development (Servlets + JSP)<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Session Goals"}
 
-[Session Goals]{.slide-title}
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Revise core JavaScript and DOM concepts
-- Connect events, validation, and rendering in one workflow
-- Build a mini project with clear milestones
-- Practice clean coding and debugging strategy
+- Create and use HttpSession
+- Store/retrieve server-side user state
+- Configure timeout and invalidate session
 :::
 
 ---
 
-## {data-menu-title="Revision Map"}
+## {data-menu-title="Prerequisites"}
 
-[Revision Map]{.slide-title2}
+[Prerequisites]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Java basics: classes, methods, objects, and exception handling
+- HTTP request-response fundamentals from Unit I/II web context
+- Revision of Lecture 21 before moving into Session Tracking with HttpSession
+:::
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Unit III topic focus: Session Tracking with HttpSession
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
+:::
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- 5-minute recap from previous lecture
+- Concept deep dive: Session Tracking with HttpSession
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+`HttpSession` keeps per-user state on the server while the browser carries only `JSESSIONID`.
+
+This model reduces direct client-side exposure of user data and supports controlled lifecycle
+management through timeout and explicit invalidation.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Should cart, role, and authentication state all live in session, or should some data be derived per request?
+:::
+
+---
+
+## {data-menu-title="Tracking Types"}
+
+[Types of Session Tracking]{.slide-title2}
+
+<hr>
+
+| Type | Where State Lives | Strength | Limitation |
+|---|---|---|---|
+| Cookies | Browser | Simple and automatic per request | Client-side exposure and size limits |
+| URL Rewriting | URL/query/path | Works when cookies are disabled | URL clutter and leakage risk |
+| Hidden Fields | HTML forms | Easy for form workflows | Only works on form submissions |
+| `HttpSession` | Server | Better control and security for user state | Server memory usage per active session |
+
+::: {.body-text-m .topbr}
+[Lecture 22 focus: `HttpSession` as the primary server-side tracking mechanism.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[HttpSession API]{.slide-title}
 
 <hr>
 
 ```{mermaid}
-flowchart LR
-  A[Variables and Scope] --> B[Functions]
-  B --> C[Events]
-  C --> D[DOM Selection]
-  D --> E[DOM Updates]
-  E --> F[Validation]
-  F --> G[Mini Project]
+sequenceDiagram
+	participant B as Browser
+	participant C as Servlet Container
+	participant S as Servlet
+	B->>S: Login request
+	S->>C: request.getSession()
+	C-->>S: HttpSession (JSESSIONID)
+	S->>C: setAttribute("user", ...)
+	S-->>B: Response + JSESSIONID cookie
+	B->>S: Next request with JSESSIONID
+	S->>C: getAttribute("user")
 ```
 
----
-
-## {data-menu-title="Quick Revision"}
-
-[Quick Revision Checklist]{.slide-title}
-
-<hr>
-
-::: {.body-text-m}
-- `let` and `const` over `var`
-- Reusable functions for repeated logic
-- Event-driven UI updates
-- `querySelector` / `querySelectorAll`
-- `classList` for visual state changes
-- Form validation before submit
+::: {.body-text-m .topbr}
+- `HttpSession` stores user state on server side
+- Browser only carries session identifier (`JSESSIONID`)
+- Always invalidate session on logout or privilege change
 :::
 
 ---
 
-## {data-menu-title="Mini Project Brief"}
+## {data-menu-title="Session API"}
 
-[Mini Project: Smart Task Tracker]{.slide-title2}
+[HttpSession Lifecycle APIs That Matter]{.slide-title2}
 
 <hr>
 
-::: {.body-text-m}
-Build a single-page task tracker where students can:
+```{.java}
+HttpSession existing = request.getSession(false); // do not create new
+HttpSession session = request.getSession();       // create if absent
+session.setAttribute("user", userDto);
+session.setMaxInactiveInterval(15 * 60);
+session.invalidate();
+```
 
-- Add tasks
-- Mark tasks complete
-- Filter by status
-- See live count of pending tasks
-- Validate empty input before adding
+::: {.body-text-m .topbr}
+- Use `getSession(false)` for protected endpoints to avoid accidental session creation
+- Store only required session data; avoid large objects
+- Regenerate or invalidate session on login/logout transitions
 :::
 
 ---
 
-## {data-menu-title="Project Structure"}
+## {data-menu-title="API Comparison"}
 
-[Project Structure]{.slide-title}
+[HttpSession API Comparison]{.slide-title2}
 
 <hr>
 
-```{.text}
-mini-project/
-  index.html
-  styles.css
-  app.js
+| API/Operation | Behavior | Best Use | Risk if Misused |
+|---|---|---|---|
+| `getSession()` | Returns existing or creates new session | Login flow and first authenticated step | Unwanted session creation on public pages |
+| `getSession(false)` | Returns existing, does not create | Protected endpoints, auth checks | Null handling required |
+| `setAttribute()` | Stores object in session | User profile/role/context | Oversized object storage |
+| `invalidate()` | Destroys current session | Logout and privilege reset | If skipped, stale/unsafe session reuse |
+
+::: {.body-text-m .topbr}
+[Operational rule: choose API variant intentionally based on endpoint responsibility.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Code Walkthrough"}
+
+[Code Walkthrough]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3"}
+HttpSession session = request.getSession();
+session.setAttribute("user", "prash");
+session.setAttribute("role", "student");
+String u = (String) session.getAttribute("user");
+session.setMaxInactiveInterval(900);
+if ("logout".equals(request.getParameter("action"))) {
+	session.invalidate();
+}
 ```
+## Memory Booster {data-menu-title="Memory Booster"}
 
-```{.html code-line-numbers="|1-2|4-5|7-9|11"}
-<input id="taskInput" type="text" placeholder="Enter task">
-<button id="addBtn">Add Task</button>
+<hr>
 
-<div id="stats">
-  Pending: <span id="pendingCount">0</span>
+::: {.body-text-m}
+Syllabus memory points for **Session Tracking with HttpSession**:
+
+- Core recall: setAttribute() and getAttribute()
+- Exam compare: Cookie-based tracking vs server-side HttpSession
+- Practical anchor: Implement session-based login state and logout invalidation
+:::
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Live implementation for Session Tracking with HttpSession:**
+
+**[Open Demo: Lecture 22 - Session Tracking with HttpSession](../demos/lecture-22-demo.html){target="_blank"}**
+
+[Demo flow:]{.teal-text}
+
+- Login to create session and set `user`/`role`
+- Access protected resource with active `JSESSIONID`
+- Invalidate session and verify protected access is blocked
+
+[Takeaway: session state is server-managed and must be explicitly closed.]{.orange-text}
+:::
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [Jakarta Servlet Specification](https://jakarta.ee/specifications/servlet/)
+- [Oracle Java EE Tutorial (Servlet/JSP)](https://docs.oracle.com/javaee/7/tutorial/)
+- Classroom notes + lecture demo file for Lecture 22
+:::
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **Session Tracking with HttpSession** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **Session Tracking with HttpSession** with one practical use case.
+- Write/identify the key API or construct: **setAttribute() and getAttribute()**.
+- Differentiate: **Cookie-based tracking vs server-side HttpSession**.
+- Mention one common implementation error and correction.
+:::
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **Session Tracking with HttpSession** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+:::
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implement: **Implement session-based login state and logout invalidation**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
+:::
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain **Session Tracking with HttpSession** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
+:::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 23 - JSP Introduction & Implicit Objects
+- Preparation required: revise this lecture summary and code walkthrough
+:::
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 23
+</div>
 </div>
 
-<ul id="taskList"></ul>
-<div id="error" class="error-msg"></div>
-```
 
----
-
-## {data-menu-title="Step 1"}
-
-[Step 1: Add Task Logic]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1-4|6-11|13-16"}
-const taskInput = document.querySelector('#taskInput');
-const addBtn = document.querySelector('#addBtn');
-const taskList = document.querySelector('#taskList');
-const errorBox = document.querySelector('#error');
-
-addBtn.addEventListener('click', () => {
-  const text = taskInput.value.trim();
-  if (!text) {
-    errorBox.textContent = 'Task cannot be empty';
-    return;
-  }
-
-  errorBox.textContent = '';
-  appendTask(text);
-  taskInput.value = '';
-});
-```
-
----
-
-## {data-menu-title="Step 2"}
-
-[Step 2: Render and Complete]{.slide-title2}
-
-<hr>
-
-```{.javascript code-line-numbers="|1-4|6-13|15"}
-function appendTask(text) {
-  const li = document.createElement('li');
-  li.textContent = text;
-
-  li.addEventListener('click', () => {
-    li.classList.toggle('done');
-    updatePending();
-  });
-
-  taskList.appendChild(li);
-  updatePending();
-}
-
-function updatePending() { /* next slide */ }
-```
-
----
-
-## {data-menu-title="Step 3"}
-
-[Step 3: Pending Counter]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1-3|5-7"}
-function updatePending() {
-  const tasks = [...document.querySelectorAll('#taskList li')];
-  const pending = tasks.filter(li => !li.classList.contains('done')).length;
-
-  document.querySelector('#pendingCount').textContent = pending;
-}
-```
-
----
-
-## {data-menu-title="Enhancements"}
-
-[Suggested Enhancements]{.slide-title2}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Add delete button for each task
-- Filter buttons: All, Pending, Completed
-- Save tasks in `localStorage`
-- Add due dates and priority tags
-- Keyboard shortcut: Enter key adds task
-:::
-
----
-
-## {data-menu-title="Debugging"}
-
-[Debugging Plan]{.slide-title}
-
-<hr>
-
-::: {.body-text-m}
-1. Use `console.log()` for input and event flow
-2. Verify selectors are not null
-3. Check class toggling and style rules
-4. Test edge cases: empty input, duplicate tasks
-5. Keep functions small and test incrementally
-:::
-
----
-
-## {data-menu-title="Submission"}
-
-[Mini Project Submission Checklist]{.slide-title2}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Working add/complete flow
-- Input validation with clear message
-- Live pending count
-- Clean code structure (`index.html`, `styles.css`, `app.js`)
-- Short README describing features and limitations
-:::
-
----
-
-## {data-menu-title="Wrap Up"}
-
-[Wrap Up]{.slide-title}
-
-<hr>
-
-::: {.body-text-m}
-This revision + mini project session combines:
-
-- JavaScript basics
-- DOM manipulation
-- Event handling
-- Validation and rendering
-
-These are essential foundations before moving into server-side web topics.
-:::

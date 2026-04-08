@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 8 Demo - HTML Forms &amp; Form Elements</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 8 Demo</h1>
+      <p class="subtitle">HTML Forms &amp; Form Elements</p>
+
+      <div class="card">
+        <p>
+          <strong>[Classroom Tip]</strong> This demo lets you interact with every major HTML input type,
+          see label accessibility in action, explore fieldset/legend grouping, and watch
+          HTML5 validation fire — all without any backend server.
+        </p>
+      </div>
+
+      <!-- Section 1: Input Types Gallery -->
+      <div class="card">
+        <h2>1) Input Types Gallery</h2>
+        <p>All these are just <code class="c">&lt;input&gt;</code> with different <code class="c">type</code> attributes.</p>
+        <div class="grid">
+          <div class="form-demo">
+            <label>type="text"</label>
+            <input type="text" placeholder="Your full name" />
+            <label>type="email"</label>
+            <input type="email" placeholder="you@example.com" />
+            <label>type="password"</label>
+            <input type="password" placeholder="••••••••" />
+            <label>type="url"</label>
+            <input type="url" placeholder="https://example.com" />
+            <label>type="tel"</label>
+            <input type="tel" placeholder="+1 555 123 4567" />
+            <label>type="search"</label>
+            <input type="search" placeholder="Search..." />
+          </div>
+          <div class="form-demo">
+            <label>type="number" (min=0, max=100)</label>
+            <input type="number" min="0" max="100" value="42" />
+            <label>type="date"</label>
+            <input type="date" />
+            <label>type="range" (min=0, max=10)</label>
+            <input type="range" min="0" max="10" value="5" id="range-demo" oninput="document.getElementById('range-val').textContent=this.value" />
+            <div style="text-align:center; font-weight:bold; color:#053660;" id="range-val">5</div>
+            <label style="margin-top:8px;">type="color"</label>
+            <input type="color" value="#053660" id="color-demo" oninput="document.getElementById('color-val').textContent=this.value; document.getElementById('color-preview').style.background=this.value" />
+            <div id="color-preview" style="height:30px; border-radius:6px; background:#053660; margin-top:6px; transition:background .2s;"></div>
+            <div id="color-val" style="text-align:center; font-size:12px; color:#555;">#053660</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Radio & Checkbox -->
+      <div class="card">
+        <h2>2) Radio Buttons vs Checkboxes</h2>
+        <div class="grid">
+          <div>
+            <h3>Radio (one choice only)</h3>
+            <pre class="code-block">&lt;input type="radio" name="level"
+  id="r1" value="beginner"&gt;
+&lt;label for="r1"&gt;Beginner&lt;/label&gt;
+
+&lt;input type="radio" name="level"
+  id="r2" value="advanced"&gt;
+&lt;label for="r2"&gt;Advanced&lt;/label&gt;</pre>
+            <div class="form-demo inline-inputs" style="margin-top:8px;">
+              <label><input type="radio" name="level" value="beginner" id="r1"> <label for="r1">Beginner</label></label>
+              <label><input type="radio" name="level" value="intermediate" id="r2"> <label for="r2">Intermediate</label></label>
+              <label><input type="radio" name="level" value="advanced" id="r3"> <label for="r3">Advanced</label></label>
+            </div>
+            <p style="font-size:12px; color:#555;">All share the same <code class="c">name</code> — selecting one deselects others.</p>
+          </div>
+          <div>
+            <h3>Checkboxes (multiple choices)</h3>
+            <pre class="code-block">&lt;input type="checkbox" name="topics[]"
+  id="c1" value="html"&gt;
+&lt;label for="c1"&gt;HTML&lt;/label&gt;
+
+&lt;input type="checkbox" name="topics[]"
+  id="c2" value="css"&gt;
+&lt;label for="c2"&gt;CSS&lt;/label&gt;</pre>
+            <div class="form-demo inline-inputs" style="margin-top:8px;">
+              <label><input type="checkbox" name="topics[]" value="html" id="c1" checked> <label for="c1">HTML</label></label>
+              <label><input type="checkbox" name="topics[]" value="css" id="c2"> <label for="c2">CSS</label></label>
+              <label><input type="checkbox" name="topics[]" value="js" id="c3"> <label for="c3">JavaScript</label></label>
+            </div>
+            <p style="font-size:12px; color:#555;">Each checkbox is independent — multiple can be checked simultaneously.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Label Accessibility -->
+      <div class="card">
+        <h2>3) Label Accessibility — The Right Way</h2>
+        <p>Always associate a <code class="c">&lt;label&gt;</code> with its input. Click the label text to see the difference.</p>
+        <div class="label-demo" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="bad">
+            <strong style="color:#dc3545;">❌ Bad — no label association:</strong>
+            <div style="margin-top:10px; font-size:13px;">
+              <span style="font-size:13px;">Username:</span>
+              <input type="text" placeholder="Click 'Username:' above — nothing happens" style="width:100%; padding:6px; border:1px solid #ccc; border-radius:4px; margin-top:4px; font-size:12px; box-sizing:border-box;" />
+              <p style="font-size:12px; color:#dc3545; margin:6px 0 0;">Uses &lt;span&gt; instead of &lt;label for="..."&gt; — screen readers can't associate them.</p>
+            </div>
+          </div>
+          <div class="good">
+            <strong style="color:#198754;">✅ Good — proper label association:</strong>
+            <div style="margin-top:10px; font-size:13px;">
+              <label for="good-input" style="font-size:13px; font-weight:600; color:#053660; cursor:pointer;">Username: (click me!)</label>
+              <input id="good-input" type="text" placeholder="Clicking the label focuses here!" style="width:100%; padding:6px; border:1px solid #ccc; border-radius:4px; margin-top:4px; font-size:12px; box-sizing:border-box;" />
+              <p style="font-size:12px; color:#198754; margin:6px 0 0;">Click the "Username:" label — focus jumps to the input. Works for click targets and screen readers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Fieldset & Legend -->
+      <div class="card">
+        <h2>4) Fieldset &amp; Legend — Grouping Related Fields</h2>
+        <div class="grid">
+          <div>
+            <pre class="code-block">&lt;fieldset&gt;
+  &lt;legend&gt;Personal Info&lt;/legend&gt;
+  &lt;label for="fname"&gt;First Name&lt;/label&gt;
+  &lt;input id="fname" type="text" /&gt;
+  &lt;label for="lname"&gt;Last Name&lt;/label&gt;
+  &lt;input id="lname" type="text" /&gt;
+&lt;/fieldset&gt;
+
+&lt;fieldset&gt;
+  &lt;legend&gt;Course Preferences&lt;/legend&gt;
+  ...checkboxes...
+&lt;/fieldset&gt;</pre>
+          </div>
+          <div class="form-demo">
+            <fieldset>
+              <legend>Personal Info</legend>
+              <label for="fname">First Name</label>
+              <input id="fname" type="text" placeholder="Alice" />
+              <label for="lname">Last Name</label>
+              <input id="lname" type="text" placeholder="Smith" />
+            </fieldset>
+            <fieldset>
+              <legend>Course Preferences</legend>
+              <div class="inline-inputs">
+                <label><input type="checkbox" value="morning"> Morning sessions</label>
+                <label><input type="checkbox" value="lab"> Lab sessions</label>
+                <label><input type="checkbox" value="online"> Online option</label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: HTML5 Validation -->
+      <div class="card">
+        <h2>5) HTML5 Form Validation — Live Demo</h2>
+        <p>Fill in the fields and click Submit. Browser validation fires without any JavaScript.</p>
+        <form id="validation-form" onsubmit="handleSubmit(event)" novalidate>
+          <div class="form-demo">
+            <label for="v-name">Full Name <span style="color:#dc3545;">*</span></label>
+            <input id="v-name" type="text" name="name" required minlength="2" placeholder="At least 2 characters" />
+
+            <label for="v-email">Email Address <span style="color:#dc3545;">*</span></label>
+            <input id="v-email" type="email" name="email" required placeholder="you@example.com" />
+
+            <label for="v-age">Age (18–120) <span style="color:#dc3545;">*</span></label>
+            <input id="v-age" type="number" name="age" required min="18" max="120" placeholder="18–120" />
+
+            <label for="v-url">Portfolio URL (optional)</label>
+            <input id="v-url" type="url" name="url" placeholder="https://..." />
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="submit" class="toggle-btn">Submit Form</button>
+              <button type="reset" class="toggle-btn" style="background:#6c757d;">Reset</button>
+            </div>
+          </div>
+        </form>
+
+        <div id="form-output" class="data-preview" style="margin-top:14px; display:none;"></div>
+      </div>
+
+      <!-- Section 6: GET vs POST -->
+      <div class="card">
+        <h2>6) GET vs POST Methods</h2>
+        <div class="grid">
+          <div style="background:#e3f2fd; border:1px solid #0d6efd; border-radius:8px; padding:14px; font-size:13px;">
+            <strong>GET method:</strong>
+            <pre class="code-block" style="margin-top:8px;">&lt;form method="GET" action="/search"&gt;
+  &lt;input type="text" name="q"&gt;
+&lt;/form&gt;</pre>
+            <ul style="margin:8px 0 0; padding-left:16px; line-height:2;">
+              <li>Appends data to URL: <code class="c">/search?q=html</code></li>
+              <li>Visible in browser bar — bookmarkable</li>
+              <li>Use for searches, filters (non-sensitive)</li>
+              <li>Limited by URL length (~2000 chars)</li>
+            </ul>
+          </div>
+          <div style="background:#e8f5e9; border:1px solid #198754; border-radius:8px; padding:14px; font-size:13px;">
+            <strong>POST method:</strong>
+            <pre class="code-block" style="margin-top:8px;">&lt;form method="POST" action="/login"&gt;
+  &lt;input type="password" name="pass"&gt;
+&lt;/form&gt;</pre>
+            <ul style="margin:8px 0 0; padding-left:16px; line-height:2;">
+              <li>Sends data in request body — not in URL</li>
+              <li>Not visible / not bookmarkable</li>
+              <li>Use for logins, registrations, payments</li>
+              <li>No size limit (handles file uploads)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      function handleSubmit(e) {
+        e.preventDefault();
+        const form = document.getElementById('validation-form');
+        const name = document.getElementById('v-name').value.trim();
+        const email = document.getElementById('v-email').value.trim();
+        const age = document.getElementById('v-age').value.trim();
+        const url = document.getElementById('v-url').value.trim();
+
+        const errors = [];
+        if (!name || name.length < 2) errors.push('Name must be at least 2 characters');
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('Please enter a valid email address');
+        if (!age || parseInt(age) < 18 || parseInt(age) > 120) errors.push('Age must be between 18 and 120');
+        if (url && !/^https?:\/\/.+/.test(url)) errors.push('URL must start with http:// or https://');
+
+        const output = document.getElementById('form-output');
+        output.style.display = 'block';
+
+        if (errors.length > 0) {
+          output.className = 'data-preview highlight-red';
+          output.innerHTML = '<strong>⚠️ Validation errors:</strong><ul style="margin:8px 0 0; padding-left:16px;">' +
+            errors.map(e => `<li style="font-size:13px;">${e}</li>`).join('') + '</ul>';
+        } else {
+          output.className = 'data-preview highlight-green';
+          output.innerHTML = `<strong>✅ Form submitted successfully!</strong><br>
+            <br><strong>Captured data (would be sent to server):</strong><br>
+            <code style="font-size:12px; line-height:2;">name="${name}" | email="${email}" | age="${age}"${url ? ' | url="' + url + '"' : ''}</code>`;
+        }
+      }
+    </script>
+  </body>
+</html>

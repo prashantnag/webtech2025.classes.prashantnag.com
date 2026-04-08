@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 5 Demo - HTML Lists &amp; Images</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 5 Demo</h1>
+      <p class="subtitle">HTML Lists &amp; Images</p>
+
+      <div class="card">
+        <p>
+          <strong>[Classroom Tip]</strong> This demo makes all three HTML list types visible,
+          shows nested lists, demonstrates images with and without alt text,
+          and illustrates the &lt;figure&gt;/&lt;figcaption&gt; pattern.
+        </p>
+      </div>
+
+      <!-- Section 1: Three List Types -->
+      <div class="card">
+        <h2>1) The Three HTML List Types</h2>
+        <div class="grid">
+          <div class="demo-list-card">
+            <h3>Unordered List (<code class="code-small">&lt;ul&gt;</code>)</h3>
+            <p style="font-size: 12px; margin:4px 0 8px;">Order doesn't matter. Use for collections.</p>
+            <ul>
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>JavaScript</li>
+            </ul>
+            <div style="margin-top: 10px;">
+              <strong style="font-size: 12px;">Change bullet style:</strong><br>
+              <button class="style-btn" style="background:#e3f2fd;" onclick="setListType('ul-demo','disc')">disc •</button>
+              <button class="style-btn" style="background:#f3e5f5;" onclick="setListType('ul-demo','circle')">circle ○</button>
+              <button class="style-btn" style="background:#e8f5e9;" onclick="setListType('ul-demo','square')">square ■</button>
+              <ul id="ul-demo" style="list-style-type: disc; margin-top:8px; font-size:13px;">
+                <li>Apples</li>
+                <li>Bananas</li>
+                <li>Oranges</li>
+              </ul>
+            </div>
+          </div>
+          <div class="demo-list-card">
+            <h3>Ordered List (<code class="code-small">&lt;ol&gt;</code>)</h3>
+            <p style="font-size: 12px; margin:4px 0 8px;">Sequence matters. Use for steps, instructions.</p>
+            <ol>
+              <li>Open browser</li>
+              <li>Navigate to site</li>
+              <li>View page source</li>
+            </ol>
+            <div style="margin-top: 10px;">
+              <strong style="font-size: 12px;">Change number type:</strong><br>
+              <button class="style-btn" style="background:#e3f2fd;" onclick="setListType('ol-demo','decimal')">1, 2, 3</button>
+              <button class="style-btn" style="background:#f3e5f5;" onclick="setOLType('ol-demo','A')">A, B, C</button>
+              <button class="style-btn" style="background:#e8f5e9;" onclick="setOLType('ol-demo','i')">i, ii, iii</button>
+              <ol id="ol-demo" style="margin-top:8px; font-size:13px;">
+                <li>Step one</li>
+                <li>Step two</li>
+                <li>Step three</li>
+              </ol>
+            </div>
+          </div>
+          <div class="demo-list-card">
+            <h3>Description List (<code class="code-small">&lt;dl&gt;</code>)</h3>
+            <p style="font-size: 12px; margin:4px 0 8px;">Term/definition pairs. Use for glossaries, FAQs.</p>
+            <dl>
+              <dt>HTML</dt>
+              <dd>Markup language for web structure</dd>
+              <dt>CSS</dt>
+              <dd>Style sheet language for visual design</dd>
+              <dt>DOM</dt>
+              <dd>Document Object Model — tree of elements</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Nested Lists -->
+      <div class="card">
+        <h2>2) Nested Lists</h2>
+        <p>Lists can be placed inside other lists using proper parent–child nesting.</p>
+        <div class="grid">
+          <div>
+            <strong>Code:</strong>
+            <pre style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius:6px; padding:12px; font-size:12px; margin-top:8px;">&lt;ul&gt;
+  &lt;li&gt;Front-End
+    &lt;ul&gt;
+      &lt;li&gt;HTML&lt;/li&gt;
+      &lt;li&gt;CSS&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Back-End
+    &lt;ul&gt;
+      &lt;li&gt;Node.js&lt;/li&gt;
+      &lt;li&gt;Databases&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</pre>
+          </div>
+          <div class="nested-demo" style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius:6px; padding:16px;">
+            <strong>Result:</strong>
+            <ul>
+              <li>Front-End
+                <ul>
+                  <li>HTML</li>
+                  <li>CSS</li>
+                </ul>
+              </li>
+              <li>Back-End
+                <ul>
+                  <li>Node.js</li>
+                  <li>Databases</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Images & Alt Text -->
+      <div class="card">
+        <h2>3) Images &amp; Alt Text</h2>
+        <p>The <code class="code-small">alt</code> attribute describes the image for screen readers and when images fail to load.</p>
+
+        <div class="grid">
+          <div>
+            <h3>Image with correct alt text</h3>
+            <pre style="background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:10px; font-size:12px;">&lt;img src="photo.jpg"
+     alt="A landscape photo
+          of mountains at sunset"
+     width="300"&gt;</pre>
+            <div style="background:#e8f4f8; border:2px solid #0d6efd; border-radius:8px; padding:16px; text-align:center; margin-top:8px;">
+              📷 <em style="color:#0d6efd;">[Browser renders image here]</em><br>
+              <small>Alt: "A landscape photo of mountains at sunset"</small>
+            </div>
+          </div>
+          <div>
+            <h3>Image fails — alt text shown</h3>
+            <pre style="background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:10px; font-size:12px;">&lt;img src="broken-path.jpg"
+     alt="A landscape photo
+          of mountains at sunset"&gt;</pre>
+            <div class="alt-demo">
+              <div>
+                <span style="font-size: 24px;">🖼️</span><br>
+                <span style="font-size: 13px; color: #555;">A landscape photo of mountains at sunset</span>
+              </div>
+            </div>
+            <p style="font-size:12px; color:#dc3545;">Broken path — browser shows alt text instead.</p>
+          </div>
+        </div>
+
+        <div style="background:#fff8e1; border:1px solid #ffc107; border-radius:8px; padding:12px; margin-top:12px;">
+          <strong>⚠️ Decorative images:</strong> If an image is purely decorative (e.g., a background flourish), use <code class="code-small">alt=""</code> (empty string). Screen readers will skip it.
+        </div>
+      </div>
+
+      <!-- Section 4: figure & figcaption -->
+      <div class="card">
+        <h2>4) &lt;figure&gt; &amp; &lt;figcaption&gt;</h2>
+        <p>Wrap images in <code class="code-small">&lt;figure&gt;</code> to associate a caption semantically.</p>
+        <div class="grid">
+          <div>
+            <strong>Code:</strong>
+            <pre style="background:#f8f9fa; border:1px solid #dee2e6; border-radius:6px; padding:12px; font-size:12px; margin-top:8px;">&lt;figure&gt;
+  &lt;img
+    src="chart.png"
+    alt="Bar chart showing
+         2026 web tech usage"
+    width="300"
+  /&gt;
+  &lt;figcaption&gt;
+    Figure 1: Web Technology
+    Popularity in 2026
+  &lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:center;">
+            <figure style="text-align:center; background:#f8f9fa; border:1px solid #dee2e6; border-radius:8px; padding:16px; max-width:280px;">
+              <div style="background:#e3f2fd; border:2px dashed #0d6efd; border-radius:4px; padding:30px; color:#0d6efd; font-size:22px;">
+                📊
+                <br><small style="font-size:11px;">chart.png</small>
+              </div>
+              <figcaption style="margin-top:8px; font-size:13px; color:#555; font-style:italic;">
+                Figure 1: Web Technology Popularity in 2026
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: List Type chooser -->
+      <div class="card">
+        <h2>5) Build Your Own List</h2>
+        <p>Type an item and choose the list type to add it to the live list below.</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+          <input id="list-input" type="text" placeholder="Type an item..." style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:13px; min-width:150px;" />
+          <button class="toggle-btn" onclick="addToList('ul-build')">Add to UL</button>
+          <button class="toggle-btn" onclick="addToList('ol-build')">Add to OL</button>
+          <button class="toggle-btn" style="background:#6c757d;" onclick="clearLists()">Clear</button>
+        </div>
+        <div class="grid">
+          <div style="background:#f0f6ff; border:1px solid #0d6efd; border-radius:8px; padding:12px;">
+            <strong>Unordered List:</strong>
+            <ul id="ul-build" style="font-size:13px; margin:8px 0 0; padding-left:18px;">
+              <li>(empty)</li>
+            </ul>
+          </div>
+          <div style="background:#f0fff0; border:1px solid #198754; border-radius:8px; padding:12px;">
+            <strong>Ordered List:</strong>
+            <ol id="ol-build" style="font-size:13px; margin:8px 0 0; padding-left:18px;">
+              <li>(empty)</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      function setListType(id, type) {
+        document.getElementById(id).style.listStyleType = type;
+      }
+      function setOLType(id, type) {
+        document.getElementById(id).type = type;
+      }
+      let ulBuildInit = true, olBuildInit = true;
+      function addToList(listId) {
+        const input = document.getElementById('list-input');
+        const text = input.value.trim();
+        if (!text) return;
+        const list = document.getElementById(listId);
+        if (listId === 'ul-build' && ulBuildInit) { list.innerHTML = ''; ulBuildInit = false; }
+        if (listId === 'ol-build' && olBuildInit) { list.innerHTML = ''; olBuildInit = false; }
+        const li = document.createElement('li');
+        li.textContent = text;
+        list.appendChild(li);
+        input.value = '';
+        input.focus();
+      }
+      function clearLists() {
+        document.getElementById('ul-build').innerHTML = '<li>(empty)</li>';
+        document.getElementById('ol-build').innerHTML = '<li>(empty)</li>';
+        ulBuildInit = true; olBuildInit = true;
+      }
+      document.getElementById('list-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') addToList('ul-build');
+      });
+    </script>
+  </body>
+</html>

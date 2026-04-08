@@ -1,5 +1,5 @@
 ---
-title: "Lecture 39: RESTful Web Services: Controllers, Request Mapping, CRUD APIs"
+title: "Lecture 39: Spring Boot Code Structure & Best Practices"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "March 27, 2026"
@@ -13,11 +13,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[RESTful Web Services: Controllers, Request Mapping, CRUD APIs]{.white-text}
+[Spring Boot Code Structure & Best Practices]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 12 | Unit V: REST APIs<br>
+Week 10 | Unit V: Spring Boot & REST Services<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -244,7 +244,7 @@ Use a standard wrapper only if it helps consistency across all endpoints.
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[Spring Boot Code Structure & Best Practices]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 40 - Spring Boot Actuator, Logger, Web App Build & Final Revision

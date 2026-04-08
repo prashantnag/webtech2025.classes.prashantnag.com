@@ -23,7 +23,7 @@ $peach: #df8073;
 // scss variables
 $presentation-title-slide-text-align: "left";
 $body-bg: $white;
-$link-color: $green;
+$link-color: $teal;
 $code-color: $magenta;
 $code-bg: $off-white;
 $code-block-font-size: 0.8em;
@@ -340,4 +340,107 @@ hr {
 .incremental > ol > li {
   margin-bottom: 0.15em;
   line-height: 1.2;
+}
+
+// Coeos-style reveal layout controls for logo/footer/slide number visibility.
+.reveal .footer {
+  bottom: 10px !important;
+  left: 14px !important;
+  right: 150px !important;
+  width: auto !important;
+  color: $dark-blue !important;
+}
+
+.reveal .slide-logo {
+  display: block !important;
+  position: fixed !important;
+  top: 0 !important;
+  right: 10px !important;
+  max-height: 10% !important;
+  height: auto !important;
+  width: auto !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}
+
+.reveal .slide-menu-button {
+  left: 10px !important;
+  bottom: 10px !important;
+}
+
+// Slide menu panel: white background, teal text.
+.slide-menu-wrapper .slide-menu {
+  background: $white !important;
+  color: $teal !important;
+}
+
+.slide-menu-wrapper .slide-menu-toolbar {
+  background: $white !important;
+}
+
+.slide-menu-wrapper .slide-menu-toolbar > li {
+  color: $teal !important;
+}
+
+.slide-menu-wrapper .slide-menu-items li {
+  color: $teal !important;
+}
+
+.slide-menu-wrapper .slide-menu-items li:not(.slide-tool-item).active,
+.slide-menu-wrapper .slide-menu-items li:not(.slide-tool-item):hover {
+  background: $teal !important;
+  color: $white !important;
+}
+
+.slide-menu-wrapper .slide-tool-item.active {
+  background: transparent !important;
+  color: $teal !important;
+}
+
+.slide-menu-wrapper .slide-tool-item.active a {
+  color: $teal !important;
+}
+
+.slide-menu-wrapper .slide-tool-item {
+  color: $teal !important;
+  border-top-color: rgba(4, 124, 144, 0.2) !important;
+}
+
+.slide-menu-wrapper .slide-tool-item a {
+  color: $teal !important;
+}
+
+.slide-menu-wrapper .slide-tool-item:hover {
+  background: $teal !important;
+  color: $white !important;
+}
+
+.slide-menu-wrapper .slide-tool-item:hover a {
+  color: $white !important;
+}
+
+.slide-menu-wrapper .slide-tool-item:hover kbd {
+  color: $baby-blue !important;
+  border-color: $baby-blue !important;
+}
+
+.reveal .slide-number,
+.reveal.has-logo .slide-number {
+  bottom: 10px !important;
+  right: 10px !important;
+  top: unset !important;
+  z-index: 60 !important;
+  color: $dark-blue !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+// Match progress bar color with the hr dark-blue accent.
+.reveal .progress {
+  color: $dark-blue !important;
+}
+
+.reveal .progress span {
+  background-color: $dark-blue !important;
 }

@@ -1,0 +1,273 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 26 Demo - Spring IoC and Bean Lifecycle</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 1100px; margin: 1.5rem auto; }
+    .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 1rem; }
+    .card { background: #fff; border: 1px solid #d9dde3; border-radius: 10px; padding: 1rem; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
+    label { display: block; font-weight: 600; margin-bottom: .3rem; }
+    select {
+      width: 100%;
+      padding: .55rem .65rem;
+      border: 1px solid #bfd2ea;
+      border-radius: 8px;
+      font-size: .95rem;
+      color: #183252;
+      background: #fff;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: .45rem; margin: .6rem 0 .4rem; }
+    button.ctrl {
+      width: auto;
+      margin: 0;
+      border: 0;
+      border-radius: 8px;
+      padding: .55rem .85rem;
+      color: #fff;
+      background: #053660;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    button.alt { background: #0b7a57; }
+    button.warn { background: #9a3412; }
+    .trace {
+      background: #0b1320;
+      color: #d6e4ff;
+      border: 1px solid #21324d;
+      border-radius: 8px;
+      min-height: 270px;
+      padding: .8rem;
+      font: .84rem/1.4 Consolas, Monaco, monospace;
+      white-space: pre-wrap;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+    th, td { border: 1px solid #d3deed; padding: .46rem; text-align: left; font-size: .88rem; }
+    th { background: #edf4ff; color: #173a62; }
+    .tag {
+      display: inline-block;
+      margin: .2rem .3rem .2rem 0;
+      padding: .18rem .5rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfd2ea;
+      color: #1d4f7c;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .mini { margin: .2rem 0 .5rem; color: #3a5678; font-size: .9rem; }
+    .ok { color: #0b7a57; font-weight: 700; }
+    .bad { color: #9a3412; font-weight: 700; }
+    ol { margin: .4rem 0 0; padding-left: 1.15rem; }
+    li { margin: .28rem 0; }
+    @media (max-width: 900px) {
+      .grid, .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<main class="shell wrap">
+  <h1>Lecture 26 Demo: IoC Container and Bean Lifecycle</h1>
+  <p class="subtitle">Interactive trace for create, inject, init, use, and destroy phases with lifecycle callback simulation.</p>
+
+  <section class="grid">
+    <article class="card">
+      <h2>1) Configure Lifecycle Scenario</h2>
+      <div class="row">
+        <div>
+          <label for="scope">Bean scope</label>
+          <select id="scope">
+            <option value="singleton">singleton</option>
+            <option value="prototype">prototype</option>
+          </select>
+        </div>
+        <div>
+          <label for="callback">Lifecycle callback mode</label>
+          <select id="callback">
+            <option value="both">Both callbacks present</option>
+            <option value="missingDestroy">Missing destroy callback</option>
+            <option value="missingInit">Missing init callback</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="mini">Bean metadata:</p>
+      <div>
+        <span class="tag">Bean: reportService</span>
+        <span class="tag">Type: ReportService</span>
+        <span class="tag" id="tagScope">Scope: singleton</span>
+        <span class="tag" id="tagCb">Callbacks: both</span>
+      </div>
+
+      <div class="actions">
+        <button class="ctrl" id="start">Start Context</button>
+        <button class="ctrl alt" id="request">Use Bean</button>
+        <button class="ctrl warn" id="stop">Stop Context</button>
+      </div>
+
+      <h2>2) Lifecycle Mapping</h2>
+      <ol>
+        <li>Container reads bean definition metadata.</li>
+        <li>Bean instance is created based on scope.</li>
+        <li>Dependencies are injected.</li>
+        <li>Initialization callback runs.</li>
+        <li>Business method executes during request.</li>
+        <li>Destroy callback runs at context shutdown.</li>
+      </ol>
+    </article>
+
+    <article class="card">
+      <h2>3) Runtime Trace</h2>
+      <div id="trace" class="trace">No lifecycle events yet. Click Start Context.</div>
+
+      <h2>4) Bean Status</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Bean</th>
+            <th>Scope</th>
+            <th>Init</th>
+            <th>Destroy</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>reportService</td>
+            <td id="cellScope">singleton</td>
+            <td id="cellInit">pending</td>
+            <td id="cellDestroy">pending</td>
+            <td id="cellState" class="ok">context not started</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+</main>
+
+<script>
+  const scopeSel = document.getElementById("scope");
+  const cbSel = document.getElementById("callback");
+  const trace = document.getElementById("trace");
+  const tagScope = document.getElementById("tagScope");
+  const tagCb = document.getElementById("tagCb");
+  const cellScope = document.getElementById("cellScope");
+  const cellInit = document.getElementById("cellInit");
+  const cellDestroy = document.getElementById("cellDestroy");
+  const cellState = document.getElementById("cellState");
+
+  let started = false;
+  let requestCount = 0;
+
+  function updateMeta() {
+    tagScope.textContent = "Scope: " + scopeSel.value;
+    tagCb.textContent = "Callbacks: " + cbSel.value;
+    cellScope.textContent = scopeSel.value;
+  }
+
+  function writeTrace(lines) {
+    trace.textContent = lines.join("\n");
+  }
+
+  function startContext() {
+    started = true;
+    requestCount = 0;
+
+    const scope = scopeSel.value;
+    const mode = cbSel.value;
+    const initOk = mode !== "missingInit";
+
+    const lines = [
+      "[IOC] Read configuration and bean definitions",
+      "[IOC] Create bean instance: reportService (" + scope + ")",
+      "[IOC] Inject dependencies into reportService"
+    ];
+
+    if (initOk) {
+      lines.push("[LIFECYCLE] @PostConstruct init() executed");
+      cellInit.textContent = "executed";
+    } else {
+      lines.push("[WARN] init callback missing: startup preparation skipped");
+      cellInit.textContent = "missing";
+    }
+
+    lines.push("[IOC] ApplicationContext ready");
+    writeTrace(lines);
+
+    cellDestroy.textContent = "waiting";
+    cellState.textContent = "running";
+    cellState.className = "ok";
+  }
+
+  function useBean() {
+    if (!started) {
+      writeTrace([
+        "[WARN] Context is not running.",
+        "Action: Start Context before using bean."
+      ]);
+      return;
+    }
+
+    requestCount += 1;
+    const scope = scopeSel.value;
+    const mode = cbSel.value;
+
+    const lines = [
+      "Request #" + requestCount + " received",
+      scope === "prototype"
+        ? "[IOC] Prototype bean created for this request"
+        : "[IOC] Singleton bean reused from context",
+      "[BUSINESS] reportService.generate() executed"
+    ];
+
+    if (mode === "missingInit") {
+      lines.push("[NOTE] Because init is missing, runtime may use incomplete resources");
+    }
+
+    writeTrace(lines);
+    cellState.textContent = "active in request flow";
+    cellState.className = "ok";
+  }
+
+  function stopContext() {
+    if (!started) {
+      writeTrace([
+        "[INFO] Context already stopped.",
+        "No destroy phase executed."
+      ]);
+      return;
+    }
+
+    const mode = cbSel.value;
+    const lines = ["[IOC] Closing ApplicationContext"]; 
+
+    if (mode === "missingDestroy") {
+      lines.push("[WARN] @PreDestroy missing: cleanup callback not executed");
+      cellDestroy.textContent = "missing";
+      cellState.textContent = "stopped with cleanup risk";
+      cellState.className = "bad";
+    } else {
+      lines.push("[LIFECYCLE] @PreDestroy cleanup() executed");
+      cellDestroy.textContent = "executed";
+      cellState.textContent = "stopped cleanly";
+      cellState.className = "ok";
+    }
+
+    lines.push("[IOC] Context shutdown complete");
+    writeTrace(lines);
+    started = false;
+  }
+
+  scopeSel.addEventListener("change", updateMeta);
+  cbSel.addEventListener("change", updateMeta);
+  document.getElementById("start").addEventListener("click", startContext);
+  document.getElementById("request").addEventListener("click", useBean);
+  document.getElementById("stop").addEventListener("click", stopContext);
+
+  updateMeta();
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 3: HTML Introduction & Basic Structure, HTML Tags"
+---
+title: "Lecture 3: HTML Introduction, Basic Structure & Tags"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "January 28, 2026"
@@ -14,7 +14,7 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[HTML Basics & Structure]{.white-text}
+[HTML Introduction, Basic Structure & Tags]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
@@ -25,20 +25,139 @@ Week 1 | Unit I: Web Page Designing<br>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
+[Learning Outcomes]{.slide-title}
 
 <hr>
 
-::: {.incremental .body-text-m}
-- Understand the structure of HTML documents
-- Learn how to use basic HTML elements
-- Create and structure your first HTML page
+::: {.body-text-m}
+After this lecture, students will be able to:
+
+- explain the structure of HTML documents
+- use basic HTML elements correctly
+- create and structure a valid first HTML page
 :::
 
 ::: {.notes}
 HTML is the foundation of all web pages. Understanding its structure is crucial before moving to styling or interactivity.
+:::
+
+---
+
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Understanding of web protocols from Lecture 2
+- Basic text editor usage
+- Familiarity with opening files in browser
+:::
+
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus mapping:
+
+- HTML introduction and basic structure
+- HTML document types and standards
+- Foundation for all web pages
+
+Prerequisites used:
+
+- Understanding of protocols from Lecture 2
+- Basic text editor knowledge
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- HTML fundamentals and terminology
+- Document structure and anatomy
+- Common tags and attributes
+- Nesting and validation
+- Build first HTML page
+- Summary and exam preparation
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Every website visible in a browser is built from HTML - it is the universal language of the web.
+- Without HTML there is no structure, no headings, no paragraphs, no links, no forms.
+- HTML is not a programming language but a markup standard that browsers understand worldwide.
+- Mastering HTML structure is the first concrete skill that allows students to actually build web pages.
+- All future topics - CSS, JavaScript, forms, accessibility - depend on correct HTML foundations.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Before we dive into details, think about these:**
+
+- If you right-click any webpage and choose "View Page Source" - what language do you see?
+- Why do browsers show your page differently if you forget to close a tag?
+- What is the difference between what the browser shows and what the code says?
+- Why does a heading need a special tag instead of just making text bigger with CSS?
+:::
+
+---
+
+## {data-menu-title="HTML Tree"}
+
+[HTML Document as a Tree]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+flowchart TD
+  Root["html"]
+  Head["head"]
+  Body["body"]
+  Meta["meta charset"]
+  Title["title"]
+  H1["h1 - Heading"]
+  P["p - Paragraph"]
+  A["a - Link"]
+  Root --> Head
+  Root --> Body
+  Head --> Meta
+  Head --> Title
+  Body --> H1
+  Body --> P
+  P --> A
+```
+
+::: {.body-text-m}
+- Every HTML document is a tree of nested elements.
+- The browser builds this tree (the DOM) and renders it as a visible page.
 :::
 
 ---
@@ -106,16 +225,16 @@ Clarify that HTML is declarative, not imperative. It describes what things are, 
 <hr>
 
 ```
-┌─────────────────────────────────────┐
-│ <p class="intro">Hello World</p>    │
-└─────────────────────────────────────┘
++-------------------------------------+
+� <p class="intro">Hello World</p>    �
++-------------------------------------+
 
-┌──────────┬─────────┬──────────┬───────────────┐
-│ Opening  │ Attribute│ Content  │ Closing Tag   │
-│  Tag     │          │          │               │
-│ <p       │ class=" │ Hello    │ </p>          │
-│  >       │ intro"  │ World    │               │
-└──────────┴─────────┴──────────┴───────────────┘
++-----------------------------------------------+
+� Opening  � Attribute� Content  � Closing Tag   �
+�  Tag     �          �          �               �
+� <p       � class=" � Hello    � </p>          �
+�  >       � intro"  � World    �               �
++-----------------------------------------------+
 ```
 
 ::: {.fragment .body-text-m .center-text .topbr}
@@ -224,9 +343,9 @@ Attributes provide additional information about elements:
 :::
 
 ::: {.incremental .body-text-m .topbr}
-✓ Use `<h1>` only once per page
-✓ Follow hierarchical order (no jumping from h1 to h3)
-✓ Improves SEO and accessibility
+? Use `<h1>` only once per page
+? Follow hierarchical order (no jumping from h1 to h3)
+? Improves SEO and accessibility
 :::
 
 ::: {.notes}
@@ -271,7 +390,7 @@ Prefer semantic tags (`<strong>`, `<em>`) over presentation tags (`<b>`, `<i>`)
 
 <hr>
 
-✅ [**Correct**]{.teal-text}
+? [**Correct**]{.teal-text}
 
 ```html
 <div>
@@ -279,7 +398,7 @@ Prefer semantic tags (`<strong>`, `<em>`) over presentation tags (`<b>`, `<i>`)
 </div>
 ```
 
-❌ [**Incorrect**]{.magenta-text}
+? [**Incorrect**]{.magenta-text}
 
 ```html
 <div>
@@ -344,20 +463,23 @@ Validation prevents browsers from having to guess your intentions
 
 ---
 
-## {data-menu-title="Quick Practice"}
+## {data-menu-title="Memory Booster"}
 
-[Quick Practice Exercise]{.slide-title}
+[Memory Booster: The Layer Cake Analogy]{.slide-title}
 
 <hr>
 
-Create an HTML page with:
+::: {.body-text-m}
+Think of an HTML document like a **layered cake recipe**:
 
-::: {.incremental .body-text-m}
-1. A main heading with your name
-2. A paragraph about yourself
-3. A `<em>` or `<strong>` somewhere
-4. A subheading "My Interests"
-5. A list of your interests (use `<ul>`)
+- **`<!DOCTYPE html>`** = The cake tin label (tells everyone what type this is)
+- **`<html>`** = The cake stand (holds everything)
+- **`<head>`** = Invisible inside layer (metadata, recipe notes - not what you see)
+- **`<body>`** = The visible cake (everything your guests actually see and eat)
+- **`<h1>` to `<h6>`** = Cake tiers (hierarchy and importance)
+- **`<p>`** = The actual cake layers (content that fills the structure)
+
+A cake without tiers is just a blob. A webpage without proper HTML structure is the same!
 :::
 
 ---
@@ -377,16 +499,162 @@ Create an HTML page with:
 
 ---
 
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist for HTML]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Investigation order when HTML won't display:
+
+1. verify DOCTYPE is present and correct
+2. check that all tags are properly closed
+3. inspect HTML structure in browser DevTools
+4. validate file encoding (should be UTF-8)
+5. check File > Page Source for actual HTML
+6. use W3C HTML Validator to find syntax errors
+7. verify file extension is .html not .txt
+
+This approach separates structure vs rendering issues.
+:::
+
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo: HTML Structure Explorer]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Interactive demonstration showing HTML document structure, tags, and browser rendering:**
+
+?? **[Open Interactive Demo: HTML Basics & Structure](../demos/lecture-03-demo.html){target="_blank"}**
+
+**What you'll see:**
+
+- Typing tags live and watching the browser render them
+- HTML document tree visualization
+- Common tags and their visual output
+- Nesting examples: correct and incorrect
+- DevTools walk-through to inspect HTML elements
+
+?? **Key insight:** The same HTML structure looks different with and without CSS!
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, you should understand:
+
+- HTML5 document structure and requirements
+- Purpose of head vs body sections
+- Meta tags and their importance
+- Semantic vs generic markup
+- How to create valid, accessible HTML documents
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- What is HTML?
+- What is the purpose of `<!DOCTYPE html>`?
+- What is the difference between `<head>` and `<body>`?
+- What is a tag?
+- What is an attribute?
+- Why is nesting important in HTML?
+- What is semantic HTML?
+- Why should HTML be validated?
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain complete HTML document structure with example.
+- Differentiate semantic and non-semantic tags with use cases.
+- Explain importance of DOCTYPE, meta tags, and encoding.
+- Explain HTML nesting rules and common mistakes.
+- Discuss role of validation in professional web development.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Create a complete HTML5 document from scratch
+- Include title, headings, paragraph, list, and link
+- Use at least 3 semantic elements
+- Validate code using W3C validator
+- Correct all validation errors
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain HTML document structure?
+- use tags and attributes correctly?
+- create a valid HTML5 page?
+- answer short and long exam questions?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: HTML Grouping with Div and Span
+- Preparation required: revise block and inline behavior
+:::
+
+---
+
 ## {#end-slide data-menu-title="End Slide" background="#053660"}
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[HTML Introduction, Basic Structure & Tags]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 4 - HTML Grouping: Div & Span
 </div>
 </div>
+
 
 
 

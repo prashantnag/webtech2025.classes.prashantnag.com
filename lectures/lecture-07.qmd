@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 7: HTML Tables & Iframes"
+---
+title: "Lecture 7: CSS Introduction, Syntax & Selectors"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 4, 2026"
@@ -14,295 +14,515 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[HTML Forms & Form Elements]{.white-text}
+[CSS Introduction, Syntax & Selectors]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 2 | Unit I: HTML Forms & CSS Introduction<br>
+Week 2 | Unit I: Web Page Designing<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
+[Learning Outcomes]{.slide-title}
 
 <hr>
 
-::: {.incremental .body-text-m}
-- Understand HTML forms and their purpose
-- Use various input types effectively
-- Create labels for accessibility
-- Implement form validation
-- Structure forms semantically
+::: {.body-text-m}
+After this lecture, students will be able to:
+
+- create complete semantic HTML tables
+- apply colspan and rowspan for complex table layouts
+- use accessibility attributes in tables correctly
+- embed external content using iframes
+- apply sandbox attributes for secure iframe usage
 :::
 
 ::: {.notes}
-Forms are how users submit data. They're crucial for user interaction and data collection.
+Tables organize tabular data. Iframes embed external content. Both are essential HTML tools.
 :::
 
 ---
 
-## {data-menu-title="Form Basics"}
+## {data-menu-title="Prerequisites"}
 
-[The Form Element]{.slide-title}
+[Prerequisites]{.slide-title2}
 
 <hr>
 
-Forms collect user input:
-
-```{.html code-line-numbers="|1|2-4|5"}
-<form action="/submit" method="POST">
-    <!-- Form inputs here -->
-    <input type="text" name="username">
-    <button type="submit">Submit</button>
-</form>
-```
-
-::: {.body-text-m .topbr}
-**Key attributes:**
-- `action`: Where to send form data
-- `method`: GET or POST
-- `name`: Identifies the form
+::: {.body-text-m}
+- HTML structure and tag basics
+- Understanding of attributes and links
+- Familiarity with browser testing workflow
 :::
 
 ---
 
-## {data-menu-title="Form Methods"}
+## {data-menu-title="Syllabus Mapping"}
 
-[HTTP Methods: GET vs POST]{.slide-title2}
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus mapping:
+
+- HTML table structure: thead, tbody, tfoot, tr, th, td
+- colspan and rowspan for merging cells
+- table accessibility: scope, caption, headers
+- iframe element: src, width, height, sandbox
+- Security and use cases for iframe embedding
+
+Prerequisites used:
+
+- HTML semantic structure from Lectures 3-6
+- understanding of attributes and paths
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Introduction and motivation
+- Table fundamentals and semantic structure
+- Colspan and rowspan spanning
+- Table accessibility requirements
+- Iframe element and embedding
+- Iframe security with sandbox attribute
+- Summary and exam preparation
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Tables are the correct tool for presenting relational, comparable, tabular data in HTML.
+- Misusing tables for layout was a legacy practice; modern layout uses CSS Flexbox and Grid instead.
+- Iframes allow embedding external documents (maps, videos, PDFs) directly within a web page.
+- Proper table accessibility ensures data is understandable by screen readers and assistive technology.
+- Knowing when to use a table versus a list versus a layout div is a critical professional skill.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Before we dive into details, think about these:**
+
+- Why does a comparison table for phone specs feel natural but using a `<table>` for a 3-column layout feel wrong?
+- What happens when a screen reader encounters a table with no header cells defined?
+- How does Google Maps appear inside a webpage without loading the whole Google Maps website?
+- What security risk exists if you embed an untrusted external page in an iframe?
+:::
+
+---
+
+## {data-menu-title="Table Structure"}
+
+[HTML Table Structure]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart TD
+  TABLE["table"]
+  CAPTION["caption\n(optional title)"]
+  THEAD["thead\nHeader rows"]
+  TBODY["tbody\nData rows"]
+  TFOOT["tfoot\nFooter rows"]
+  TR["tr - Table Row"]
+  TH["th - Header Cell"]
+  TD["td - Data Cell"]
+  TABLE --> CAPTION
+  TABLE --> THEAD
+  TABLE --> TBODY
+  TABLE --> TFOOT
+  THEAD --> TR
+  TR --> TH
+  TBODY --> TR
+  TR --> TD
+```
+
+---
+
+## {data-menu-title="Basic Table"}
+
+[Creating a Basic Table]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2-5|6-11|12"}
+<table>
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Age</th>
+            <th scope="col">City</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Alice</td>
+            <td>25</td>
+            <td>Mumbai</td>
+        </tr>
+        <tr>
+            <td>Bob</td>
+            <td>30</td>
+            <td>Delhi</td>
+        </tr>
+    </tbody>
+</table>
+```
+
+---
+
+## {data-menu-title="Table Caption"}
+
+[Table Caption and Semantic Structure]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2|3-7|8-14|15"}
+<table>
+    <caption>Student Exam Results - Semester 1, 2026</caption>
+    <thead>
+        <tr>
+            <th scope="col">Student</th>
+            <th scope="col">Theory</th>
+            <th scope="col">Practical</th>
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Priya Sharma</td>
+            <td>78</td>
+            <td>45</td>
+            <td>123</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Class Average</td>
+            <td>118</td>
+        </tr>
+    </tfoot>
+</table>
+```
+
+---
+
+## {data-menu-title="Colspan Rowspan"}
+
+[Merging Cells: Colspan & Rowspan]{.slide-title2}
 
 <hr>
 
 ::: columns
 ::: {.column width="50%"}
-[**GET Method**]{.teal-text}
+**colspan - merge across columns:**
 
+```{.html code-line-numbers="|3"}
+<tr>
+    <td colspan="2">
+        Spans two columns
+    </td>
+</tr>
+<tr>
+    <td>Cell A</td>
+    <td>Cell B</td>
+</tr>
+```
+:::
+
+::: {.column width="50%"}
+**rowspan - merge across rows:**
+
+```{.html code-line-numbers="|2"}
+<tr>
+    <td rowspan="2">Spans two rows</td>
+    <td>Row 1 Data</td>
+</tr>
+<tr>
+    <td>Row 2 Data</td>
+</tr>
+```
+:::
+:::
+
+::: {.body-text-m .topbr}
+[**Rule:** colspan merges horizontally. rowspan merges vertically.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Colspan Example"}
+
+[Colspan in a Real Table]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|3|4-5|9"}
+<table>
+    <thead>
+        <tr>
+            <th scope="col" rowspan="2">Student</th>
+            <th scope="col" colspan="2">Marks</th>
+        </tr>
+        <tr>
+            <th scope="col">Theory</th>
+            <th scope="col">Practical</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Rahul</td>
+            <td>85</td>
+            <td>42</td>
+        </tr>
+    </tbody>
+</table>
+```
+
+---
+
+## {data-menu-title="Table Accessibility"}
+
+[Table Accessibility]{.slide-title}
+
+<hr>
+
+::: columns
+::: {.column width="50%"}
 ::: {.incremental .body-text-m}
-- Data in URL
-- Limited length
-- Less secure
-- Use for searches
+- Use `<th>` for header cells, not `<td>`
+- Add `scope="col"` for column headers
+- Add `scope="row"` for row headers
+- Add `<caption>` to describe the table
+- Use `id` + `headers` for complex tables
 :::
 :::
 
 ::: {.column width="50%"}
-[**POST Method**]{.teal-text}
+```html
+<table>
+  <caption>
+    Monthly Sales Data
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col">Month</th>
+      <th scope="col">Revenue</th>
+    </tr>
+  </thead>
+  ...
+</table>
+```
+:::
+:::
+
+---
+
+## {data-menu-title="Table Best Practices"}
+
+[HTML Table Best Practices]{.slide-title}
+
+<hr>
 
 ::: {.incremental .body-text-m}
-- Data in request body
-- No size limit
-- More secure
-- Use for sensitive data
-:::
-:::
-:::
-
----
-
-## {data-menu-title="Input Types"}
-
-[HTML5 Input Types - Part 1]{.slide-title}
-
-<hr>
-
-```{.html code-line-numbers="|1|2|3|4|5"}
-<input type="text" placeholder="Enter name">        <!-- Text input -->
-<input type="password" name="pwd">                 <!-- Hide as dots -->
-<input type="email" name="email">                  <!-- Email validation -->
-<input type="number" name="age" min="0" max="120"> <!-- Numbers only -->
-<input type="date" name="birthday">                <!-- Date picker -->
-```
-
-::: {.fragment .body-text-m .topbr}
-Each type has built-in validation!
+1. **Use semantic structure** - `<thead>`, `<tbody>`, `<tfoot>` always
+2. **Header cells** - Use `<th>` with `scope` attribute, never `<td>` for headers
+3. **Caption** - Always add `<caption>` to describe the table purpose
+4. **Do NOT use tables for layout** - Use CSS Flexbox or Grid instead
+5. **Keep it simple** - Avoid deeply nested or complex merged cell structures
+6. **Style with CSS** - Use CSS for borders and spacing, not the deprecated `border` attribute
+7. **Responsive** - Wrap complex tables in a scrollable div on mobile
 :::
 
 ---
 
-## {data-menu-title="Input Types 2"}
+## {data-menu-title="What is Iframe"}
 
-[HTML5 Input Types - Part 2]{.slide-title}
-
-<hr>
-
-```{.html code-line-numbers="|1|2|3|4|5"}
-<input type="url" name="website">          <!-- URL validation -->
-<input type="tel" name="phone">            <!-- Telephone input -->
-<input type="color" name="favorite">       <!-- Color picker -->
-<input type="range" min="0" max="10">      <!-- Slider -->
-<input type="search" name="query">         <!-- Search optimized -->
-```
-
----
-
-## {data-menu-title="Checkboxes & Radio"}
-
-[Checkboxes & Radio Buttons]{.slide-title}
+[The iframe Element]{.slide-title}
 
 <hr>
 
-**Checkboxes** (multiple selections):
-
-```{.html code-line-numbers="|1-3"}
-<input type="checkbox" name="interests" value="sports"> Sports
-<input type="checkbox" name="interests" value="music"> Music
-<input type="checkbox" name="interests" value="coding"> Coding
-```
-
-**Radio Buttons** (one selection only):
-
-```{.html code-line-numbers="|1-3"}
-<input type="radio" name="gender" value="male"> Male
-<input type="radio" name="gender" value="female"> Female
-<input type="radio" name="gender" value="other"> Other
-```
-
-::: {.fragment .body-text-m .center-text .topbr}
-[Same `name` = grouped together]{.teal-text}
+::: {.body-text-m}
+An `<iframe>` (inline frame) embeds another HTML document inside the current page:
 :::
 
----
-
-## {data-menu-title="Select & Textarea"}
-
-[Dropdowns & Text Areas]{.slide-title}
-
-<hr>
-
-**Dropdown Select:**
-
-```{.html code-line-numbers="|1-5|6"}
-<select name="country">
-    <option value="us">United States</option>
-    <option value="uk">United Kingdom</option>
-    <option value="in">India</option>
-</select>
-```
-
-**Text Area (Multi-line):**
-
-```html
-<textarea name="message" rows="4" cols="50">
-Type your message here...
-</textarea>
-```
-
----
-
-## {data-menu-title="Labels"}
-
-[The Label Element]{.slide-title}
-
-<hr>
-
-Labels associate text with inputs for accessibility:
-
-```{.html code-line-numbers="|1-3|4-6"}
-<!-- Bad: User can't click text to focus -->
-<input type="checkbox" id="agree"> I agree
-
-<!-- Good: User can click "I agree" to focus -->
-<label for="agree">
-    <input type="checkbox" id="agree"> I agree
-</label>
+```{.html code-line-numbers="|1|2|3|4"}
+<iframe
+    src="https://www.example.com"
+    width="800"
+    height="450"
+    title="Embedded content from Example">
+</iframe>
 ```
 
 ::: {.body-text-m .topbr}
-**Or using `for` attribute:**
+- `src` -> URL of the page to embed
+- `width` and `height` -> dimensions in pixels or percentage
+- `title` -> describes the iframe content (required for accessibility)
+- Common uses: Google Maps, YouTube videos, PDF documents, external dashboards
+:::
+
+---
+
+## {data-menu-title="Iframe Use Cases"}
+
+[Common Iframe Use Cases]{.slide-title2}
+
+<hr>
+
+**Embed a Google Map:**
 
 ```html
-<label for="username">Username:</label>
-<input type="text" id="username" name="username">
+<iframe
+    src="https://www.google.com/maps/embed?pb=..."
+    width="600" height="450"
+    title="Location map of our office"
+    allowfullscreen loading="lazy">
+</iframe>
 ```
+
+**Embed a YouTube video:**
+
+```html
+<iframe
+    width="560" height="315"
+    src="https://www.youtube.com/embed/VIDEO_ID"
+    title="Introduction to HTML - Video Tutorial"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media"
+    allowfullscreen>
+</iframe>
+```
+
+---
+
+## {data-menu-title="Iframe Sandbox"}
+
+[Iframe Security: The sandbox Attribute]{.slide-title}
+
+<hr>
+
+The `sandbox` attribute restricts what embedded content can do:
+
+```{.html code-line-numbers="|1|2|3|4"}
+<!-- Maximum restriction - no scripts, no forms, no top navigation -->
+<iframe src="untrusted-page.html" sandbox></iframe>
+
+<!-- Selectively allow features -->
+<iframe src="trusted-demo.html"
+        sandbox="allow-scripts allow-same-origin">
+</iframe>
+```
+
+::: {.body-text-m .topbr}
+| Sandbox flag | What it allows |
+|---|---|
+| `allow-scripts` | JavaScript execution |
+| `allow-forms` | Form submission |
+| `allow-same-origin` | Same-origin resource access |
+| `allow-popups` | Opening new windows |
 :::
 
 ---
 
-## {data-menu-title="Form Attributes"}
+## {data-menu-title="Iframe vs Table"}
 
-[Input Attributes for Validation]{.slide-title}
-
-<hr>
-
-HTML5 provides built-in validation:
-
-```{.html code-line-numbers="|1|2|3|4|5|6"}
-<input type="text" required>              <!-- Cannot be empty -->
-<input type="email" required>             <!-- Must be valid email -->
-<input type="text" minlength="3">         <!-- At least 3 chars -->
-<input type="number" min="1" max="100">   <!-- Range limits -->
-<input type="text" pattern="[A-Z]{3}">    <!-- Regex pattern -->
-<input type="text" placeholder="hint..."> <!-- Helper text -->
-```
-
----
-
-## {data-menu-title="Complete Form Example"}
-
-[Complete Contact Form]{.slide-title}
+[Choosing: Table or Iframe?]{.slide-title}
 
 <hr>
 
-```{.html code-line-numbers="|1|2-3|4-5|6-7|8-9|10-11|12"}
-<form action="/contact" method="POST">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-    
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    
-    <label for="message">Message:</label>
-    <textarea id="message" name="message" required></textarea>
-    
-    <button type="submit">Send</button>
-    <button type="reset">Clear</button>
-</form>
-```
+::: columns
+::: {.column width="50%"}
+[**Use `<table>` when:**]{.teal-text}
 
----
+::: {.body-text-m}
+- Displaying rows and columns of related data
+- Showing comparison between items
+- Presenting schedule or timetable
+- Listing products with properties
+:::
+:::
 
-## {data-menu-title="Form Best Practices"}
+::: {.column width="50%"}
+[**Use `<iframe>` when:**]{.teal-text}
 
-[HTML Form Best Practices]{.slide-title}
+::: {.body-text-m}
+- Embedding a map (Google Maps)
+- Embedding a video (YouTube)
+- Displaying a PDF document
+- Showing a live external widget
+:::
+:::
+:::
 
-<hr>
-
-::: {.incremental .body-text-m}
-1. **Always use labels** - Improves accessibility & UX
-2. **Use semantic structure** - `<fieldset>` and `<legend>`
-3. **Validate on client** - Catch errors before sending
-4. **Provide feedback** - Show which fields are required
-5. **Use correct input types** - `email`, `number`, `date`, etc.
-6. **Name form elements** - Essential for server processing
-7. **Test on mobile** - Forms often used on phones
+::: {.body-text-m .center-text .topbr}
+[Neither should be used for page layout - that is the job of CSS Flexbox and Grid]{.magenta-text}
 :::
 
 ---
 
-## {data-menu-title="Fieldset & Legend"}
+## {data-menu-title="Memory Booster"}
 
-[Grouping Inputs with Fieldset]{.slide-title}
+[Memory Booster: Tables and Iframes]{.slide-title}
 
 <hr>
 
-```{.html code-line-numbers="|1-2|3-8|9"}
-<form>
-    <fieldset>
-        <legend>Personal Information</legend>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
-        
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email">
-    </fieldset>
-</form>
-```
+::: {.body-text-m}
+- **`<table>`** = A **spreadsheet embedded in HTML** - rows, columns, headers, cells, but for display not data processing
+- **`<thead>`** = The **column header row** in your spreadsheet (bold, frozen at top)
+- **`<tbody>`** = The **data rows** of your spreadsheet
+- **`<tfoot>`** = The **summary row** at the bottom (totals, averages)
+- **`colspan`** = "Merge cells across" (horizontal merge like Excel "merge and center")
+- **`rowspan`** = "Merge cells down" (vertical merge)
+- **`<iframe>`** = A **picture-in-picture window** showing a completely different website or document
+- **`sandbox`** = The **security fence** around that picture-in-picture to prevent it from affecting your page
+:::
 
-::: {.fragment .body-text-m .center-text .topbr}
-[`<fieldset>` groups related fields, `<legend>` labels the group]{.teal-text}
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo: Tables & Iframes Explorer]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Interactive demonstration of HTML table structure and iframe embedding:**
+
+?? **[Open Interactive Demo: HTML Tables & Iframes](../demos/lecture-07-demo.html){target="_blank"}**
+
+**What you'll see:**
+
+- Basic table with thead, tbody, tfoot
+- Colspan and rowspan visual merge demonstration
+- Table with caption and accessibility scope attributes
+- Iframe embedding a map and a document
+- Sandbox attribute toggle showing restriction effects
+
+?? **Key insight:** A screen reader navigates tables cell by cell - headers make this comprehensible!
 :::
 
 ---
@@ -314,10 +534,137 @@ HTML5 provides built-in validation:
 <hr>
 
 ::: {.body-text-m}
-- [MDN: HTML Forms](https://developer.mozilla.org/en-US/docs/Learn/Forms)
-- [MDN: Input Types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
-- [Form Validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)
+- [MDN: The table element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table)
+- [MDN: The iframe element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe)
+- [W3C: Accessible Tables](https://www.w3.org/WAI/tutorials/tables/)
+- [MDN: iframe sandbox attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox)
 - [Course content: Week 2](/content/week-02.qmd)
+:::
+
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist for Tables & Iframes]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**When table layout breaks:**
+
+1. check that tr/td counts are consistent across all rows
+2. verify colspan and rowspan values add up correctly
+3. inspect HTML structure in DevTools Elements panel
+4. check for missing closing tags
+5. validate with W3C HTML Validator
+
+**When iframe does not load:**
+
+1. verify `src` URL is correct and accessible
+2. check browser console for blocked-frame errors
+3. confirm the target site allows iframe embedding (X-Frame-Options header)
+4. test with `sandbox=""` removed to isolate permission issues
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, you should understand:
+
+- Complete HTML table structure: caption, thead, tbody, tfoot
+- Merging cells using colspan and rowspan
+- Table accessibility: scope, headers, caption
+- The iframe element for embedding external content
+- Sandbox attribute for iframe security
+- When to use tables vs iframes vs CSS layout
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- What is the purpose of `<th>` vs `<td>`?
+- What is the role of `<thead>`, `<tbody>`, and `<tfoot>`?
+- What does `colspan="2"` mean?
+- What does `rowspan="3"` mean?
+- Why is `scope` attribute important in tables?
+- What does `<caption>` do in a table?
+- What is an `<iframe>` used for?
+- What is the purpose of the `sandbox` attribute on an iframe?
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain complete HTML table structure with semantic elements and accessibility.
+- Create a timetable using colspan and rowspan with a suitable example.
+- Discuss table accessibility requirements with scope and caption attributes.
+- Explain the iframe element with use cases for maps, videos, and documents.
+- Discuss iframe sandbox attribute and its security implications.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- create a semester timetable using a complete semantic table
+- apply colspan and rowspan to merge at least two cells
+- add a caption and scope attributes for accessibility
+- embed a Google Map or YouTube video using iframe
+- test table in browser and inspect with DevTools
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- create semantic and accessible HTML tables?
+- apply colspan and rowspan correctly?
+- embed external content with iframe?
+- explain sandbox security attribute?
+- answer short and long exam questions?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: HTML Forms & Form Elements
+- Preparation required: revise HTML attributes and semantic structure
 :::
 
 ---
@@ -326,15 +673,11 @@ HTML5 provides built-in validation:
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[CSS Introduction, Syntax & Selectors]{.white-text}
 </div>
 <div class="custom-subtitle3">
-Next: Lecture 8 - Introduction to CSS
+Next: Lecture 8 - HTML Forms & Form Elements
 </div>
 </div>
 
-
-
-
-
-
+```{.html code-line-numbers="|1|2-4|5"}

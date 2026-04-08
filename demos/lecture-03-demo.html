@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 3 Demo - HTML Basics &amp; Structure</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+    <style>
+      .tree-box { background: #f0f6ff; border: 1px solid #0d6efd; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 13px; }
+      .tree-node { margin: 4px 0; cursor: default; }
+      .tag-open { color: #0d6efd; font-weight: bold; }
+      .tag-close { color: #6d5fa0; }
+      .tag-attr { color: #198754; }
+      .tag-text { color: #333; font-style: italic; }
+      .indent-1 { margin-left: 20px; }
+      .indent-2 { margin-left: 40px; }
+      .indent-3 { margin-left: 60px; }
+      .output-box { border: 2px solid #dee2e6; border-radius: 8px; padding: 16px; background: white; min-height: 80px; }
+      .tag-pill { display: inline-block; background: #e7f3ff; border: 1px solid #0d6efd; color: #0d6efd; border-radius: 20px; padding: 4px 12px; margin: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+      .tag-pill:hover { background: #0d6efd; color: white; }
+      .tag-info { background: #f8f9fa; border-left: 4px solid #0d6efd; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; display: none; }
+      .tag-info.active { display: block; }
+      textarea.code-input { width: 100%; font-family: monospace; font-size: 13px; border: 2px solid #dee2e6; border-radius: 8px; padding: 10px; resize: vertical; }
+      #live-preview { border: 2px solid #198754; border-radius: 8px; padding: 16px; background: white; min-height: 100px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 3 Demo</h1>
+      <p class="subtitle">HTML Introduction &amp; Basic Structure, HTML Tags</p>
+
+      <div class="card">
+        <p>
+          <strong>[Classroom Tip]</strong> This demo shows the structure of HTML documents,
+          the anatomy of HTML elements, and common tags in action. Use each section to
+          reinforce the concepts from the lecture.
+        </p>
+        <p style="font-size: 12px; color: #666; margin: 0;">
+          [Tip] Open DevTools (F12) → Elements tab to see the actual HTML being parsed by the browser.
+        </p>
+      </div>
+
+      <!-- Section 1: HTML Document Tree -->
+      <div class="card">
+        <h2>1) HTML Document Tree Structure</h2>
+        <p>Every HTML document is a tree of nested elements. Click the tags below to learn what each part does.</p>
+
+        <div class="tree-box">
+          <div class="tree-node"><span class="tag-open">&lt;!DOCTYPE html&gt;</span></div>
+          <div class="tree-node"><span class="tag-open">&lt;html</span> <span class="tag-attr">lang="en"</span><span class="tag-open">&gt;</span></div>
+          <div class="tree-node indent-1"><span class="tag-open">&lt;head&gt;</span></div>
+          <div class="tree-node indent-2"><span class="tag-open">&lt;meta</span> <span class="tag-attr">charset="UTF-8"</span><span class="tag-open">/&gt;</span></div>
+          <div class="tree-node indent-2"><span class="tag-open">&lt;title&gt;</span><span class="tag-text">Page Title</span><span class="tag-close">&lt;/title&gt;</span></div>
+          <div class="tree-node indent-1"><span class="tag-close">&lt;/head&gt;</span></div>
+          <div class="tree-node indent-1"><span class="tag-open">&lt;body&gt;</span></div>
+          <div class="tree-node indent-2"><span class="tag-open">&lt;h1&gt;</span><span class="tag-text">Main Heading</span><span class="tag-close">&lt;/h1&gt;</span></div>
+          <div class="tree-node indent-2"><span class="tag-open">&lt;p&gt;</span><span class="tag-text">A paragraph of text.</span><span class="tag-close">&lt;/p&gt;</span></div>
+          <div class="tree-node indent-2"><span class="tag-open">&lt;a</span> <span class="tag-attr">href="#"</span><span class="tag-open">&gt;</span><span class="tag-text">A link</span><span class="tag-close">&lt;/a&gt;</span></div>
+          <div class="tree-node indent-1"><span class="tag-close">&lt;/body&gt;</span></div>
+          <div class="tree-node"><span class="tag-close">&lt;/html&gt;</span></div>
+        </div>
+
+        <p style="margin-top: 12px; font-size: 13px; color: #555;"><strong>Key insight:</strong> The browser reads this structure top-to-bottom and builds the DOM (Document Object Model) — an internal tree representation that CSS and JavaScript can then manipulate.</p>
+      </div>
+
+      <!-- Section 2: Common Tags Explorer -->
+      <div class="card">
+        <h2>2) Common HTML Tags Explorer</h2>
+        <p>Click each tag below to see what it does and view a rendered example.</p>
+
+        <div>
+          <span class="tag-pill" onclick="showTag('heading')">h1-h6</span>
+          <span class="tag-pill" onclick="showTag('paragraph')">p</span>
+          <span class="tag-pill" onclick="showTag('strong')">strong</span>
+          <span class="tag-pill" onclick="showTag('em')">em</span>
+          <span class="tag-pill" onclick="showTag('anchor')">a</span>
+          <span class="tag-pill" onclick="showTag('img')">img</span>
+          <span class="tag-pill" onclick="showTag('br')">br / hr</span>
+          <span class="tag-pill" onclick="showTag('mark')">mark</span>
+        </div>
+
+        <div id="tag-info-heading" class="tag-info">
+          <strong>&lt;h1&gt; to &lt;h6&gt;</strong> — Headings. h1 is most important (use only once per page). h6 is least.
+          <div class="output-box" style="margin-top: 8px;">
+            <h1 style="font-size:24px; margin:4px 0;">h1 Page Title</h1>
+            <h2 style="font-size:20px; margin:4px 0;">h2 Section</h2>
+            <h3 style="font-size:17px; margin:4px 0;">h3 Subsection</h3>
+            <h4 style="font-size:15px; margin:4px 0;">h4 Sub-subsection</h4>
+          </div>
+        </div>
+
+        <div id="tag-info-paragraph" class="tag-info">
+          <strong>&lt;p&gt;</strong> — Paragraph. Block-level, automatically adds spacing above and below.
+          <div class="output-box" style="margin-top: 8px;">
+            <p>This is a paragraph. Browsers automatically add margin above and below each paragraph element.</p>
+            <p>This is a second paragraph. Notice the spacing between them — that comes from the browser's default stylesheet.</p>
+          </div>
+        </div>
+
+        <div id="tag-info-strong" class="tag-info">
+          <strong>&lt;strong&gt;</strong> — Bold + semantic importance. Screen readers may emphasize this.
+          <div class="output-box" style="margin-top: 8px;">
+            <p>This text is normal. <strong>This text is bold and semantically important.</strong> Back to normal.</p>
+            <p>Compare: <b>b tag (presentation only)</b> vs <strong>strong tag (semantic importance)</strong></p>
+          </div>
+        </div>
+
+        <div id="tag-info-em" class="tag-info">
+          <strong>&lt;em&gt;</strong> — Italic + semantic emphasis. Screen readers may stress this differently.
+          <div class="output-box" style="margin-top: 8px;">
+            <p>The <em>deadline is tomorrow</em> — please submit before midnight.</p>
+            <p>Compare: <i>i tag (presentation)</i> vs <em>em tag (semantic stress)</em></p>
+          </div>
+        </div>
+
+        <div id="tag-info-anchor" class="tag-info">
+          <strong>&lt;a&gt;</strong> — Anchor/Hyperlink. The href attribute specifies the destination.
+          <div class="output-box" style="margin-top: 8px;">
+            <p><a href="https://www.example.com">External link (example.com)</a></p>
+            <p><a href="#section2">Anchor link (jumps to #section2 on same page)</a></p>
+            <p><a href="mailto:info@example.com">Email link (opens email client)</a></p>
+          </div>
+        </div>
+
+        <div id="tag-info-img" class="tag-info">
+          <strong>&lt;img&gt;</strong> — Image. Self-closing. src and alt are required attributes.
+          <div class="output-box" style="margin-top: 8px;">
+            <img src="https://via.placeholder.com/200x120?text=Sample+Image" alt="Sample placeholder image showing 200x120 dimensions" style="display:block; margin-bottom:8px; border-radius:4px;">
+            <code style="font-size:12px;">&lt;img src="photo.jpg" alt="Description of image"&gt;</code>
+          </div>
+        </div>
+
+        <div id="tag-info-br" class="tag-info">
+          <strong>&lt;br&gt;</strong> — Line break (inline). <strong>&lt;hr&gt;</strong> — Horizontal rule (thematic break).
+          <div class="output-box" style="margin-top: 8px;">
+            <p>Line one.<br>Line two (after br tag).<br>Line three.</p>
+            <hr style="margin: 8px 0;">
+            <p>Content below a horizontal rule (&lt;hr&gt;)</p>
+          </div>
+        </div>
+
+        <div id="tag-info-mark" class="tag-info">
+          <strong>&lt;mark&gt;</strong> — Highlighted text. <strong>&lt;small&gt;</strong> — Smaller text. <strong>&lt;u&gt;</strong> — Underline.
+          <div class="output-box" style="margin-top: 8px;">
+            <p>Search result: The <mark>HTML</mark> standard was created by Tim Berners-Lee.</p>
+            <p><small>Small print: Terms and conditions apply.</small></p>
+            <p><u>Underlined text</u> (avoid for non-links as it causes confusion)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Live HTML Editor -->
+      <div class="card">
+        <h2>3) Live HTML Editor</h2>
+        <p>Type HTML below and see the rendered output instantly. Try headings, paragraphs, and formatting tags!</p>
+
+        <div class="grid">
+          <div>
+            <label style="font-weight: 600; display:block; margin-bottom: 6px;">HTML Code:</label>
+            <textarea class="code-input" id="htmlInput" rows="8" oninput="updatePreview()">&lt;h2&gt;Web Technology 2026&lt;/h2&gt;
+&lt;p&gt;HTML is the &lt;strong&gt;foundation&lt;/strong&gt; of all web pages.&lt;/p&gt;
+&lt;p&gt;It uses &lt;em&gt;tags&lt;/em&gt; to structure content.&lt;/p&gt;</textarea>
+          </div>
+          <div>
+            <label style="font-weight: 600; display:block; margin-bottom: 6px;">Rendered Output:</label>
+            <div id="live-preview"></div>
+          </div>
+        </div>
+        <p class="tip" style="margin-top: 8px; font-size: 12px; color: #555;">[Note] The preview updates as you type. Try adding &lt;h1&gt;, &lt;mark&gt;, &lt;br&gt;, or &lt;ul&gt;&lt;li&gt; tags!</p>
+      </div>
+
+      <!-- Section 4: Well-formed vs Broken HTML -->
+      <div class="card">
+        <h2>4) Well-formed vs Broken HTML</h2>
+        <div class="grid">
+          <div>
+            <h3 style="color: #198754;">✓ Correct Nesting</h3>
+            <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 12px;">
+              &lt;div&gt;<br>
+              &nbsp;&nbsp;&lt;p&gt;This is &lt;strong&gt;correct&lt;/strong&gt; nesting.&lt;/p&gt;<br>
+              &lt;/div&gt;
+            </div>
+            <div class="output-box" style="margin-top: 8px;">
+              <p>This is <strong>correct</strong> nesting.</p>
+            </div>
+          </div>
+          <div>
+            <h3 style="color: #dc3545;">✗ Broken Nesting</h3>
+            <div style="background: #fff3f3; border: 1px solid #f5c2c7; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 12px;">
+              &lt;div&gt;<br>
+              &nbsp;&nbsp;&lt;p&gt;This is &lt;strong&gt;broken nesting.&lt;/p&gt;<br>
+              &nbsp;&nbsp;&lt;/strong&gt;<br>
+              &lt;/div&gt;
+            </div>
+            <div style="background: #fff3f3; border: 1px solid #f5c2c7; border-radius: 6px; padding: 12px; margin-top: 8px; font-size: 13px;">
+              The browser tries to auto-fix this but the result is unpredictable. <em>Always close tags in reverse order!</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      function showTag(name) {
+        const allInfos = document.querySelectorAll('.tag-info');
+        allInfos.forEach(el => el.classList.remove('active'));
+        const el = document.getElementById('tag-info-' + name);
+        if (el) el.classList.add('active');
+      }
+
+      function updatePreview() {
+        const input = document.getElementById('htmlInput').value;
+        document.getElementById('live-preview').innerHTML = input;
+      }
+
+      // Initialize preview
+      updatePreview();
+    </script>
+  </body>
+</html>

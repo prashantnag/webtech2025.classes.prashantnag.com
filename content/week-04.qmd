@@ -1,11 +1,11 @@
 ﻿---
 title: "Week 4: Feb 16 - Feb 22, 2026"
-subtitle: "Unit II: JavaScript Functions, Events & Control Flow"
+subtitle: "Unit II: JavaScript Advanced — Scope, Objects & DOM"
 ---
 
 ## Week Overview
 
-This week covers JavaScript functions, event handling, and begins control flow structures for interactive web pages.
+This week advances your JavaScript skills with block-scoped variables, objects and object literals, DOM manipulation, array methods, and a practical revision session.
 
 **Course Outcome:** CO-2 (K3 - Application)  
 **Duration:** 1 week (4 lectures + 1 lab)  
@@ -13,7 +13,7 @@ This week covers JavaScript functions, event handling, and begins control flow s
 
 ---
 
-## Lecture 13: Introduction to Bootstrap {#lecture-13}
+## Lecture 13: Block Scope Variables (let, const) {#lecture-13}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -29,53 +29,46 @@ This week covers JavaScript functions, event handling, and begins control flow s
 :::
 
 
-### Functions
+### var vs let vs const
 ```javascript
-// Function declaration
-function greet(name) {
-  return "Hello, " + name;
+var x = 1;    // function-scoped, can be redeclared (avoid in modern JS)
+let y = 2;    // block-scoped, reassignable
+const z = 3;  // block-scoped, cannot be reassigned
+```
+
+### Block Scope in Action
+```javascript
+if (true) {
+  let blockVar   = 10;   // only accessible inside this block
+  const blockConst = 20;
+  console.log(blockVar); // 10 ✅
 }
-
-// Function expression
-const add = function(a, b) {
-  return a + b;
-};
-
-// Arrow function (ES6)
-const multiply = (a, b) => a * b;
-
-// Anonymous function
-const square = function(x) { return x * x; };
+console.log(blockVar);   // ReferenceError ❌
 ```
 
-### Events
+### Template Literals (ES6)
 ```javascript
-// Event listener
-button.addEventListener('click', function() {
-  alert('Button clicked!');
-});
-
-// Common events
-element.addEventListener('click', handleClick);
-element.addEventListener('change', handleChange);
-element.addEventListener('submit', handleSubmit);
-element.addEventListener('mouseover', handleHover);
-element.addEventListener('keypress', handleKeyPress);
+const name = "Alice";
+const age  = 25;
+console.log(`Name: ${name}, Age: ${age}`);  // Name: Alice, Age: 25
 ```
 
-### Event Object
+### Destructuring & Spread
 ```javascript
-button.addEventListener('click', function(event) {
-  console.log(event.type);        // 'click'
-  console.log(event.target);      // The clicked element
-  event.preventDefault();         // Prevent default action
-  event.stopPropagation();        // Stop event bubbling
-});
+// Array destructuring
+const [a, b] = [10, 20];
+
+// Object destructuring
+const { x, y } = { x: 1, y: 2 };
+
+// Spread operator
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1, 4, 5]; // [1, 2, 3, 4, 5]
 ```
 
 ---
 
-## Lecture 14: Revision & Practical Exercise (HTML + CSS + Bootstrap) {#lecture-14}
+## Lecture 14: Objects & Object Literals in JavaScript {#lecture-14}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -89,59 +82,45 @@ button.addEventListener('click', function(event) {
 :::
 
 
-### If/Else Statements
+### Object Literal Syntax
 ```javascript
-if (age >= 18) {
-  console.log("Adult");
-} else if (age >= 13) {
-  console.log("Teenager");
-} else {
-  console.log("Child");
-}
+const student = {
+  name:   "Riya",
+  roll:   42,
+  branch: "MCA",
+  greet: function() { return `Hello, I am ${this.name}`; }
+};
 ```
 
-### Switch Statement
+### Accessing & Modifying Properties
 ```javascript
-switch (day) {
-  case 'Monday':
-    console.log("Start of week");
-    break;
-  case 'Friday':
-    console.log("Almost weekend");
-    break;
-  default:
-    console.log("Regular day");
-}
+console.log(student.name);       // dot notation
+console.log(student['branch']);  // bracket notation
+student.city = "Noida";          // add new property
+delete student.roll;             // delete a property
 ```
 
-### Loops
+### Nested Objects
 ```javascript
-// For loop
-for (let i = 0; i < 5; i++) {
-  console.log(i);
-}
+const course = {
+  title: "Web Technology",
+  instructor: { name: "Mr. Nag", dept: "MCA" }
+};
+console.log(course.instructor.name);  // Mr. Nag
+```
 
-// While loop
-let count = 0;
-while (count < 5) {
-  console.log(count);
-  count++;
-}
-
-// For...of loop (iterate values)
-for (const item of array) {
-  console.log(item);
-}
-
-// For...in loop (iterate keys/properties)
-for (const key in object) {
-  console.log(key, object[key]);
-}
+### `this` Keyword
+```javascript
+const obj = {
+  value: 100,
+  show: function() { console.log(this.value); }
+};
+obj.show(); // 100
 ```
 
 ---
 
-## Lecture 15: Introduction to JavaScript & Variables {#lecture-15}
+## Lecture 15: DOM Manipulation & Array Methods {#lecture-15}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -155,51 +134,45 @@ for (const key in object) {
 :::
 
 
-### Objects
+### DOM Selection
 ```javascript
-const person = {
-  name: "John",
-  age: 30,
-  email: "john@example.com",
-  greet: function() {
-    return "Hello, " + this.name;
-  }
-};
-
-// Access properties
-console.log(person.name);
-console.log(person['age']);
-
-// Add/modify properties
-person.city = "New York";
-person.age = 31;
+document.getElementById('id');           // by id
+document.querySelector('.class');        // first match (CSS selector)
+document.querySelectorAll('p');          // all matches → NodeList
 ```
 
-### Block Scope
+### DOM Manipulation
 ```javascript
-let globalVar = 10;
-
-if (true) {
-  let blockVar = 20;      // Only available in block
-  const blockConst = 30;  // Only available in block
-}
-
-function myFunction() {
-  var functionVar = 40;   // Only available in function
-}
-
-console.log(globalVar);     // 10 (accessible)
-console.log(blockVar);      // Error: not defined
+element.textContent = "New text";        // set text
+element.innerHTML   = "<b>Bold</b>";     // set HTML
+element.classList.add('active');         // add class
+element.classList.toggle('hidden');      // toggle class
+element.style.color = 'red';             // inline style
+element.setAttribute('href', '/path');   // set attribute
 ```
 
-### Scope Chain
-- Local scope → Function scope → Global scope
-- Inner scope can access outer scope
-- Outer scope cannot access inner scope
+### Creating & Removing Elements
+```javascript
+const li = document.createElement('li');
+li.textContent = "New item";
+document.querySelector('ul').appendChild(li);
+li.remove(); // remove from DOM
+```
+
+### Array Methods
+```javascript
+const nums = [1, 2, 3, 4, 5];
+nums.map(x => x * 2);               // [2, 4, 6, 8, 10]
+nums.filter(x => x > 2);            // [3, 4, 5]
+nums.reduce((sum, x) => sum + x, 0); // 15
+nums.find(x => x > 3);              // 4
+nums.includes(3);                   // true
+nums.slice(1, 3);                   // [2, 3]
+```
 
 ---
 
-## Lecture 16: Functions in JavaScript & Returning Data {#lecture-16}
+## Lecture 16: Revision & Practical (JavaScript + DOM) {#lecture-16}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -213,90 +186,69 @@ console.log(blockVar);      // Error: not defined
 :::
 
 
-### Arrow Functions
+### Interactive Task List (Combining It All)
 ```javascript
-// Regular vs Arrow
-const regular = function(x) { return x * 2; };
-const arrow = x => x * 2;
+const input = document.querySelector('#taskInput');
+const list  = document.querySelector('#taskList');
 
-// Multiple parameters
-const add = (a, b) => a + b;
-
-// With curly braces (need return)
-const greet = name => {
-  const greeting = "Hello, " + name;
-  return greeting;
-};
+document.querySelector('#addBtn').addEventListener('click', () => {
+  if (!input.value.trim()) return;
+  const li = document.createElement('li');
+  li.textContent = input.value;
+  li.addEventListener('click', () => li.classList.toggle('done'));
+  list.appendChild(li);
+  input.value = '';
+});
 ```
 
-### Callbacks
-```javascript
-function processArray(arr, callback) {
-  let result = [];
-  for (let i = 0; i < arr.length; i++) {
-    result.push(callback(arr[i]));
-  }
-  return result;
-}
-
-const doubled = processArray([1, 2, 3], x => x * 2);
-```
-
-### Array Methods with Callbacks
-```javascript
-const numbers = [1, 2, 3, 4, 5];
-
-// Map
-const doubled = numbers.map(x => x * 2);
-
-// Filter
-const evens = numbers.filter(x => x % 2 === 0);
-
-// Reduce
-const sum = numbers.reduce((acc, x) => acc + x, 0);
-
-// forEach
-numbers.forEach(x => console.log(x));
-```
+### Revision Checklist
+- [ ] Declare variables correctly with `const` / `let`
+- [ ] Write and call functions including arrow functions
+- [ ] Attach event listeners and use the event object
+- [ ] Write `if/else`, `switch`, `for`, and `while` correctly
+- [ ] Create, modify, and delete DOM elements
+- [ ] Use `map`, `filter`, `reduce` on arrays
+- [ ] Understand block scope vs function scope
 
 ---
 
-## Lab 4: JavaScript Functions & Events
+## Lab 4: JavaScript Array Methods and Nested Functions
 
 ### Objectives
-- Create interactive elements with JavaScript
-- Handle user events
-- Use functions effectively
+- Apply array methods (`map`, `filter`, `reduce`) to real data
+- Practice nested functions and closures
+- Combine DOM manipulation with event handling
 
 ### Activities
-1. Add click handlers to buttons
-2. Create a simple calculator
-3. Form validation with JavaScript
-4. Change CSS styles with JavaScript
-5. Implement a counter
+1. Create an array of student objects and use `map` to render them in a table
+2. Add a search input that `filter`s the rendered list in real time
+3. Use `reduce` to calculate a total (e.g., average marks)
+4. Implement a counter using closures
+5. Commit all work to GitHub
 
 ### Deliverables
-- HTML with event handlers
-- JavaScript functions
-- Working interactive features
+- HTML + JS file with array methods and DOM updates
+- Working search/filter functionality
+- GitHub commit with changes
 
 ---
 
 ## Key Takeaways
 
-✅ Functions organize reusable code  
-✅ Events respond to user interactions  
-✅ Control flow structures make decisions  
-✅ Objects group related data and functions  
-✅ Callbacks enable event-driven programming
+✅ `const` / `let` are block-scoped; prefer them over `var`  
+✅ Objects group related data and behaviour in key-value pairs  
+✅ DOM manipulation lets JavaScript change live HTML content  
+✅ Array methods (`map`, `filter`, `reduce`) enable concise data processing  
+✅ Combine scope, objects, DOM, and events to build interactive UI components
 
 ---
 
 ## Next Week
 
-We'll continue with:
-- Advanced DOM manipulation
-- More array methods
-- ES6+ features
+Unit III: Java Servlet Programming (Server-Side Web):
+- Lecture 17: Servlet Overview & Architecture
+- Lecture 18: Servlet Interface & Life Cycle
+- Lecture 19: Handling HTTP GET & POST Requests
+- Lecture 20: Redirecting Requests & Request Dispatching
 
 

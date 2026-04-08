@@ -1,5 +1,5 @@
 ---
-title: "Lecture 37: Revision & Hands-on (Spring Core)"
+title: "Lecture 37: Request Body, Path Variable & Request Parameter"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "March 25, 2026"
@@ -13,11 +13,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Revision & Hands-on (Spring Core)]{.white-text}
+[Request Body, Path Variable & Request Parameter]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 12 | Unit V: REST Services<br>
+Week 10 | Unit V: Spring Boot & REST Services<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -36,6 +36,75 @@ Week 12 | Unit V: REST Services<br>
 - Build a mini layered app (`controller -> service -> repository`)
 - Practice debugging common Spring configuration mistakes
 - Prepare for end-sem practical and viva questions
+:::
+
+---
+
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Before this lecture, quickly revise:
+
+- previous lecture concepts and key terminology
+- related unit outcomes and expected practical skills
+- baseline Java/web flow needed for in-class examples
+:::
+
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Unit alignment for this lecture topic
+- Exam alignment for short and long questions
+- Lab/practical alignment for implementation tasks
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- quick revision of context
+- concept explanation with examples
+- implementation/demo walk-through
+- debugging and exam-focused recap
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+This lecture builds conceptual clarity first, then connects it to practical coding and exam application.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+What one real classroom/lab scenario best demonstrates where this topic is useful?
 :::
 
 ---
@@ -261,13 +330,141 @@ Prepare:
 - Hands-on coding is the best revision strategy before exam
 :::
 
+## Memory Booster {data-menu-title="Memory Booster"}
+
+<hr>
+
+::: {.body-text-m}
+Quick memory anchor for this lecture:
+
+- define the core concept in one line
+- map where it is used in architecture
+- recall one implementation or exam-style example
+:::
+
 ---
 
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Demo focus for this lecture:
+
+- walk through one practical code flow
+- identify key configuration/code lines
+- verify output and common failure points
+:::
+
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Official Spring/JSP/Servlet documentation relevant to this lecture
+- Classroom notes and examples discussed in slides
+- Course repository examples and demo references
+:::
+
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify imports, annotations/tags, and object names are correct
+2. check request flow, mappings, and lifecycle/state assumptions
+3. inspect runtime logs and stack trace for first failing point
+4. validate expected output against actual response/view
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define the core concept covered in this lecture.
+- Differentiate related terms/approaches with one example.
+- List important components, annotations, or lifecycle steps.
+- Mention common mistakes and how to avoid them.
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain the lecture topic with architecture/flow diagram and examples.
+- Compare alternatives and justify best-practice usage.
+- Discuss practical implementation steps and debugging strategy.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- implement one minimal, working example based on this lecture
+- test with valid and invalid inputs
+- document two errors encountered and how you fixed them
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain the concept clearly without notes?
+- implement the basic example end-to-end?
+- debug common classroom/exam mistakes?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 38 continuation
+- Preparation required: revise this lecture summary and practice task
+:::
+
+---
 ## {#end-slide data-menu-title="End Slide" background="#053660"}
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[Request Body, Path Variable & Request Parameter]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 38 - Spring Boot Configuration, Annotations & Build Systems

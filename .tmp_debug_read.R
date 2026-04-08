@@ -1,0 +1,6 @@
+suppressPackageStartupMessages({library(readr); library(dplyr)})
+cat('1 read\n')
+schedule <- read_csv('data/schedule.csv', show_col_types = FALSE)
+cat('2 nrow ', nrow(schedule), '\n')
+print(names(schedule))
+print(str(schedule))

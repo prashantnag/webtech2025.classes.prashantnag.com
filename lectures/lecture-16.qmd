@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 16: Functions in JavaScript & Returning Data"
+---
+title: "Lecture 16: Revision & Practical (JavaScript + DOM)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 19, 2026"
@@ -14,11 +14,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Arrow Functions & Callbacks]{.white-text}
+[Revision & Practical (JavaScript + DOM)]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 4 | Unit II: JavaScript Functions & Events<br>
+Week 4 | Unit II: Scripting with JavaScript<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -187,7 +187,7 @@ const result = transformNumbers([2, 4, 6], x => x / 2);
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[Revision & Practical (JavaScript + DOM)]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Week 5 - DOM Manipulation

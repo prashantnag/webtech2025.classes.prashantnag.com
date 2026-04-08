@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 14: Revision & Practical Exercise (HTML + CSS + Bootstrap)"
+---
+title: "Lecture 14: Objects & Object Literals in JavaScript"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 17, 2026"
@@ -14,11 +14,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Conditional Statements & Looping]{.white-text}
+[Objects & Object Literals in JavaScript]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 4 | Unit II: JavaScript Functions & Events<br>
+Week 4 | Unit II: Scripting with JavaScript<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -203,7 +203,7 @@ for (let i = 1; i <= 10; i++) {
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[Objects & Object Literals in JavaScript]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 15 - Objects & Scope

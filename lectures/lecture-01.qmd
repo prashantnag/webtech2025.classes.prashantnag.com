@@ -1,412 +1,636 @@
-﻿---
+---
 title: "Lecture 1: Introduction to Web Page Designing & Web Development Strategies"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "January 26, 2026"
-code-annotations: below
 ---
 
-
-## {#title-slide data-menu-title="Title Slide" background="#053660"}
+## {#title-slide data-menu-title="Title" background="#053660"}
 
 <div class="custom-title">
 [Lecture 1]{.baby-blue-text}
 </div>
 
 <div class="custom-subtitle">
-[Introduction to Web Designing]{.white-text}
+[Introduction to Web Page Designing & Web Development Strategies]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
 Week 1 | Unit I: Web Page Designing<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
-{{< meta instructor.name >}}, {{< meta instructor.title >}}
+{{< meta instructor.name >}}, {{< meta instructor.title >}}<br>
+{{< meta instructor.office >}}<br>
+{{< meta course.institution >}}
 </div>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
+[Learning Outcomes]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, students will be able to:
+
+- define web designing and web development in academic and industry terms
+- explain the role of frontend, backend, and web protocols in an application
+- differentiate major development roles and responsibilities in a web project
+- analyze how MVC and layered architecture organize a web system
+- apply the concepts of HTML, CSS, and JavaScript to simple web pages
+:::
+
+---
+
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Basic computer knowledge
+- Familiarity with internet usage and websites
+- Understanding of browser-based navigation
+- Basic file and folder handling
+- Programming basics are helpful but not mandatory
+:::
+
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Unit: Unit I - Web Page Designing
+- Topics Covered:
+  - Introduction to web page designing
+  - Web development strategies and project roles
+  - Core web technologies and architecture overview
+  - Foundation for upcoming HTML, CSS, and protocol lectures
+- OBE Alignment:
+  - CO Mapping: CO1
+  - Bloom's Level: L3 (Apply)
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Introduction and motivation
+- Web context: history and protocols
+- Core concepts in web designing and development
+- Architecture, roles, and workflow
+- Real-world example and comparison
+- Summary, exam preparation, and practice
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Every modern business, service, and institution depends on web applications.
+- Web technology combines creativity, communication, and software engineering.
+- A clear understanding of roles, layers, and technologies reduces confusion in later topics.
+- This lecture builds the conceptual foundation for the full Unit I sequence.
+- Real systems such as Gmail, Amazon, and college portals all rely on these basics.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Before we dive into details, think about these:**
+
+- What happens when you type `google.com` in the browser address bar?
+- Where is a website actually stored?
+- How does your browser know where to find it?
+- What is the difference between the internet and the web?
+
+:::
+
+---
+
+## {data-menu-title="Context Timeline"}
+
+[Web and Internet Context]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+timeline
+  title Evolution of Web and Internet
+  1969 : ARPANET foundation
+  1989 : World Wide Web proposed
+  1994 : Browsers popularized web access
+  2004 : Web 2.0 interactive era
+  2010+ : Mobile and cloud-first web
+```
+
+---
+
+## {data-menu-title="Context Notes"}
+
+[Web and Internet Context]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- The internet provides the network foundation.
+- The web provides content delivery using standards such as HTTP and HTML.
+- Modern applications evolved from static pages to interactive platforms.
+:::
+
+---
+
+## {data-menu-title="Protocols"}
+
+[Internet Protocols at a Glance]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- **HTTP:** transfers web requests and responses between browser and server
+- **HTTPS:** secures HTTP using encryption for safe communication
+- **DNS:** translates domain names into IP addresses
+- **TCP/IP:** supports reliable network communication across systems
+- These protocols form the base for all web applications students build later
+:::
+
+---
+
+## {data-menu-title="Concept 1"}
+
+[Concept 1: Web Designing vs Web Development]{.slide-title2}
+
+<hr>
+
+::: columns
+::: {.column width="50%"}
+```{mermaid}
+flowchart LR
+  D1["UI Layout"]
+  D2["Colors and Typography"]
+  W1["Coding"]
+  W2["Functionality"]
+  S{"Shared Focus<br/>Usability<br/>and UX"}
+  D1 --> S
+  D2 --> S
+  W1 --> S
+  W2 --> S
+```
+:::
+
+::: {.column width="50%"}
+::: {.incremental .body-text-m}
+- Web designing focuses on visual communication and user experience.
+- Web development focuses on technical implementation and behavior.
+- Key point: effective websites need both design quality and functional correctness.
+:::
+:::
+:::
+
+---
+
+## {data-menu-title="Comparison"}
+
+[Comparison: Designing vs Development]{.slide-title}
+
+<hr>
+
+| Feature | Web Designing | Web Development |
+|---|---|---|
+| Main focus | Look, feel, and usability | Logic, behavior, and implementation |
+| Typical work | Layout, color, typography | Coding, APIs, validation |
+| Common tools | Figma, wireframes, mockups | VS Code, frameworks, Git |
+| Output | Interface design | Working web application |
+| Shared goal | Better user experience | Better user experience |
+
+---
+
+## {data-menu-title="Concept 2"}
+
+[Concept 2: Frontend and Backend Architecture]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  Browser(["Browser"])
+  Frontend["HTML / CSS / JavaScript"]
+  Server[("Server")]
+  DB[("Database")]
+  Browser --> Frontend
+  Frontend <-->|Request / Response| Server
+  Server --> DB
+```
+
+::: {.body-text-m}
+- The frontend runs in the browser and handles presentation and interaction.
+- The backend processes business rules, security, and persistent data.
+- Communication between the two layers usually happens through HTTP/HTTPS.
+:::
+
+---
+
+## {data-menu-title="Frontend-Backend Login Story"}
+
+[When a User Clicks "Login" - A Real Story]{.slide-title2}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Understand web development and web designing concepts
-- Learn about web development strategies
-- Explore different roles in web development
-:::
+1. **Frontend collects data:** User enters username and password in the login form (HTML input fields)
+2. **Frontend sends request:** JavaScript captures the click event and sends data via HTTP/HTTPS to the server
+3. **Backend verifies:** Server receives the request, checks credentials against the database, applies security rules
+4. **Response is returned:** Server sends back a success or error message to the browser
+5. **Frontend renders result:** Browser displays the dashboard (success) or error message (failure)
 
-::: {.notes}
-Start by explaining the importance of understanding the difference between design and development.
+*This is what happens every time you log into Gmail, Facebook, or your college portal!*
 :::
 
 ---
 
-## {data-menu-title="Web Designing vs Web Development"}
+## {data-menu-title="Frontend"}
 
-[What is Web Designing vs Web Development?]{.slide-title2}
+[Frontend Development]{.slide-title2}
 
 <hr>
 
-[**Web Designing**]{.teal-text}
-
 ::: {.body-text-m}
-::: {.fragment}
-- Visual appearance & UX
-:::
-::: {.fragment}
-- Layout, colors, typography
-:::
-::: {.fragment}
-- Tools: Figma, Adobe XD
-:::
-:::
-
-. . .
-
-[**Web Development**]{.teal-text}
-
-::: {.body-text-m}
-::: {.fragment}
-- Implementation & functionality
-:::
-::: {.fragment}
-- Coding the design
-:::
-::: {.fragment}
-- Tools: HTML, CSS, JS
-:::
+- Browser-side development focuses on interface and interaction.
+- HTML structures content.
+- CSS controls presentation and layout.
+- JavaScript adds interactivity and dynamic behavior.
+- Accessibility and responsiveness are essential requirements.
+- Example: login form, navigation bar, dashboard view.
 :::
 
 ---
 
-## {data-menu-title="Client-side vs Server-side"}
+## {data-menu-title="Backend"}
 
-[Client-side vs Server-side Development]{.slide-title2}
+[Backend Development]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Server-side processing manages data, logic, and security.
+- Validates requests and business rules.
+- Stores and retrieves data from databases.
+- Manages authentication, authorization, and APIs.
+- Returns responses to the browser or mobile client.
+- Example: user login verification and order processing.
+:::
+
+---
+
+## {data-menu-title="Concept 3"}
+
+[Concept 3: Development Roles in a Web Project]{.slide-title}
 
 <hr>
 
 ::: columns
 ::: {.column width="50%"}
-[**Client-side**]{.teal-text}
-
-::: {.fragment .body-text-m}
-- Runs in the browser
-- HTML, CSS, JavaScript
-- User interface
-- [✓ Immediate feedback]{.magenta-text}
-:::
+```{mermaid}
+flowchart LR
+  UX(["UI/UX Designer"])
+  FE(["Frontend Developer"])
+  BE(["Backend Developer"])
+  FS(["Full-Stack Developer"])
+  APP{"Web\nApplication"}
+  UX -.-> APP
+  FE -.-> APP
+  BE -.-> APP
+  FS -.-> APP
+```
 :::
 
 ::: {.column width="50%"}
-[**Server-side**]{.teal-text}
-
-::: {.fragment .body-text-m}
-- Runs on the server
-- PHP, Python, Java, Node.js
-- Database operations
-- [✓ Business logic]{.magenta-text}
-:::
-:::
-:::
-
-::: {.notes}
-Emphasize that modern web applications need both client-side and server-side development. Give examples like Gmail (client-side for UI, server-side for email storage).
-:::
-
----
-
-## {data-menu-title="Development Roles"}
-
-[Development Roles]{.slide-title}
-
-<hr>
-
-::: columns
-::: {.column width="33%"}
-::: {.fragment}
-[**Frontend**]{.slide-title3 .teal-text}
-
-::: {.body-text-m}
-- UI & UX
-- HTML, CSS, JS
-- React, Vue
-:::
-:::
-:::
-
-::: {.column width="33%"}
-::: {.fragment}
-[**Backend**]{.slide-title3 .teal-text}
-
-::: {.body-text-m}
-- Server & APIs
-- Java, Python, Node
-- SQL, MongoDB
-:::
-:::
-:::
-
-::: {.column width="33%"}
-::: {.fragment}
-[**Full-stack**]{.slide-title3 .teal-text}
-
-::: {.body-text-m}
-- Front & back
-- End-to-end
-- Most in-demand
-:::
-:::
-:::
-:::
-
----
-
-## {data-menu-title="Key Concepts" auto-animate=true}
-
-[Key Web Technologies]{.slide-title}
-
-<hr>
-
-::: columns
-::: {.column width="33%"}
-::: {.body-text-xl .center-text}
-HTML
-:::
-::: {.body-text-m .center-text}
-Structure
-:::
-:::
-
-::: {.column width="33%"}
-::: {.body-text-xl .center-text}
-CSS
-:::
-::: {.body-text-m .center-text}
-Style
-:::
-:::
-
-::: {.column width="33%"}
-::: {.body-text-xl .center-text}
-JavaScript
-:::
-::: {.body-text-m .center-text}
-Behavior
-:::
-:::
-:::
-
----
-
-## {data-menu-title="HTML Example"}
-
-[HTML: The Structure]{.slide-title}
-
-<hr>
-
-```{.html code-line-numbers="|1|2|3,4,5|6,7,8|7"}
-<!DOCTYPE html>                           <!-- <1> -->
-<html lang="en">                          <!-- <2> -->
-<head>                                    <!-- <3> -->
-  <title>My First Page</title>          <!-- <4> -->
-</head>
-<body>                                    <!-- <5> -->
-  <h1>Hello World!</h1>                 <!-- <6> -->
-</body>
-</html>
-```
-1. Declares this is an HTML5 document
-2. Root element with language attribute
-3. Contains metadata (not visible on page)
-4. Page title shown in browser tab
-5. Contains all visible page content
-6. Main heading, displayed as large text
-
-::: {.fragment .body-text-m .center-text .topbr}
-👆 Foundation of every web page
-:::
-
----
-
-## {data-menu-title="CSS Example" auto-animate=true}
-
-[CSS: Adding Style]{.slide-title}
-
-<hr>
-
-```html
-<h1>Hello World!</h1>
-```
-
----
-
-## {data-menu-title="CSS Styling" auto-animate=true}
-
-[CSS: Adding Style]{.slide-title}
-
-<hr>
-
-```html
-<head>
-  <style>
-    h1 {
-      color: blue;
-    }
-  </style>
-</head>
-<h1>Hello World!</h1>
-```
-
-::: {.fragment .body-text-m .center-text .topbr}
-✨ CSS transforms plain HTML into beautiful web pages
-:::
-
----
-
-## {data-menu-title="JavaScript Example" auto-animate=true}
-
-[JavaScript: Adding Interactivity]{.slide-title}
-
-<hr>
-
-```html
-<button>Click Me</button>
-```
-
----
-
-## {data-menu-title="JavaScript Interaction" auto-animate=true}
-
-[JavaScript: Adding Interactivity]{.slide-title}
-
-<hr>
-
-```html
-<button id="btn">Click Me</button>
-
-<script>
-  document.getElementById('btn')
-    .addEventListener('click', function() {
-      alert('Button clicked!');
-    });
-</script>
-```
-
-::: {.fragment .body-text-m .center-text .topbr}
-🎯 JavaScript brings interactivity and dynamic behavior
-:::
-
----
-
-[Web Development Workflow]{.slide-title}
-
-<hr>
-
 ::: {.incremental .body-text-m}
-1. Planning & Requirements
-2. Design & Prototyping
-3. [Development]{.teal-text}
-4. Testing & Debugging
-5. Deployment
-6. Maintenance
+- Web products are built through coordinated specialist roles.
+- Designers shape experience.
+- Frontend developers implement the interface.
+- Backend developers manage server logic.
+- Full-stack developers connect both sides.
 :::
-
-::: {.fragment .body-text-s .center-text .topbr}
-⚡ We'll focus on **Development** in this course
+:::
 :::
 
 ---
 
-## {data-menu-title="Tools & Technologies"}
+## {data-menu-title="Common Confusions"}
 
-[Essential Tools]{.slide-title2}
+[Common Confusion Points (Clarity Matters!)]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-::: {.fragment .fade-up}
-**Code Editor**: VS Code
-:::
-::: {.fragment .fade-up}
-**Version Control**: Git & GitHub
-:::
-::: {.fragment .fade-up}
-**Browser DevTools**: Chrome, Firefox
-:::
-::: {.fragment .fade-up}
-**Frameworks**: Bootstrap, React, Vue
-:::
+| Confusion | Reality |
+|---|---|
+| **Web = Internet** | Web is content delivered *over* the internet using HTTP; internet is the underlying network infrastructure |
+| **Frontend = Design** | Frontend is implementation (HTML/CSS/JS); design is the planning of interface and interaction before coding |
+| **Backend = Database only** | Backend includes server logic, authentication, APIs, and business rules - database is only one part |
 :::
 
 ---
 
-## {data-menu-title="Why Learn Web Development?"}
+## {data-menu-title="MVC"}
 
-[Why Learn Web Development?]{.slide-title}
+[MVC Architecture]{.slide-title2}
 
 <hr>
 
-::: columns
-::: {.column width="50%"}
-::: {.body-text-m}
-::: {.fragment}
-📈 High demand
-:::
-::: {.fragment}
-💰 Great salaries
-:::
-::: {.fragment}
-🌍 Work remotely
-:::
-:::
-:::
+```{mermaid}
+flowchart LR
+  U(("User")) -->|Input| V["View"]
+  V -->|Action| C{"Controller"}
+  C -->|Update| M[("Model")]
+  M -->|Data| V
+```
 
-::: {.column width="50%"}
 ::: {.body-text-m}
-::: {.fragment}
-🎨 Creative outlet
-:::
-::: {.fragment}
-🚀 Build your ideas
-:::
-::: {.fragment}
-📚 Constant learning
-:::
-:::
-:::
+- **Model** manages data and business logic.
+- **View** presents information to the user.
+- **Controller** connects user actions with application behavior.
+- **Flow:** User -> View (sees interface) -> Controller (processes input) -> Model (applies logic) -> View (displays result)
 :::
 
 ---
 
-## {data-menu-title="Resources"}
+## {data-menu-title="Web Stack"}
 
-[Resources]{.slide-title}
+[Web Stack Overview]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  Browser1["Browser"] -->|HTTP Request| Server["Server\n+ Database"]
+  Server -->|Response| Browser2["Browser"]
+  Browser2 -->|Render| Result["HTML/CSS/JS<br/>Display"]
+```
+
+::: {.body-text-m}
+- **Complete flow:** Browser sends HTTP request -> Server processes & queries database -> Server sends response -> Browser renders HTML/CSS/JavaScript
+- HTML, CSS, and JavaScript create the client-side experience.
+- HTTP/HTTPS connects browser actions with server responses.
+- Server logic and databases support dynamic applications.
+:::
+
+---
+
+## {data-menu-title="Core Technologies"}
+
+[Role of HTML, CSS, and JavaScript]{.slide-title2}
+
+<hr>
+
+| Technology | Role in a Web Page | Typical Example |
+|---|---|---|
+| HTML | Structure and semantic meaning | headings, paragraphs, forms |
+| CSS | Style, spacing, layout, responsiveness | colors, fonts, alignment |
+| JavaScript | Behavior and interactivity | validation, alerts, dynamic content |
+
+---
+
+## {data-menu-title="Memory Booster"}
+
+[Memory Booster: The Anatomy Analogy]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-- [MDN: Getting started](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web)
-- [W3C Standards](https://www.w3.org/standards/webdesign/)
-- [Week 1 Content](/content/week-01.qmd)
+Think of a **web page like a human body**:
+
+- **HTML** = Skeleton (structure, framework, what holds it together)
+- **CSS** = Clothes (appearance, style, how it looks)
+- **JavaScript** = Brain (behavior, thinking, how it responds and acts)
+
+You need all three to make a complete, functional web page!
 :::
 
 ---
 
-## {#end-slide data-menu-title="End Slide" background="#053660"}
+## {data-menu-title="Workflow"}
+
+[Web Development Workflow]{.slide-title2}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  A["Planning"] --> B["Design"] --> C["Development"] --> D["Testing"] --> E["Deployment"] --> F["Maintenance"]
+```
+
+::: {.body-text-m}
+- Planning: define objectives, audience, features, and scope.
+- Design: create wireframes, UI decisions, and interaction flow.
+- Development: implement frontend, backend, and integrations.
+- Testing: verify functionality, usability, performance, and security.
+- Deployment: release the application to production servers.
+- Maintenance: fix issues, improve features, and monitor reliability.
+:::
+
+---
+
+## {data-menu-title="Real-World Example"}
+
+[Real-World Example: Gmail]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- The Gmail interface is a frontend built with HTML, CSS, and JavaScript.
+- Email storage, authentication, and search run on backend services.
+- Design choices improve readability, speed, and usability.
+- MVC-style separation helps large teams manage complex features.
+- Protocols and secure communication are essential for every user action.
+:::
+
+---
+
+## {data-menu-title="Tools"}
+
+[Essential Tools and Technologies]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- **Basic Editors:** Notepad (Windows), TextEdit (macOS)
+- **Primary Code Editor:** VS Code (recommended)
+- **Version Control:** Git and GitHub
+- **Browser Tools:** Chrome DevTools or Firefox DevTools
+:::
+
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo: Web Development in Action]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Interactive demonstration showing HTML, CSS, and JavaScript working together:**
+
+**[Open Interactive Demo: Web Development Fundamentals](../demos/lecture-01-demo.html){target="_blank"}**
+
+**What you'll see:**
+
+- HTML structure and semantic meaning
+- CSS styling, colors, and animations
+- JavaScript interactivity and form validation
+- Real login simulation (frontend only)
+- DevTools tips for exploring code
+
+**Why this matters:** This is exactly how real websites work!
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary and Key Takeaways]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Web designing and web development are different but complementary.
+- Frontend, backend, and protocols work together in every web system.
+- Development roles and MVC improve clarity in team-based projects.
+- HTML, CSS, and JavaScript form the foundation of client-side development.
+- This lecture prepares students for the detailed Unit I technical topics.
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define web designing.
+- What is web development?
+- What is the role of HTTP in a web application?
+- Differentiate frontend and backend in one point.
+- Name any four stages of the web development workflow.
+- What is the purpose of the Design stage?
+- What is the role of JavaScript in the browser?
+- What is MVC in full form?
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain web designing vs web development with suitable examples.
+- Explain frontend and backend architecture with a neat diagram.
+- Explain all stages of the web development workflow with a real scenario.
+- Explain MVC architecture and justify its use in modern web applications.
+- Describe the roles of HTML, CSS, and JavaScript in building a complete web page.
+- Discuss how protocols like HTTP, HTTPS, DNS, and TCP/IP support web systems.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Create a simple personal profile page using HTML.
+- Add basic styling using CSS for colors, spacing, and headings.
+- Add one JavaScript interaction such as a button click message.
+- Identify which parts belong to design and which belong to development.
+- Explain how the page would fit into a larger frontend/backend system.
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- define the major web development concepts?
+- explain frontend, backend, and protocols clearly?
+- draw a simple architecture or MVC diagram?
+- compare web designing and web development?
+- answer the likely exam questions from this lecture?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- **Topic:** History of Web & Internet, Protocols Governing the Web
+- **Preparation required:** revise HTTP, HTTPS, DNS, and browser-server interaction
+- **Read ahead:** Week 1 course content and introductory MDN material
+:::
+
+---
+
+## {data-menu-title="References"}
+
+[References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [MDN Web Docs: Getting Started with the Web](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web)
+- [W3C Standards for Web Design and Applications](https://www.w3.org/standards/webdesign/)
+- [Week 1 Course Content](/content/week-01.qmd)
+- [Quarto RevealJS Documentation](https://quarto.org/docs/presentations/revealjs/)
+:::
+
+---
+
+## {#end-slide data-menu-title="Questions" background="#053660"}
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[Introduction to Web Page Designing & Web Development Strategies]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 2 - History of Web & Internet
 </div>
 </div>
-
-
-
-
-
-

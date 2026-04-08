@@ -1,24 +1,24 @@
 ﻿---
-title: "Week 9: Mar 23 - Mar 29, 2026"
-subtitle: "Unit III: JSP Advanced & MVC Architecture"
+title: "Unit III Block 2: Session Tracking and JSP"
+subtitle: "Lectures 21-24 - cookies, HttpSession, JSP basics, and JSP tags"
 ---
 
-## Week Overview
+## Block Overview
 
-This week covers advanced JSP features, JSTL, MVC architecture, and database connectivity with JDBC.
+This block completes Unit III by covering state management in web applications and the basics of Java Server Pages. Students move from raw servlet handling into view generation and reusable server-side page components.
 
-**Course Outcome:** CO-3, CO-4 (K3-K4 - Application & Analysis)  
-**Duration:** 1 week (4 lectures + 1 lab)  
-**Lab:** JSP & Database Integration
+**Course Outcome:** CO-3 (K3 - Application)  
+**Lectures Covered:** 21-24  
+**Theme:** Sessions and JSP programming
 
 ::: {.callout-tip icon=false}
-## Quick Practice Quizzes (Lectures 25-28)
+## Quick Practice Quizzes (Lectures 21-24)
 Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
 
-- [Lecture 25 Quiz](/quiz/lecture-25-quiz.qmd)
-- [Lecture 26 Quiz](/quiz/lecture-26-quiz.qmd)
-- [Lecture 27 Quiz](/quiz/lecture-27-quiz.qmd)
-- [Lecture 28 Quiz](/quiz/lecture-28-quiz.qmd)
+- [Lecture 21 Quiz](/quiz/lecture-21-quiz.qmd)
+- [Lecture 22 Quiz](/quiz/lecture-22-quiz.qmd)
+- [Lecture 23 Quiz](/quiz/lecture-23-quiz.qmd)
+- [Lecture 24 Quiz](/quiz/lecture-24-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -28,236 +28,144 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 25: Handling HTTP GET & POST Requests {#lecture-25}
+## Lecture 21: Session Tracking using Cookies {#lecture-21}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-25-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-25.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-21-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-21.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-21.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### Why Cookies Matter
+- HTTP is stateless, so the server needs a way to recognize repeat visits
+- Cookies store small pieces of data on the client side
+- Typical uses include remembering preferences and lightweight identifiers
 
-### JSP Directives
-```jsp
-<!-- Page directive -->
-<%@ page language="java" contentType="text/html; charset=UTF-8" 
-         import="java.util.*" errorPage="error.jsp" %>
-
-<!-- Include directive -->
-<%@ include file="header.jsp" %>
-
-<!-- Taglib directive -->
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+### Example
+```java
+Cookie userCookie = new Cookie("username", "student1");
+userCookie.setMaxAge(3600);
+response.addCookie(userCookie);
 ```
 
-### Implicit Objects
-```jsp
-<!-- request: HttpServletRequest -->
-<%= request.getParameter("name") %>
-<%= request.getRequestURI() %>
-
-<!-- response: HttpServletResponse -->
-<% response.sendRedirect("newpage.jsp"); %>
-
-<!-- session: HttpSession -->
-<% session.setAttribute("userId", "123"); %>
-
-<!-- out: PrintWriter (response output) -->
-<% out.println("Output text"); %>
-
-<!-- application: ServletContext - shared data -->
-<% application.setAttribute("appName", "MyApp"); %>
-
-<!-- config: ServletConfig -->
-<%= config.getServletName() %>
-
-<!-- pageContext: PageContext - all JSP objects -->
-<% pageContext.setAttribute("var", "value"); %>
-
-<!-- exception: Throwable (in error pages) -->
-<%= exception.getMessage() %>
-
-<!-- page: Object (reference to current page) -->
-```
+### Cautions
+- Do not store sensitive data directly in cookies
+- Browser settings can block or clear cookies
 
 ---
 
-## Lecture 26: Redirecting Requests & Request Dispatching {#lecture-26}
+## Lecture 22: Session Tracking with HttpSession {#lecture-22}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-26-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-26.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-22-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-22.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-26.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-22.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### Why `HttpSession` Matters
+- Keeps state on the server instead of exposing data in the browser
+- Useful for authentication, carts, dashboards, and user workflow state
 
-### Redirect vs Forward (Simple View)
-
-- **Redirect**: browser gets new URL and sends new request
-- **Forward**: server internally sends same request to another resource
-- Redirect changes URL; forward usually keeps same URL
-- Redirect loses request attributes; forward keeps them
-
-### Servlet Example
-```java
-if (isValidUser) {
-  response.sendRedirect("home.jsp");
-} else {
-  request.setAttribute("error", "Invalid login");
-  request.getRequestDispatcher("login.jsp").forward(request, response);
-}
-```
-
-### When to Use Which
-
-- Use redirect after successful form submission (PRG pattern)
-- Use forward to show validation errors on same flow
-- Use forward when JSP needs request attributes
-
----
-
-## Lecture 27: Cookies & Session Tracking {#lecture-27}
-
-::: {.callout-note icon=false}
-## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-27-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-27.qmd){target="_blank" rel="noopener noreferrer"}
-```{=html}
-<div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-27.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
-</div>
-```
-:::
-
-
-### Why Session Tracking is Needed
-
-- HTTP is stateless, so server does not remember old requests by default
-- We need tracking for login state, cart, and personalized pages
-
-### Cookie Example
-```java
-Cookie c = new Cookie("user", "rahul");
-c.setMaxAge(3600);
-response.addCookie(c);
-```
-
-### HttpSession Example
+### Example
 ```java
 HttpSession session = request.getSession();
-session.setAttribute("loggedInUser", "rahul@gcet.ac.in");
+session.setAttribute("loggedInUser", "student1");
+String user = (String) session.getAttribute("loggedInUser");
 ```
 
-### Key Difference
-
-- Cookies are stored in browser (small data)
-- Session data is stored on server (safer for login state)
+### Compare with Cookies
+- Cookie data is stored client-side
+- Session data is stored server-side and identified via session ID
 
 ---
 
-## Lecture 28: Session Tracking using HttpSession {#lecture-28}
+## Lecture 23: JSP Introduction & Implicit Objects {#lecture-23}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-28-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-28.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-23-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-23.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/index.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-23.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### What JSP Adds
+- Embeds server-side logic into page rendering
+- Reduces the need to print HTML manually from servlet code
+- Works well as the view layer with servlets/controllers
 
-### JDBC Connection
-```java
-import java.sql.*;
+### Common Implicit Objects
+- `request`
+- `response`
+- `session`
+- `application`
+- `out`
+- `pageContext`
 
-// Load driver
-Class.forName("com.mysql.cj.jdbc.Driver");
-
-// Create connection
-String url = "jdbc:mysql://localhost:3306/mydb";
-String user = "root";
-String password = "password";
-Connection conn = DriverManager.getConnection(url, user, password);
-```
-
-### Execute Query
-```java
-// PreparedStatement (secure against SQL injection)
-String query = "SELECT * FROM users WHERE id = ?";
-PreparedStatement pstmt = conn.prepareStatement(query);
-pstmt.setInt(1, userId);
-
-ResultSet rs = pstmt.executeQuery();
-while (rs.next()) {
-  String name = rs.getString("name");
-  String email = rs.getString("email");
-}
-
-rs.close();
-pstmt.close();
-conn.close();
-```
-
-### Insert/Update/Delete
-```java
-String insertSQL = "INSERT INTO users (name, email) VALUES (?, ?)";
-PreparedStatement pstmt = conn.prepareStatement(insertSQL);
-pstmt.setString(1, "John");
-pstmt.setString(2, "john@example.com");
-int rows = pstmt.executeUpdate();  // Returns affected rows
+### Example
+```jsp
+<h2>Welcome, <%= request.getParameter("name") %></h2>
+<p>Session user: <%= session.getAttribute("loggedInUser") %></p>
 ```
 
 ---
 
-## Lab 7: JSP Pages & Database Integration
+## Lecture 24: JSP Scripting, Directives, Actions & Custom Tags {#lecture-24}
 
-### Objectives
-- Build JSP applications with database
-- Implement MVC pattern
-- Use JSTL for templates
-- JDBC for data access
+::: {.callout-note icon=false}
+## Lecture Materials
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-24-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-24.qmd){target="_blank" rel="noopener noreferrer"}
+```{=html}
+<div class="ratio ratio-16x9 mb-3">
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-24.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+</div>
+```
+:::
 
-### Activities
-1. Create user registration form
-2. Store data in database
-3. Display user list from database
-4. Update/delete user functionality
-5. Implement basic MVC structure
+### Key JSP Constructs
+- Directives: configure the page or include resources
+- Scriptlets and expressions: embed Java directly in JSP
+- Standard actions: `<jsp:include>`, `<jsp:forward>`, `<jsp:useBean>`
+- Custom tags: reusable logic and view helpers
 
-### Deliverables
-- JSP application with CRUD operations
-- Database integration
-- Working MVC implementation
+### Example
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="header.jsp" %>
+<jsp:include page="menu.jsp" />
+```
+
+### Design Advice
+- Keep business logic in servlets/services
+- Use JSP mainly for rendering output
+- Prefer tags and EL over large scriptlets where possible
 
 ---
 
 ## Key Takeaways
 
-✅ JSP implicit objects provide access to request/response  
-✅ JSTL reduces need for Java code in JSP  
-✅ MVC separates concerns (controller, model, view)  
-✅ JDBC provides Java API for database access  
-✅ PreparedStatement prevents SQL injection
+- Cookies and `HttpSession` solve different state-tracking needs  
+- JSP is the view-side companion to servlet processing  
+- Directives and actions support reusable page composition  
+- This block completes Unit III and prepares the move into Spring
 
----
+## Next Block
 
-## Next Week
-
-Unit IV begins:
-- Spring Framework fundamentals
+Unit IV begins with Spring Core, dependency injection, bean life cycle, and configuration.
 - Dependency Injection
 - Spring Beans and application context
 

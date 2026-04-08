@@ -1,0 +1,55 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 23 Demo - JSP Introduction & Implicit Objects</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 980px; margin: 2rem auto; padding: 1rem; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+    .card { background:#fff; border:1px solid #d9dde3; border-radius:10px; padding:1rem; }
+    input { width:100%; padding:.55rem; border:1px solid #cbd5e1; border-radius:8px; margin-bottom:.5rem; }
+    button { background:#053660; color:#fff; border:0; padding:.55rem .9rem; border-radius:8px; cursor:pointer; }
+    pre { background:#0f172a; color:#e2e8f0; border-radius:8px; padding:.8rem; overflow:auto; }
+    .preview { border:1px dashed #94a3b8; border-radius:8px; padding:.8rem; background:#f8fafc; }
+    @media (max-width: 800px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <h1>Lecture 23 Demo: JSP + Implicit Objects</h1>
+    <section class="grid">
+      <article class="card">
+        <h3>Controller Inputs (request/session)</h3>
+        <input id="name" placeholder="request.name" value="Prashant">
+        <input id="city" placeholder="request.city" value="Noida">
+        <input id="sessionUser" placeholder="session.loggedInUser" value="student1">
+        <button id="render">Render JSP View</button>
+      </article>
+      <article class="card">
+        <h3>JSP Output Preview</h3>
+        <div class="preview" id="view">No output yet.</div>
+        <h4>Implicit Objects Access Trace</h4>
+        <pre id="trace">No trace yet.</pre>
+      </article>
+    </section>
+  </main>
+  <script>
+    const view = document.getElementById('view');
+    const trace = document.getElementById('trace');
+    document.getElementById('render').addEventListener('click', () => {
+      const name = document.getElementById('name').value || '(missing)';
+      const city = document.getElementById('city').value || '(missing)';
+      const user = document.getElementById('sessionUser').value || '(missing)';
+      view.innerHTML = `<h3>Welcome, ${name}</h3><p>City: ${city}</p><p>Session User: ${user}</p>`;
+      trace.textContent = [
+        'request.getAttribute("name") -> ' + name,
+        'request.getAttribute("city") -> ' + city,
+        'session.getAttribute("loggedInUser") -> ' + user,
+        'out.println(...) -> HTML response'
+      ].join('\n');
+    });
+  </script>
+</body>
+</html>

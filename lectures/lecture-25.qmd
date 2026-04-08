@@ -1,8 +1,8 @@
----
-title: "Lecture 25: Handling HTTP GET & POST Requests"
+﻿---
+title: "Lecture 25: Spring Core Basics & Dependency Injection"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
-date: "March 13, 2026"
+date: "March 9, 2026"
 code-annotations: below
 ---
 
@@ -13,16 +13,17 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Handling HTTP GET & POST Requests]{.white-text}
+[Spring Core Basics & Dependency Injection]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 8 | Unit III: Servlets<br>
+Week 7 | Unit IV: Spring Framework Basics<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
+
 
 ## {data-menu-title="Learning Objectives"}
 
@@ -31,787 +32,553 @@ Week 8 | Unit III: Servlets<br>
 <hr>
 
 ::: {.incremental .body-text-m}
-- Understand HTTP request methods (GET, POST, PUT, DELETE)
-- Differentiate between GET and POST requests
-- Implement `doGet()` and `doPost()` methods
-- Handle HTML form submissions with proper parameters
-- Extract request parameters and handle multiple values
-- Send appropriate HTTP responses with proper status codes
-- Apply input validation and error handling
-- Use POST-Redirect-GET pattern to prevent duplicate submissions
-- Apply security best practices for sensitive data
+- Define Spring Framework and explain what it is
+- List key advantages of Spring for enterprise development
+- Summarize the history and evolution of Spring
+- Explain Spring Core motivation
+- Understand dependency injection
+- Compare tight coupling vs DI
 :::
 
 ---
 
-## {data-menu-title="HTTP Methods"}
+## {data-menu-title="Prerequisites"}
 
-[HTTP Request Methods]{.slide-title}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-**Common HTTP Methods:**
-
-- **GET**: Retrieve data from server
-- **POST**: Send data to server
-- **PUT**: Update existing resource
-- **DELETE**: Remove resource
-- **HEAD**: Get headers only
-- **OPTIONS**: Get supported methods
-
-In servlets, we primarily use **GET** and **POST**.
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 24 before moving into Spring Core Basics & Dependency Injection
 :::
-
 ---
 
-## {data-menu-title="Request Response Cycle"}
+## {data-menu-title="Syllabus Mapping"}
 
-[HTTP Request-Response Cycle]{.slide-title2}
-
-<hr>
-
-```{mermaid}
-%%| fig-height: 3.5
-sequenceDiagram
-    participant B as Browser
-    participant S as Servlet
-    participant D as Database
-    
-    B->>S: HTTP Request (GET/POST)
-    S->>D: Query Data
-    D-->>S: Return Data
-    S-->>B: HTTP Response
-```
-
----
-
-## {data-menu-title="GET Method"}
-
-[GET Method: Retrieving Data]{.slide-title}
+[Syllabus Mapping]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-**Purpose**: Request data from server
-
-**Characteristics:**
-
-- Data sent in URL query string
-- Limited data size (~2KB)
-- Visible in browser address bar
-- Can be bookmarked
-- Can be cached
-- **Not secure** for sensitive data
-- Idempotent (same result on repeated calls)
+- Unit IV topic focus: Spring Core Basics & Dependency Injection
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
 :::
-
 ---
 
-## {data-menu-title="GET Example"}
+## {data-menu-title="Agenda"}
 
-[GET Request Example]{.slide-title}
-
-<hr>
-
-**URL with Query Parameters:**
-```
-http://localhost:8080/app/search?query=java&category=books
-```
-
-**HTML Form (GET):**
-```{.html code-line-numbers="|1|2|3|4"}
-<form action="search" method="GET">
-  <input type="text" name="query" placeholder="Search term">
-  <input type="text" name="category" value="books">
-  <button type="submit">Search</button>
-</form>
-```
-
----
-
-## {data-menu-title="doGet Method"}
-
-[Handling GET Requests: doGet()]{.slide-title2}
-
-<hr>
-
-```{.java code-line-numbers="|1-3|5-6|9-10|13-18"}
-@WebServlet("/search")
-public class SearchServlet extends HttpServlet {
-  
-  protected void doGet(HttpServletRequest request,
-                     HttpServletResponse response)
-    throws ServletException, IOException {
- 
-    // Get query parameters from URL
-    String query = request.getParameter("query");
-    String category = request.getParameter("category");
-    
-    // Generate response
-    response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
-    out.println("<h1>Search Results</h1>");
-    out.println("<p>Query: " + query + "</p>");
-    out.println("<p>Category: " + category + "</p>");
-    out.close();
-  }
-}
-```
-
----
-
-## {data-menu-title="GET Use Cases"}
-
-[When to Use GET]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- **Search operations**: Searching products, articles
-- **Filtering data**: Sort, filter options
-- **Pagination**: Page numbers in URL
-- **Sharing links**: Bookmarkable URLs
-- **Read-only operations**: No data modification
-- **Public data**: Non-sensitive information
-:::
-
-::: {.fragment .body-text-m}
-**Example URLs:**
-```
-/products?category=electronics&sort=price
-/articles?page=2&limit=10
-/weather?city=Mumbai&units=metric
-```
-:::
-
----
-
-## {data-menu-title="POST Method"}
-
-[POST Method: Submitting Data]{.slide-title}
+[Agenda]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-**Purpose**: Submit data to server
-
-**Characteristics:**
-
-- Data sent in request body (hidden)
-- Unlimited data size
-- Not visible in URL
-- Cannot be bookmarked
-- Not cached
-- **More secure** than GET
-- Non-idempotent (may have different results)
+- 5-minute recap from previous lecture
+- Concept deep dive: Spring Core Basics & Dependency Injection
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
 :::
-
 ---
 
-## {data-menu-title="POST Example"}
+## {data-menu-title="Introduction"}
 
-[POST Request Example]{.slide-title}
-
-<hr>
-
-**HTML Form (POST):**
-```{.html code-line-numbers="|1|2-3|4-5|6"}
-<form action="register" method="POST">
-  <input type="text" name="username" required>
-  <input type="email" name="email" required>
-  <input type="password" name="password" required>
-  <input type="date" name="dob">
-  <button type="submit">Register</button>
-</form>
-```
-
-::: {.body-text-m}
-Form data sent in request body, not visible in URL.
-:::
-
----
-
-## {data-menu-title="doPost Method"}
-
-[Handling POST Requests: doPost()]{.slide-title2}
-
-<hr>
-
-```{.java code-line-numbers="|1-3|5-9|12-13|16-21"}
-@WebServlet("/register")
-public class RegisterServlet extends HttpServlet {
-  
-  protected void doPost(HttpServletRequest request,
-                       HttpServletResponse response)
-    throws ServletException, IOException {
-    
-    // Get form parameters from request body
-    String username = request.getParameter("username");
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-    String dob = request.getParameter("dob");
-    
-    // Process registration (save to database)
-    boolean success = saveUser(username, email, password, dob);
-    
-    // Send response
-    response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
-    if (success) {
-      out.println("<h1>Registration Successful!</h1>");
-      out.println("<p>Welcome, " + username + "</p>");
-    } else {
-      out.println("<h1>Registration Failed</h1>");
-    }
-  }
-  
-  private boolean saveUser(String username, String email, 
-                          String password, String dob) {
-    // Database logic here
-    return true;
-  }
-}
-```
-
----
-
-## {data-menu-title="POST Use Cases"}
-
-[When to Use POST]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- **User registration**: Creating new accounts
-- **Login forms**: Authenticating users
-- **Data submission**: Creating/updating records
-- **File uploads**: Sending files to server
-- **Sensitive data**: Passwords, credit cards
-- **Large data**: No size limitations
-:::
-
-::: {.fragment .body-text-m}
-**Examples:**
-- User registration and login
-- Contact form submission
-- Blog post creation
-- Order placement
-:::
-
----
-
-## {data-menu-title="GET vs POST"}
-
-[GET vs POST Comparison]{.slide-title}
-
-<hr>
-
-| Feature | GET | POST |
-|---------|-----|------|
-| **Data Location** | URL query string | Request body |
-| **Visibility** | Visible in URL | Hidden |
-| **Data Size** | Limited (~2KB) | Unlimited |
-| **Security** | Less secure | More secure |
-| **Bookmarking** | Can bookmark | Cannot bookmark |
-| **Caching** | Can be cached | Not cached |
-| **Browser History** | Saved | Not saved |
-| **Use Case** | Retrieve data | Submit data |
-| **Idempotent** | Yes | No |
-
----
-
-## {data-menu-title="Request Parameters"}
-
-[Extracting Request Parameters]{.slide-title2}
-
-<hr>
-
-```{.java code-line-numbers="|2|5|8|11-14"}
-// Single parameter value
-String name = request.getParameter("name");
-
-// Multiple values for same parameter (checkboxes)
-String[] hobbies = request.getParameterValues("hobby");
-
-// All parameter names
-Enumeration<String> paramNames = request.getParameterNames();
-
-// All parameters as Map
-Map<String, String[]> paramMap = request.getParameterMap();
-for (Map.Entry<String, String[]> entry : paramMap.entrySet()) {
-  System.out.println(entry.getKey() + ": " + 
-                    Arrays.toString(entry.getValue()));
-}
-```
-
----
-
-## {data-menu-title="Checkbox Example"}
-
-[Handling Multiple Values (Checkboxes)]{.slide-title2}
-
-<hr>
-
-**HTML Form:**
-```{.html code-line-numbers="|2-5"}
-<form action="preferences" method="POST">
-  <input type="checkbox" name="hobby" value="coding"> Coding
-  <input type="checkbox" name="hobby" value="music"> Music
-  <input type="checkbox" name="hobby" value="sports"> Sports
-  <button type="submit">Submit</button>
-</form>
-```
-
-**Servlet:**
-```{.java code-line-numbers="|2|3-5"}
-protected void doPost(...) {
-  String[] hobbies = request.getParameterValues("hobby");
-  if (hobbies != null) {
-    for (String hobby : hobbies) {
-      System.out.println("Hobby: " + hobby);
-    }
-  }
-}
-```
-
----
-
-## {data-menu-title="Request Info"}
-
-[Request Information Methods]{.slide-title2}
-
-<hr>
-
-```{.java code-line-numbers="|2|5|8|11|14|17"}
-// HTTP method (GET, POST, etc.)
-String method = request.getMethod();
-
-// Request URI
-String uri = request.getRequestURI();  // /app/login
-
-// Query string (for GET)
-String query = request.getQueryString();  // user=john&id=5
-
-// Request URL
-StringBuffer url = request.getRequestURL();
-
-// Context path
-String contextPath = request.getContextPath();  // /app
-
-// Servlet path
-String servletPath = request.getServletPath();  // /login
-```
-
----
-
-## {data-menu-title="Response Methods"}
-
-[Response Methods]{.slide-title}
-
-<hr>
-
-```{.java code-line-numbers="|2|5|8|11"}
-// Set content type
-response.setContentType("text/html; charset=UTF-8");
-
-// Get writer for text output
-PrintWriter out = response.getWriter();
-
-// Set HTTP status code
-response.setStatus(HttpServletResponse.SC_OK);  // 200
-
-// Redirect to another page
-response.sendRedirect("success.html");
-```
-
----
-
-## {data-menu-title="Content Types"}
-
-[Common Content Types]{.slide-title}
+[Introduction]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-```java
-// HTML page
-response.setContentType("text/html");
+Spring Core is the foundation of the Spring ecosystem and focuses on one major goal:
 
-// Plain text
-response.setContentType("text/plain");
+- move object creation and wiring out of business classes
+- centralize dependency management in the IoC container
+- keep application modules loosely coupled and easier to test
 
-// JSON data
-response.setContentType("application/json");
-
-// XML data
-response.setContentType("application/xml");
-
-// PDF file
-response.setContentType("application/pdf");
-```
+In practical system design, service classes remain focused on business logic while
+the container manages creation and wiring of dependencies. This separation improves
+maintainability, testability, and long-term change readiness.
 :::
 
 ---
 
-## {data-menu-title="Complete Login"}
+## {data-menu-title="Spring Definition"}
 
-[Complete Login Example]{.slide-title}
-
-<hr>
-
-```{.java code-line-numbers="|1|3-5|8-9|12-18|20-22"}
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
-  
-  protected void doPost(HttpServletRequest request,
-                       HttpServletResponse response)
-    throws ServletException, IOException {
-    
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    
-    // Validate credentials
-    if (authenticate(username, password)) {
-      // Success - redirect to home
-      HttpSession session = request.getSession();
-      session.setAttribute("user", username);
-      response.sendRedirect("home.jsp");
-    } else {
-      // Failure - show error
-      response.setContentType("text/html");
-      PrintWriter out = response.getWriter();
-      out.println("<h1>Login Failed!</h1>");
-      out.println("<a href='login.html'>Try Again</a>");
-    }
-  }
-  
-  private boolean authenticate(String user, String pass) {
-    // Database authentication logic
-    return "admin".equals(user) && "password".equals(pass);
-  }
-}
-```
-
----
-
-## {data-menu-title="Both Methods"}
-
-[Handling Both GET and POST]{.slide-title2}
+[Definition of Spring]{.slide-title}
 
 <hr>
-
-```{.java code-line-numbers="|1-3|6-10|13-16"}
-@WebServlet("/user")
-public class UserServlet extends HttpServlet {
-  
-  // Show user form (GET)
-  protected void doGet(HttpServletRequest request,
-                     HttpServletResponse response)
-    throws ServletException, IOException {
-    response.setContentType("text/html");
-    // Display form
-  }
-  
-  // Process form submission (POST)
-  protected void doPost(HttpServletRequest request,
-                       HttpServletResponse response)
-    throws ServletException, IOException {
-    // Process form data
-  }
-}
-```
-
----
-
-## {data-menu-title="POST Redirect GET"}
-
-[POST-Redirect-GET Pattern]{.slide-title2}
-
-<hr>
-
-```{mermaid}
-sequenceDiagram
-    participant Browser
-    participant Servlet
-    
-    Browser->>Servlet: POST /register (form data)
-    Servlet->>Servlet: Process & Save Data
-    Servlet-->>Browser: 302 Redirect to /success
-    Browser->>Servlet: GET /success
-    Servlet-->>Browser: 200 Success Page
-```
 
 ::: {.body-text-m}
-**Benefits:**
-- Prevents duplicate submissions on page refresh
-- Cleaner browser history
-- Better user experience
+**Spring Framework** is an open-source Java framework used to build
+enterprise applications in a modular, testable, and maintainable way.
+
+At its core, Spring provides:
+
+- **Inversion of Control (IoC)** for object lifecycle management
+- **Dependency Injection (DI)** for loose coupling between components
+- consistent programming model for web, data, security, and microservices
 :::
 
 ---
 
-## {data-menu-title="Calculator Example"}
+## {data-menu-title="What Is Spring"}
 
-[Calculator Example]{.slide-title}
+[What Spring Is]{.slide-title2}
 
 <hr>
 
-**HTML Form:**
-```{.html code-line-numbers="|2-5|6"}
-<form action="calculate" method="POST">
-  <input type="number" name="num1" required>
-  <select name="operation">
-    <option value="add">+</option>
-    <option value="subtract">-</option>
-  </select>
-  <input type="number" name="num2" required>
-  <button type="submit">Calculate</button>
-</form>
-```
+::: {.body-text-m}
+Think of Spring as an **application framework + ecosystem**.
+
+- It is not just one library; it is a family of projects
+- Spring Core provides IoC container and bean wiring
+- Spring MVC supports web applications and REST APIs
+- Spring Boot simplifies setup, configuration, and deployment
+
+[In one line: Spring lets developers focus on business logic while the framework handles infrastructure concerns.]{.teal-text}
+:::
 
 ---
 
-## {data-menu-title="Calculator Servlet"}
+## {data-menu-title="History of Spring"}
 
-[Calculator Servlet]{.slide-title}
+[History of Spring]{.slide-title2}
 
 <hr>
 
-```{.java code-line-numbers="|5-7|10-21"}
-@WebServlet("/calculate")
-public class CalculatorServlet extends HttpServlet {
-  
-  protected void doPost(HttpServletRequest request,
-                       HttpServletResponse response)
-    throws ServletException, IOException {
-    
-    int num1 = Integer.parseInt(request.getParameter("num1"));
-    int num2 = Integer.parseInt(request.getParameter("num2"));
-    String operation = request.getParameter("operation");
-    
-    int result = 0;
-    switch(operation) {
-      case "add": result = num1 + num2; break;
-      case "subtract": result = num1 - num2; break;
-      case "multiply": result = num1 * num2; break;
-      case "divide": result = num1 / num2; break;
-    }
-    
-    response.setContentType("text/html");
-    response.getWriter().println("<h1>Result: " + result + "</h1>");
-  }
+::: {.body-text-m}
+Quick timeline:
+
+- **2002:** Rod Johnson publishes ideas that challenge heavyweight J2EE development
+- **2003:** Spring Framework appears as a lightweight alternative for enterprise Java
+- **2004:** Spring 1.0 release, strong adoption for IoC and DI
+- **2014:** Spring Boot launch simplifies production-ready app development
+- **Today:** Spring ecosystem powers cloud-native apps, microservices, and enterprise platforms
+:::
+
+---
+
+## {data-menu-title="Advantages of Spring"}
+
+[Advantages of Spring]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Key advantages in real projects:
+
+- **Loose coupling:** DI keeps business classes independent of concrete implementations
+- **Better testability:** dependencies can be replaced with mocks/stubs in unit tests
+- **Modular architecture:** choose only required modules (Core, MVC, Data, Security)
+- **Faster development:** Spring Boot reduces setup and boilerplate configuration
+- **Production readiness:** built-in support for monitoring, profiles, and externalized config
+- **Strong ecosystem:** large community, documentation, and enterprise adoption
+
+[Exam line: Spring improves maintainability, scalability, and development speed through IoC, DI, and ecosystem support.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Key design questions for dependency injection:
+
+1. If `OrderService` creates `new UpiGateway()`, what happens when business asks for `CardGateway` tomorrow?
+2. How will you unit test `OrderService` if dependency creation is hardcoded inside it?
+3. Who should own object lifecycle: each class or a container?
+4. Which design is easier to maintain after 6 months: direct object creation or DI-based wiring?
+
+[Key reflection: externalizing object creation reduces coupling, improves testability, and keeps business classes focused.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Problem Framing"}
+
+[Why Spring Core Was Needed]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+In large Java projects without a container:
+
+- classes create dependencies directly using `new`
+- switching implementation forces code changes in business classes
+- unit testing becomes difficult because real dependencies are tightly bound
+- object graph wiring logic gets repeated across modules
+
+[Spring Core solves this with IoC + DI]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Tight vs Loose"}
+
+[Tight Coupling vs Dependency Injection]{.slide-title2}
+
+<hr>
+
+::: columns
+::: {.column width="50%"}
+[**Tight Coupling (without DI)**]{.magenta-text}
+
+```{.java}
+class OrderService {
+  private final PaymentGateway gateway = new UpiGateway();
 }
 ```
 
----
-
-## {data-menu-title="HTTP Status Codes"}
-
-[HTTP Status Codes]{.slide-title}
-
-<hr>
-
-::::{.columns}
+- hard to replace implementation
+- hard to mock in tests
+- violates separation of concerns
+:::
 
 ::: {.column width="50%"}
+[**Loose Coupling (with DI)**]{.teal-text}
+
+```{.java}
+class OrderService {
+  private final PaymentGateway gateway;
+  OrderService(PaymentGateway gateway){ this.gateway = gateway; }
+}
+```
+
+- implementation selected externally
+- easy test doubles/stubs
+- cleaner architecture
+:::
+:::
+
+---
+
+## {data-menu-title="DI Types"}
+
+[Types of Dependency Injection]{.slide-title2}
+
+<hr>
+
 ::: {.body-text-m}
-**Success (2xx)**
+Main DI styles in Spring:
 
-- `200 OK` - Request successful
-- `201 Created` - Resource created
-
-**Redirection (3xx)**
-
-- `301 Moved Permanently`
-- `302 Found (Temporary redirect)`
-:::
+1. **Constructor Injection** (recommended default)
+2. **Setter Injection** (optional dependencies)
+3. **Field Injection** (quick but less testable)
 :::
 
-:::{.column width="50%"}
+```{.java}
+// Constructor Injection (preferred)
+public OrderService(PaymentGateway gateway) { this.gateway = gateway; }
+
+// Setter Injection
+public void setGateway(PaymentGateway gateway) { this.gateway = gateway; }
+```
+
+---
+
+## {data-menu-title="Container Role"}
+
+[What IoC Container Actually Does]{.slide-title}
+
+<hr>
+
+::: columns
+::: {.column width="58%"}
+```{mermaid}
+flowchart TD
+  A["Read Configuration / Component Scan"] --> B["Create Bean Definitions"]
+  B --> C["Instantiate Beans"]
+  C --> D["Resolve Dependencies"]
+  D --> E["Inject Dependencies"]
+  E --> F["Ready Application Context"]
+```
+:::
+
+::: {.column width="42%"}
 ::: {.body-text-m}
-**Client Error (4xx)**
-
-- `400 Bad Request`
-- `404 Not Found`
-- `403 Forbidden`
-
-**Server Error (5xx)**
-
-- `500 Internal Server Error`
-- `503 Service Unavailable`
+- container owns object creation lifecycle
+- application code asks for abstractions, not concrete classes
+- dependency graph is resolved once and reused
 :::
 :::
-
-::::
-
----
-
-## {data-menu-title="Error Handling"}
-
-[Error Handling]{.slide-title}
-
-<hr>
-
-```{.java code-line-numbers="|1-3|5-8|10-14"}
-protected void doPost(HttpServletRequest request,
-                     HttpServletResponse response)
-  throws ServletException, IOException
-{
-  
-  try {
-    String age = request.getParameter("age");
-    int ageValue = Integer.parseInt(age);
-    // Process age
-  } catch (NumberFormatException e) {
-    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    PrintWriter out = response.getWriter();
-    out.println("Invalid age format!");
-  } catch (Exception e) {
-    response.sendError(500, "Internal Server Error");
-  }
-}
-```
-
----
-
-## {data-menu-title="Input Validation"}
-
-[Input Validation Example]{.slide-title2}
-
-<hr>
-
-```{.java code-line-numbers="|2-4|7-9|12-14"}
-// Validate required parameters
-if (username == null || username.trim().isEmpty()) {
-  response.sendError(400, "Username is required");
-  return;
-}
-
-// Validate format (email)
-if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-  response.sendError(400, "Invalid email format");
-  return;
-}
-
-// Validate length
-if (password.length() < 8) {
-  response.sendError(400, "Password must be at least 8 characters");
-  return;
-}
-```
-
----
-
-## {data-menu-title="Security Best Practices"}
-
-[Security Best Practices]{.slide-title2}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Use POST for sensitive data (passwords, personal info)
-- Validate and sanitize all input
-- Use HTTPS for production
-- Protect against SQL injection
-- Implement CSRF tokens for forms
-- Encode output to prevent XSS attacks
-- Use parameterized queries
-- Never trust client-side validation alone
 :::
 
 ---
 
-## {data-menu-title="Form to Servlet"}
+## {data-menu-title="Figure Interpretation"}
 
-[Complete Form to Servlet Flow]{.slide-title2}
+[What This IoC Figure Means in Practice]{.slide-title2}
 
 <hr>
 
-**registration.html:**
-```{.html code-line-numbers="|1|2-4|5"}
-<form action="register" method="POST">
-  <input type="text" name="username" required>
-  <input type="email" name="email" required>
-  <input type="password" name="password" required>
-  <button type="submit">Register</button>
-</form>
+::: {.body-text-m}
+- **Read Configuration / Scan:** container identifies which classes should be managed.
+- **Create Bean Definitions:** metadata is prepared for each managed object.
+- **Instantiate Beans:** container creates required objects at startup (or lazily).
+- **Resolve + Inject Dependencies:** references are connected in the correct order.
+- **Ready Context:** application gets a complete object graph before business requests begin.
+
+[Presentation takeaway: object wiring is infrastructure work, not business-class responsibility.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Bean Definition"}
+
+[What Is a Bean in Spring?]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+A **bean** is any object whose full lifecycle is managed by the Spring IoC container.
+
+Bean lifecycle responsibility includes:
+
+- creation (instantiation)
+- dependency injection
+- initialization callbacks
+- scope handling (`singleton`, `prototype`, etc.)
+- destruction callbacks when context closes
+
+[Simple definition for exams: A bean is a Spring-managed object stored in the application context.]{.orange-text}
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[Dependency Injection Concept]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  C["Client: OrderService"] -->|depends on| A["Abstraction: PaymentGateway"]
+  I["Implementation: UpiGateway"] -->|wired by| S["Spring Container"]
+  S --> C
 ```
 
-**RegisterServlet.java:**
-```{.java code-line-numbers="|2|3-5|6-7"}
-protected void doPost(...) {
-  // Extract form data
-  String username = request.getParameter("username");
-  String email = request.getParameter("email");
-  String password = request.getParameter("password");
-  // Process and respond
-  response.sendRedirect("welcome.jsp");
+::: {.body-text-m .topbr}
+- Business class depends on interface, not concrete implementation
+- Spring container resolves and injects correct dependency
+- This improves testability and reduces coupling
+:::
+
+---
+
+## {data-menu-title="Configuration Styles"}
+
+[Java Config vs Annotation Scanning]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Spring supports multiple ways to register beans:
+
+- **Java Configuration** using `@Configuration` + `@Bean`
+- **Stereotype scanning** using `@Component`, `@Service`, `@Repository`
+
+Both lead to the same goal: dependency graph managed by container.
+:::
+
+```{.java}
+@Service
+class OrderService {
+  private final PaymentGateway gateway;
+  OrderService(PaymentGateway gateway) { this.gateway = gateway; }
 }
 ```
+
+---
+
+## {data-menu-title="Code Walkthrough"}
+
+[Code Walkthrough]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3"}
+interface PaymentGateway {}
+class UpiGateway implements PaymentGateway {}
+class OrderService {
+  private final PaymentGateway gateway;
+  OrderService(PaymentGateway gateway) { this.gateway = gateway; }
+}
+
+@Configuration
+class AppConfig {
+  @Bean PaymentGateway gateway() { return new UpiGateway(); }
+  @Bean OrderService orderService(PaymentGateway gateway) { return new OrderService(gateway); }
+}
+```
+
+::: {.body-text-m .topbr}
+[Walkthrough checkpoints:]{.teal-text}
+
+- `OrderService` never creates gateway directly
+- implementation can be swapped in config only
+- test setup can inject fake gateway without changing business logic
+:::
+
+---
+
+## {data-menu-title="Layered Example"}
+
+[DI in a Layered Application]{.slide-title}
+
+<hr>
+
+::: columns
+::: {.column width="56%"}
+```{mermaid}
+flowchart TD
+  C["Controller"] --> S["Service"]
+  S --> R["Repository"]
+  R --> D[(Database)]
+```
+:::
+
+::: {.column width="44%"}
+::: {.body-text-m}
+Dependency Injection helps each layer depend on abstractions:
+
+- Controller depends on service interface
+- Service depends on repository interface
+- Repository implementation can be replaced without changing service logic
+
+:::
+:::
+:::
+
+---
+
+## {data-menu-title="Refactor Path"}
+
+[Refactoring from Tight to Loose Coupling]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Typical migration sequence:
+
+1. Extract interface from concrete dependency
+2. Inject interface through constructor
+3. Move implementation selection to Spring configuration
+4. Add alternate implementation (for environment/testing)
+5. Verify behavior without touching business class
+:::
+
+```{.java}
+interface PaymentGateway { void pay(double amount); }
+
+class CardGateway implements PaymentGateway {
+  public void pay(double amount) { /* card flow */ }
+}
+```
+
+---
+
+## {data-menu-title="Testing Benefit"}
+
+[Unit Testing Advantage of DI]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+With DI, service testing is isolated from infrastructure:
+
+- no real payment API call required
+- fake/stub dependency controls test outcomes
+- test failures point to business logic clearly
+:::
+
+```{.java}
+class FakeGateway implements PaymentGateway {
+  boolean called;
+  public void pay(double amount) { called = true; }
+}
+
+// Inject FakeGateway into OrderService during test
+```
+
+---
+
+## {data-menu-title="Decision Table"}
+
+[Constructor vs Setter vs Field Injection]{.slide-title2}
+
+<hr>
+
+| Injection Style | Best Use | Strength | Limitation |
+|---|---|---|---|
+| Constructor | Mandatory dependencies | Immutable + test-friendly | More constructor args if many deps |
+| Setter | Optional dependencies | Flexible post-creation setup | Can leave object partially configured |
+| Field | Quick wiring | Minimal boilerplate | Harder to test and less explicit |
+
+::: {.body-text-m .topbr}
+[Recommended default for production code: Constructor Injection]{.teal-text}
+:::
 
 ---
 
 ## {data-menu-title="Common Mistakes"}
 
-[Common Mistakes to Avoid]{.slide-title2}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Using GET for sensitive data
-- Not validating input parameters
-- Forgetting to set content type
-- Not handling null parameters
-- Hardcoding URLs in redirects
-- Ignoring character encoding
-- Not closing PrintWriter
-- Mixing HTML and Java code excessively
-:::
-
----
-
-## {data-menu-title="Summary"}
-
-[Summary]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- GET retrieves data, POST submits data
-- GET: data in URL, POST: data in body
-- Use `doGet()` for GET requests
-- Use `doPost()` for POST requests
-- Extract parameters using `request.getParameter()`
-- Set content type before writing response
-- Validate all user input
-- Use POST for sensitive/large data
-- Apply POST-Redirect-GET pattern for better UX
-- Always prioritize security in your servlets
-:::
-
----
-
-## {data-menu-title="Practice"}
-
-[Practice Exercise]{.slide-title}
+[Common DI Mistakes and Fixes]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Create a Student Search & Registration System:
+1. **Direct `new` inside service classes**
+  Fix: inject dependencies through constructor
 
-1. HTML form with search (GET) and registration (POST) capabilities
-2. Servlet to handle both GET (search/filter) and POST (registration)
-3. Validate all form inputs (email format, password strength)
-4. Display search results with pagination
-5. Show confirmation page after registration
-6. Use POST-Redirect-GET pattern for registration
-7. Set appropriate HTTP status codes for success/failure
+2. **Using field injection everywhere**
+  Fix: prefer constructor injection for required dependencies
 
-**Bonus**: Implement input sanitization and security checks
+3. **Business logic inside configuration classes**
+  Fix: keep config only for bean wiring
+
+4. **Circular dependency between services**
+  Fix: redesign responsibilities or introduce interface boundary
 :::
 
+---
+
+## Memory Booster {data-menu-title="Memory Booster"}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus memory points for **Spring Core Basics & Dependency Injection**:
+
+- Core recall: constructor-based DI and inversion of control
+- Exam compare: Tight coupling vs dependency injection
+- Practical anchor: Refactor class to inject dependency via constructor
+:::
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Live implementation for Spring Core Basics & Dependency Injection:**
+
+**[Open Demo: Lecture 25 - Spring Core Basics & Dependency Injection](../demos/lecture-25-demo.html){target="_blank"}**
+
+[Demo flow:]{.teal-text}
+
+- Boot IoC container and observe bean wiring trace
+- Switch implementation (`UpiGateway` -> `CardGateway`) without changing service code
+- Inject `MockGateway` to show test-friendly design
+
+[Takeaway: configuration changes behavior, business class stays stable.]{.orange-text}
+:::
 ---
 
 ## {data-menu-title="Resources"}
@@ -821,13 +588,94 @@ Create a Student Search & Registration System:
 <hr>
 
 ::: {.body-text-m}
-- [MDN: HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
-- [Jakarta Servlet Specification](https://jakarta.ee/specifications/servlet/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-- [OWASP Security Best Practices](https://owasp.org/)
-- [Course content: Week 8](/content/week-08.qmd)
+- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
+- [Spring Guides](https://spring.io/guides)
+- [Baeldung: Dependency Injection in Spring](https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring)
+- Classroom notes + lecture demo file for Lecture 25
 :::
+---
 
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **Spring Core Basics & Dependency Injection** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **Spring Core Basics & Dependency Injection** with one practical use case.
+- Write/identify the key API or construct: **constructor-based DI and inversion of control**.
+- Differentiate: **Tight coupling vs dependency injection**.
+- Mention one common implementation error and correction.
+- Why is constructor injection preferred over field injection in production code?
+:::
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **Spring Core Basics & Dependency Injection** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+- Design a payment module using interface-based DI and justify your bean wiring choices.
+:::
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implement: **Refactor class to inject dependency via constructor**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
+:::
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain **Spring Core Basics & Dependency Injection** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
+:::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 26 - Spring IoC & Bean Life Cycle
+- Preparation required: revise this lecture summary and code walkthrough
+:::
 ---
 
 ## {#end-slide data-menu-title="End Slide" background="#053660"}
@@ -837,6 +685,8 @@ Create a Student Search & Registration System:
 [Questions?]{.white-text}
 </div>
 <div class="custom-subtitle3">
-Next: Lecture 26 - Redirecting Requests & Request Dispatching
+Next: Lecture 26
 </div>
 </div>
+
+

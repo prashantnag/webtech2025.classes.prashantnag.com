@@ -1,5 +1,5 @@
----
-title: "Lecture 23: Servlet Overview & Architecture"
+﻿---
+title: "Lecture 23: JSP Introduction & Implicit Objects"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 27, 2026"
@@ -13,16 +13,18 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Servlet Overview & Architecture]{.white-text}
+[JSP Introduction & Implicit Objects]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 8 | Unit III: Servlets<br>
+Week 8 | Unit III: Web App Development (Servlets + JSP)<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
+
+
 
 ## {data-menu-title="Learning Objectives"}
 
@@ -31,375 +33,296 @@ Week 8 | Unit III: Servlets<br>
 <hr>
 
 ::: {.incremental .body-text-m}
-- Explain what a servlet is and its role in web applications
-- Understand the servlet architecture and container responsibilities
-- Describe the request-response processing flow
-- Understand servlet mapping and URL patterns
-- Grasp basic servlet lifecycle concepts
-- Learn about servlet filters and interceptors
+- Explain JSP purpose in MVC flow
+- Use JSP implicit objects correctly
+- Render dynamic attributes in JSP view
 :::
 
 ---
 
-## {data-menu-title="Servlet Concept"}
+## {data-menu-title="Prerequisites"}
 
-[Servlet at a Glance]{.slide-title}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-A **Servlet** is a Java class that handles HTTP requests and generates responses on the server side.
+- Java basics: classes, methods, objects, and exception handling
+- HTTP request-response fundamentals from Unit I/II web context
+- Revision of Lecture 22 before moving into JSP Introduction & Implicit Objects
+:::
+---
 
-Typical uses:
+## {data-menu-title="Syllabus Mapping"}
 
-- Process form data
-- Perform business logic
-- Interact with databases
-- Return HTML/JSON responses
-- Handle user sessions and authentication
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Unit III topic focus: JSP Introduction & Implicit Objects
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
+:::
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- 5-minute recap from previous lecture
+- Concept deep dive: JSP Introduction & Implicit Objects
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+JSP is a view technology in the servlet ecosystem: controller logic stays in servlets while JSP
+handles presentation.
+
+Implicit objects allow direct access to request/session/application context during rendering,
+which keeps the view dynamic without writing boilerplate object creation code.
 :::
 
 ---
 
-## {data-menu-title="Web Application Architecture"}
+## {data-menu-title="Think About It"}
 
-[Traditional Web Application Architecture]{.slide-title2}
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+If business logic and HTML are mixed in servlets, what happens to maintainability after 6 months?
+:::
+
+---
+
+## {data-menu-title="Tracking Recap"}
+
+[Session Tracking Types Recap]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+JSP views usually consume state prepared through one of these mechanisms:
+
+- Cookies
+- URL rewriting
+- Hidden form fields
+- `HttpSession` (most common in servlet + JSP apps)
+
+[Connection to this lecture: implicit object `session` exposes `HttpSession` data inside JSP.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[JSP Implicit Objects]{.slide-title}
 
 <hr>
 
 ```{mermaid}
-%%| fig-height: 3.5
 flowchart LR
-  Client["Browser"] -->|HTTP Request| WebServer
-  WebServer["Web Server<br/>(Tomcat)"] -->|Forward| SC
-  SC["Servlet Container"] -->|Route| Servlet
-  Servlet["Your Servlet"] -->|Query| DB[(Database)]
-  DB -->|Result| Servlet
-  Servlet -->|Response| Client
+	B["Browser"] --> S["Servlet Controller"]
+	S -->|request.setAttribute| J["JSP View"]
+	J -->|uses implicit objects| H["Rendered HTML"]
+	H --> B
 ```
 
----
-
-## {data-menu-title="Servlet Container Role"}
-
-[Servlet Container Responsibilities]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- **Load and instantiate servlets** - Creates servlet objects when first request arrives
-- **Manage lifecycle** - Calls `init()`, `service()`, `destroy()` at appropriate times
-- **Create request/response objects** - Wraps HTTP calls in `HttpServletRequest` and `HttpServletResponse`
-- **Handle threading** - Assigns threads from thread pool to handle concurrent requests
-- **Security** - Manages authentication, authorization, and SSL/TLS
-- **Session management** - Maintains user sessions across requests
-- **Resource management** - Manages classloaders, security domains, and resource pooling
+::: {.body-text-m .topbr}
+- Servlets handle control flow and business decisions
+- JSP focuses on rendering response using implicit objects
+- Common implicit objects: `request`, `response`, `session`, `application`, `out`, `pageContext`
 :::
 
 ---
 
-## {data-menu-title="Servlet Mapping"}
+## {data-menu-title="Scope Use"}
 
-[URL Mapping: How Requests Route to Servlets]{.slide-title}
+[Choosing the Right Object Scope in JSP]{.slide-title2}
 
 <hr>
 
-```{.java}
-@WebServlet("/hello")              // Exact match
-@WebServlet("/api/*")              // Wildcard: /api/users, /api/tasks, etc.
-@WebServlet("*.json")              // Extension: any .json request
-```
+| Scope/Object | Lifetime | Typical Data |
+|---|---|---|
+| `request` | Single request | Validation errors, view model |
+| `session` | Across user session | User identity, role, locale |
+| `application` | App lifetime | Shared constants/config |
 
-**Or in web.xml:**
-```{.xml}
-<servlet-mapping>
-  <servlet-name>HelloServlet</servlet-name>
-  <url-pattern>/hello</url-pattern>
-</servlet-mapping>
-```
-
-::: {.body-text-m}
-The container matches incoming request URLs to servlet mappings and routes accordingly.
+::: {.body-text-m .topbr}
+[Common mistake: storing request-only data in session causes stale UI behavior.]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="Servlet Interface"}
+## {data-menu-title="Request Lifecycle"}
 
-[Core Servlet Classes & Methods]{.slide-title2}
-
-<hr>
-
-```{.java}
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-@WebServlet("/demo")
-public class DemoServlet extends HttpServlet {
-  
-  // Called once when servlet is first loaded
-  public void init() throws ServletException { }
-  
-  // Called for every request (delegated to doGet/doPost)
-  public void service(HttpServletRequest req, HttpServletResponse res) { }
-  
-  // Handle GET requests
-  protected void doGet(HttpServletRequest req, HttpServletResponse res) { }
-  
-  // Handle POST requests
-  protected void doPost(HttpServletRequest req, HttpServletResponse res) { }
-  
-  // Called once when servlet is unloaded
-  public void destroy() { }
-}
-```
-
----
-
-## {data-menu-title="Simple Servlet Example"}
-
-[Simple Servlet Example]{.slide-title}
-
-<hr>
-
-```{.java code-line-numbers="|1|2|4-6|7-10|11-13"}
-@WebServlet("/hello")                                                      // <1>
-public class HelloServlet extends HttpServlet {
-  
-  @Override
-  protected void doGet(HttpServletRequest request,                         // <2>
-                      HttpServletResponse response)
-      throws ServletException, IOException {
-    response.setContentType("text/html; charset=UTF-8");                   // <3>
-    PrintWriter out = response.getWriter();
-    
-    out.println("<h1>Hello from Servlet!</h1>");                           // <4>
-    out.println("<p>Request URI: " + request.getRequestURI() + "</p>");
-    out.close();
-  }
-}
-```
-
-::: {.annotations .body-text-s}
-1. **@WebServlet** - Maps this servlet to `/hello` URL
-2. **doGet()** - Handles GET requests (called by container)
-3. **setContentType()** - Tells browser what format to expect
-4. **PrintWriter** - Output stream to send response to client
-:::
-
----
-
-## {data-menu-title="Request-Response Flow"}
-
-[Request-Response Processing Flow]{.slide-title}
+[JSP Request-to-Response Lifecycle]{.slide-title2}
 
 <hr>
 
 ```{mermaid}
-%%| fig-height: 3.5
 sequenceDiagram
-    participant C as Browser
-    participant SC as Servlet Container
-    participant S as Servlet
-    
-    C->>SC: HTTP GET /hello
-    SC->>S: service(request, response)
-    S->>S: doGet() → generate HTML
-    S-->>SC: Response 200 OK
-    SC-->>C: HTTP Response
+	participant B as Browser
+	participant C as Controller Servlet
+	participant V as JSP Engine
+	participant O as Output HTML
+	B->>C: HTTP Request
+	C->>C: Validate + prepare model
+	C->>V: forward(request, response)
+	V->>V: Resolve EL/implicit objects
+	V-->>O: Rendered HTML
+	O-->>B: HTTP Response
 ```
+
+::: {.body-text-m .topbr}
+- Controller creates model data (`request.setAttribute(...)`)
+- JSP consumes model and session/application context for rendering
+- Final output is plain HTML returned to browser
+:::
 
 ---
 
-## {data-menu-title="Response Methods"}
+## {data-menu-title="Implicit Objects Deep Dive"}
 
-[Generating Responses]{.slide-title}
+[Implicit Objects: What to Use and When]{.slide-title2}
 
 <hr>
 
-```{.java code-line-numbers="|2|5|8|11|14"}
-// Set content type (MUST before getWriter())
-response.setContentType("text/html; charset=UTF-8");
+| Implicit Object | Typical Responsibility | Good Example |
+|---|---|---|
+| `request` | Per-request data from controller | Validation errors, form values |
+| `session` | User-specific cross-request state | Logged-in user, preferred locale |
+| `application` | Shared app-wide data | Version, global feature flags |
+| `out` | Response writer | Render final markup/text |
+| `pageContext` | Access to page/request/session/app scopes | Utility lookups across scopes |
 
-// Get output stream for text
-PrintWriter out = response.getWriter();
-
-// Write response data
-out.println("<h1>Title</h1>");
-
-// Set HTTP status code
-response.setStatus(HttpServletResponse.SC_OK);  // 200
-
-// Send error response
-response.sendError(404, "Page not found");
-```
+::: {.body-text-m .topbr}
+[Design principle: read data in JSP; avoid moving business decisions into JSP logic.]{.orange-text}
+:::
 
 ---
 
-## {data-menu-title="URL Patterns"}
+## {data-menu-title="View Comparison"}
 
-[Servlet URL Patterns & Routing]{.slide-title2}
+[JSP Rendering Style Comparison]{.slide-title2}
 
 <hr>
 
-```{.java}
-// Exact match - only /search
-@WebServlet("/search")
+| Rendering Style | Example Pattern | Strength | Limitation |
+|---|---|---|---|
+| Scriptlet-heavy JSP | `<% if (...) { %>` blocks | Quick for prototypes | Hard to maintain and test |
+| EL + JSTL + tags | `${user.name}`, tag-based conditions | Clean and readable view logic | Requires proper model preparation |
+| Servlet-generated HTML | `out.println(...)` in controller | Full Java control | Mixes controller and view concerns |
 
-// Path wildcard - /api/users, /api/tasks, etc.
-@WebServlet("/api/*")
+::: {.body-text-m .topbr}
+[Preferred approach for production: EL/JSTL/tag-based JSP with controller-owned decisions.]{.teal-text}
+:::
 
-// Extension match - anything.json
-@WebServlet("*.json")
+---
 
-// Root servlet - everything not matched elsewhere
-@WebServlet("/")
-```
+## {data-menu-title="MVC Case"}
+
+[Mini MVC Case: Login Result Page]{.slide-title2}
+
+<hr>
 
 ::: {.body-text-m}
-URL pattern matching order:
-1. Exact matches first
-2. Then longest path pattern
-3. Then extension pattern
-4. Finally default servlet (`/`)
+Controller responsibilities:
+
+1. authenticate credentials
+2. set request attributes like `message` and `lastLogin`
+3. store user identity in `session`
+4. forward to `dashboard.jsp`
+
+JSP responsibilities:
+
+- render greeting with `${sessionScope.user.name}`
+- render one-time request message with `${requestScope.message}`
+- avoid performing authentication logic in view layer
 :::
 
 ---
 
-## {data-menu-title="Servlet Filters"}
+## {data-menu-title="Pitfalls"}
 
-[Servlet Filters: Intercepting Requests/Responses]{.slide-title}
+[Common JSP + Implicit Object Pitfalls]{.slide-title2}
 
 <hr>
 
-```{.java}
-@WebFilter("/*")                                                           // <1>
-public class LoggingFilter implements Filter {
-  
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response,   // <2>
-                       FilterChain chain)
-      throws IOException, ServletException {
-    
-    System.out.println(">> Before servlet: " + 
-      ((HttpServletRequest)request).getRequestURI());
-    
-    chain.doFilter(request, response);  // Pass to next filter/servlet      // <3>
-    
-    System.out.println("<< After servlet: Status " + 
-      ((HttpServletResponse)response).getStatus());
-  }
-  
-  @Override
-  public void init(FilterConfig config) throws ServletException { }
-  
-  @Override
-  public void destroy() { }
-}
-```
+::: {.body-text-m}
+- **Pitfall:** storing temporary error messages in `session`  
+	**Impact:** stale messages shown on later pages
 
-::: {.annotations .body-text-s}
-1. **@WebFilter** - Applies to all URLs (`/*`)
-2. **doFilter()** - Intercepts request before servlet and response after
-3. **chain.doFilter()** - Passes control down to next filter or servlet
+- **Pitfall:** null attribute assumptions in view  
+	**Impact:** broken UI fragments or confusing placeholders
+
+- **Pitfall:** controller logic copied into JSP blocks  
+	**Impact:** tight coupling and difficult debugging
+
+[Reliable pattern: servlet decides, JSP presents.]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="Filter Chain"}
+## {data-menu-title="Code Walkthrough"}
 
-[Filter Chain: Multiple Interceptors]{.slide-title}
+[Code Walkthrough]{.slide-title2}
 
 <hr>
 
-```{mermaid}
-flowchart LR
-  Request["HTTP Request"]
-  F1["Filter 1<br/>(Logging)"]
-  F2["Filter 2<br/>(Auth)"]
-  Servlet["Servlet"]
-  F2_out["Filter 2<br/>(Response)"]
-  F1_out["Filter 1<br/>(Response)"]
-  Response["HTTP Response"]
-  
-  Request -->|chain.doFilter| F1
-  F1 -->|chain.doFilter| F2
-  F2 -->|chain.doFilter| Servlet
-  Servlet -->|returns| F2_out
-  F2_out -->|returns| F1_out
-  F1_out -->|returns| Response
+```{.java code-line-numbers="|1-3"}
+request.setAttribute("name", "Prash");
+request.setAttribute("lastLogin", "10:30 AM");
+request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+// JSP view:
+// <h2>Welcome, ${name}</h2>
+// <p>Last login: ${lastLogin}</p>
 ```
-
----
-
-## {data-menu-title="Filter Use Cases"}
-
-[Common Filter Use Cases]{.slide-title}
+## Memory Booster {data-menu-title="Memory Booster"}
 
 <hr>
 
-::: {.incremental .body-text-m}
-- **Logging Filter** - Log all incoming requests and outgoing responses
-- **Authentication Filter** - Check credentials before servlet processes request
-- **Compression Filter** - GZip response body for faster transfer
-- **CORS Filter** - Add cross-origin headers for REST APIs
-- **Character Encoding Filter** - Set consistent encoding for all requests
-- **Rate Limiting Filter** - Throttle requests per IP or user
-- **Error Handling Filter** - Catch and format errors consistently
+::: {.body-text-m}
+Syllabus memory points for **JSP Introduction & Implicit Objects**:
+
+- Core recall: request, response, session, out
+- Exam compare: Servlet-generated HTML vs JSP view rendering
+- Practical anchor: Render user-specific data in JSP using implicit objects
 :::
-
 ---
 
-## {data-menu-title="Servlet Initialization"}
+## {data-menu-title="Live Demo"}
 
-[Servlet Initialization Parameters]{.slide-title}
+[Live Demo]{.slide-title2}
 
 <hr>
 
-**Via annotation:**
-```{.java}
-@WebServlet(value = "/config", 
-            initParams = { @WebInitParam(name = "maxUsers", value = "1000"),
-                          @WebInitParam(name = "timeout", value = "30") })
-public class ConfigServlet extends HttpServlet {
-  public void init() {
-    String maxUsers = getInitParameter("maxUsers");
-    String timeout = getInitParameter("timeout");
-  }
-}
-```
+::: {.body-text-m}
+**Live implementation for JSP Introduction & Implicit Objects:**
 
-**Via web.xml:**
-```{.xml}
-<servlet>
-  <init-param>
-    <param-name>maxUsers</param-name>
-    <param-value>1000</param-value>
-  </init-param>
-</servlet>
-```
+**[Open Demo: Lecture 23 - JSP Introduction & Implicit Objects](../demos/lecture-23-demo.html){target="_blank"}**
 
----
+[Demo flow:]{.teal-text}
 
-## {data-menu-title="Summary"}
+- Set request/session values in simulated controller input
+- Render JSP-style output and inspect implicit-object trace
+- Compare behavior when attributes are present vs missing
 
-[Summary]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- **Servlet** is a Java class handling HTTP requests on the server side
-- **Servlet Container** manages lifecycle, threading, and resource allocation
-- **URL Mapping** routes incoming requests to the appropriate servlet
-- **Servlet Methods**: `init()` (setup), `service()` (handle requests), `destroy()` (cleanup)
-- **Request-Response** objects wrap HTTP data with Java API
-- **Filters** intercept requests/responses for cross-cutting concerns
-- **Filter Chain** allows multiple interceptors to work in sequence
-
-This architecture is the foundation of enterprise Java web applications!
+[Takeaway: JSP should render model data, while control decisions stay in servlet layer.]{.orange-text}
 :::
-
 ---
 
 ## {data-menu-title="Resources"}
@@ -410,12 +333,90 @@ This architecture is the foundation of enterprise Java web applications!
 
 ::: {.body-text-m}
 - [Jakarta Servlet Specification](https://jakarta.ee/specifications/servlet/)
-- [Apache Tomcat Documentation](https://tomcat.apache.org/tomcat-10.1-doc/)
-- [Servlet API Documentation](https://jakarta.ee/specifications/servlet/6.0/apidocs/)
-- [Web Application Architecture Patterns](https://en.wikipedia.org/wiki/Web_application)
-- [Course content: Week 8](/content/week-08.qmd)
+- [Oracle Java EE Tutorial (Servlet/JSP)](https://docs.oracle.com/javaee/7/tutorial/)
+- Classroom notes + lecture demo file for Lecture 23
 :::
+---
 
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **JSP Introduction & Implicit Objects** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **JSP Introduction & Implicit Objects** with one practical use case.
+- Write/identify the key API or construct: **request, response, session, out**.
+- Differentiate: **Servlet-generated HTML vs JSP view rendering**.
+- Mention one common implementation error and correction.
+:::
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **JSP Introduction & Implicit Objects** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+:::
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implement: **Render user-specific data in JSP using implicit objects**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
+:::
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain **JSP Introduction & Implicit Objects** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
+:::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 24 - JSP Scripting, Directives, Actions & Custom Tags
+- Preparation required: revise this lecture summary and code walkthrough
+:::
 ---
 
 ## {#end-slide data-menu-title="End Slide" background="#053660"}
@@ -425,6 +426,8 @@ This architecture is the foundation of enterprise Java web applications!
 [Questions?]{.white-text}
 </div>
 <div class="custom-subtitle3">
-Next: Lecture 24 - Servlet Interface & Life Cycle
+Next: Lecture 24
 </div>
 </div>
+
+

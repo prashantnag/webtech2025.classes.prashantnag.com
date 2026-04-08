@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 6 Demo - HTML Images &amp; Hyperlinks</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 6 Demo</h1>
+      <p class="subtitle">HTML Images &amp; Hyperlinks</p>
+
+      <div class="card">
+        <p>
+          <strong>[Classroom Tip]</strong> Interact with each section to explore how image attributes work,
+          the four types of hyperlinks, and how to build an accessible navigation menu.
+        </p>
+      </div>
+
+      <!-- Section 1: Image Attributes Explorer -->
+      <div class="card">
+        <h2>1) Image Attributes Explorer</h2>
+        <p>Toggle checkboxes to add/remove attributes and see how the <code class="c">&lt;img&gt;</code> element changes.</p>
+
+        <div class="grid">
+          <div>
+            <strong>Attribute Toggles:</strong>
+            <div class="image-attr-toggle">
+              <label><input type="checkbox" id="chk-src" checked onchange="updateImgPreview()"> <code class="c">src</code> — image source path</label>
+              <label><input type="checkbox" id="chk-alt" checked onchange="updateImgPreview()"> <code class="c">alt</code> — alternative text</label>
+              <label><input type="checkbox" id="chk-width" onchange="updateImgPreview()"> <code class="c">width="300"</code></label>
+              <label><input type="checkbox" id="chk-loading" onchange="updateImgPreview()"> <code class="c">loading="lazy"</code></label>
+              <label><input type="checkbox" id="chk-title" onchange="updateImgPreview()"> <code class="c">title="tooltip"</code></label>
+            </div>
+            <div style="margin-top:14px;">
+              <strong>Generated HTML:</strong>
+              <pre id="img-code" class="code-block">&lt;img src="mountain.jpg" alt="Mountain at sunset" /&gt;</pre>
+            </div>
+          </div>
+          <div>
+            <strong>Browser Preview:</strong>
+            <div class="img-preview" id="img-preview">
+              <span style="font-size: 36px;">🏔️</span>
+              <span id="img-alt-text" style="font-size: 13px; color: #555;">alt: Mountain at sunset</span>
+            </div>
+            <p id="img-note" style="font-size: 12px; color: #777; margin-top: 6px;">Image renders with alt visible on hover.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Four Link Types -->
+      <div class="card">
+        <h2>2) The Four Hyperlink Types</h2>
+        <div class="grid">
+          <div class="link-type-card">
+            <h3>1. External Link</h3>
+            <pre class="code-block">&lt;a href="https://www.w3.org"
+   target="_blank"
+   rel="noopener"&gt;
+  Visit W3C
+&lt;/a&gt;</pre>
+            <div class="result-box">Navigates to another website in a new tab. <code class="c">rel="noopener"</code> prevents security vulnerabilities.</div>
+          </div>
+          <div class="link-type-card">
+            <h3>2. Internal Link</h3>
+            <pre class="code-block">&lt;a href="about.html"&gt;
+  About Page
+&lt;/a&gt;</pre>
+            <div class="result-box">Navigates to another page within the same website. Use relative paths.</div>
+          </div>
+          <div class="link-type-card">
+            <h3>3. Anchor Link (Jump Link)</h3>
+            <pre class="code-block">&lt;!-- Target element: --&gt;
+&lt;h2 id="section-2"&gt;Section 2&lt;/h2&gt;
+&lt;!-- Link to it: --&gt;
+&lt;a href="#section-2"&gt;Go to Section 2&lt;/a&gt;</pre>
+            <div class="result-box">Jumps to an element with a matching <code class="c">id</code> on the same page. Used in table of contents.</div>
+          </div>
+          <div class="link-type-card">
+            <h3>4. Email &amp; Tel Links</h3>
+            <pre class="code-block">&lt;a href="mailto:info@example.com"&gt;
+  Email us
+&lt;/a&gt;
+&lt;a href="tel:+15551234567"&gt;
+  Call us
+&lt;/a&gt;</pre>
+            <div class="result-box">Opens default email client or phone dialer. <code class="c">mailto:</code> and <code class="c">tel:</code> are URL schemes.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Link Simulator -->
+      <div class="card">
+        <h2>3) Link Simulator</h2>
+        <p>Click each link type to see what would happen (no actual navigation).</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin:12px 0;">
+          <a href="#" onclick="simulateLink(event,'external')">🌐 External Link</a>
+          <a href="#" onclick="simulateLink(event,'internal')">📄 Internal Link</a>
+          <a href="#" onclick="simulateLink(event,'anchor')">⚓ Anchor Link</a>
+          <a href="#" onclick="simulateLink(event,'email')">✉️ Email Link</a>
+          <a href="#" onclick="simulateLink(event,'tel')">📞 Tel Link</a>
+        </div>
+        <div id="link-result" style="background:#e8f4f8; border:1px solid #0d6efd; border-radius:8px; padding:14px; font-size:13px; min-height:50px;">
+          Click a link above to see what would happen...
+        </div>
+      </div>
+
+      <!-- Section 4: Navigation Menu Builder -->
+      <div class="card">
+        <h2>4) Building a &lt;nav&gt; Menu</h2>
+        <p>A semantic navigation bar uses <code class="c">&lt;nav&gt;</code> + <code class="c">&lt;ul&gt;</code> + <code class="c">&lt;a&gt;</code>. Type pages below to build one live.</p>
+
+        <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+          <input id="nav-input" type="text" placeholder="Page name (e.g. About)..." style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:13px; min-width:150px;" value="" />
+          <button class="toggle-btn" onclick="addNavItem()">Add Page</button>
+          <button class="toggle-btn" style="background:#6c757d;" onclick="resetNav()">Reset</button>
+        </div>
+
+        <strong>Visual Result:</strong>
+        <nav class="nav-demo" id="nav-demo" aria-label="Main navigation" style="margin-top:8px;">
+          <a href="#">Home</a>
+          <a href="#">Lectures</a>
+          <a href="#">Resources</a>
+        </nav>
+
+        <div style="margin-top:12px;">
+          <strong>Generated HTML:</strong>
+          <pre id="nav-code" class="code-block">&lt;nav&gt;
+  &lt;a href="index.html"&gt;Home&lt;/a&gt;
+  &lt;a href="lectures.html"&gt;Lectures&lt;/a&gt;
+  &lt;a href="resources.html"&gt;Resources&lt;/a&gt;
+&lt;/nav&gt;</pre>
+        </div>
+      </div>
+
+      <!-- Section 5: Linked Image -->
+      <div class="card">
+        <h2>5) Image as a Hyperlink</h2>
+        <p>Wrapping an <code class="c">&lt;img&gt;</code> inside an <code class="c">&lt;a&gt;</code> makes the image clickable.</p>
+        <div class="grid">
+          <div>
+            <pre class="code-block">&lt;a href="https://www.w3.org" target="_blank"&gt;
+  &lt;img src="w3c-logo.png"
+       alt="Visit W3C website"
+       width="120" /&gt;
+&lt;/a&gt;</pre>
+          </div>
+          <div>
+            <strong>Result (simulated):</strong>
+            <div style="margin-top:8px;">
+              <a href="#" onclick="simulateLink(event,'external-img')" style="display:inline-block; border:2px solid #0d6efd; border-radius:8px; overflow:hidden; text-decoration:none;">
+                <div style="background:#053660; color:white; padding:20px 30px; font-weight:bold; font-size:18px; text-align:center;">W3C</div>
+                <div style="background:#f0f6ff; text-align:center; padding:6px; font-size:12px; color:#0d6efd;">alt: Visit W3C website</div>
+              </a>
+            </div>
+            <p style="font-size:12px; color:#555; margin-top:8px;">The entire image is clickable. Always include alt text describing the link destination.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      function updateImgPreview() {
+        const hasSrc = document.getElementById('chk-src').checked;
+        const hasAlt = document.getElementById('chk-alt').checked;
+        const hasWidth = document.getElementById('chk-width').checked;
+        const hasLoading = document.getElementById('chk-loading').checked;
+        const hasTitle = document.getElementById('chk-title').checked;
+
+        let attrs = [];
+        if (hasSrc) attrs.push('src="mountain.jpg"');
+        if (hasAlt) attrs.push('alt="Mountain at sunset"');
+        if (hasWidth) attrs.push('width="300"');
+        if (hasLoading) attrs.push('loading="lazy"');
+        if (hasTitle) attrs.push('title="tooltip"');
+
+        document.getElementById('img-code').textContent = '&lt;img ' + attrs.join(' ') + ' /&gt;';
+        const note = document.getElementById('img-note');
+        const altText = document.getElementById('img-alt-text');
+
+        if (!hasSrc && !hasAlt) {
+          altText.textContent = '⚠️ No src and no alt — broken and inaccessible!';
+          altText.style.color = '#dc3545';
+          note.textContent = 'Missing both src and alt is bad practice.';
+        } else if (!hasSrc) {
+          altText.textContent = hasAlt ? 'alt: Mountain at sunset (shown when src missing)' : '';
+          altText.style.color = '#ff9800';
+          note.textContent = 'No src → image broken; alt text displayed instead.';
+        } else if (!hasAlt) {
+          altText.textContent = '⚠️ No alt text — inaccessible to screen readers!';
+          altText.style.color = '#dc3545';
+          note.textContent = 'Always add alt text for accessibility.';
+        } else {
+          altText.textContent = 'alt: Mountain at sunset';
+          altText.style.color = '#555';
+          note.textContent = 'Image renders with alt visible on hover.';
+        }
+      }
+
+      const linkMessages = {
+        'external': '🌐 <strong>External link:</strong> Browser would navigate to <code>https://www.w3.org</code> in a new tab. <code>rel="noopener"</code> protects against tab-napping attacks.',
+        'internal': '📄 <strong>Internal link:</strong> Browser would load <code>about.html</code> in the same tab — relative to the current page\'s directory.',
+        'anchor': '⚓ <strong>Anchor link:</strong> Page would instantly scroll to the element with <code>id="section-2"</code> — no page reload.',
+        'email': '✉️ <strong>Email link:</strong> Your default email client (e.g. Outlook, Gmail app) would open a new compose window with <code>info@example.com</code> pre-filled.',
+        'tel': '📞 <strong>Tel link:</strong> On mobile, this dials the number. On desktop, depends on default calling app (Skype, Teams, etc.).',
+        'external-img': '🌐 <strong>Linked image:</strong> Clicking the image navigates to <code>https://www.w3.org</code> — the &lt;img&gt; is wrapped inside &lt;a&gt;.'
+      };
+
+      function simulateLink(e, type) {
+        e.preventDefault();
+        document.getElementById('link-result').innerHTML = linkMessages[type];
+      }
+
+      const defaultNavItems = ['Home', 'Lectures', 'Resources'];
+      let navItems = [...defaultNavItems];
+
+      function addNavItem() {
+        const input = document.getElementById('nav-input');
+        const name = input.value.trim();
+        if (!name) return;
+        navItems.push(name);
+        renderNav();
+        input.value = '';
+        input.focus();
+      }
+
+      function resetNav() {
+        navItems = [...defaultNavItems];
+        renderNav();
+      }
+
+      function renderNav() {
+        const nav = document.getElementById('nav-demo');
+        nav.innerHTML = navItems.map(n => `<a href="#">${n}</a>`).join('');
+        const code = navItems.map(n => `  &lt;a href="${n.toLowerCase().replace(/\s+/g,'-')}.html"&gt;${n}&lt;/a&gt;`).join('\n');
+        document.getElementById('nav-code').textContent = `&lt;nav&gt;\n${code}\n&lt;/nav&gt;`;
+      }
+
+      document.getElementById('nav-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') addNavItem();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+---
+title: "Week 7: Feb 23 - Mar 1, 2026"
+subtitle: "Unit III Transition: Request Handling to Session Tracking"
+---
+
+## Week Overview
+
+This week continues Unit III by covering practical request handling in servlets and introducing state management with cookies.
+
+**Course Outcome:** CO-3 (K3 - Application)  
+**Duration:** 1 week (3 lectures + 1 lab)  
+**Lab:** Browser Information, Objects, and Script Reuse  
+**Home Assignment 2 Due:** Feb 25
+
+::: {.callout-tip icon=false}
+## Quick Practice Quizzes (Lectures 19-21)
+Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
+
+- [Lecture 19 Quiz](/quiz/lecture-19-quiz.qmd)
+- [Lecture 20 Quiz](/quiz/lecture-20-quiz.qmd)
+- [Lecture 21 Quiz](/quiz/lecture-21-quiz.qmd)
+:::
+
+---
+
+## Lecture 19: Handling HTTP GET & POST Requests {#lecture-19}
+
+::: {.callout-note icon=false}
+## Lecture Materials
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-19-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-19.qmd){target="_blank" rel="noopener noreferrer"}
+```{=html}
+<div class="ratio ratio-16x9 mb-3">
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-19.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+</div>
+```
+:::
+
+### Key Concepts
+- Purpose of `doGet()` and `doPost()` in servlet development
+- Reading parameters using `request.getParameter()`
+- Designing safe request processing flows
+
+### Typical Example
+```java
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+  String username = request.getParameter("username");
+  response.getWriter().println("Welcome " + username);
+}
+```
+
+---
+
+## Lecture 20: Redirecting Requests & Request Dispatching {#lecture-20}
+
+::: {.callout-note icon=false}
+## Lecture Materials
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-20-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-20.qmd){target="_blank" rel="noopener noreferrer"}
+```{=html}
+<div class="ratio ratio-16x9 mb-3">
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-20.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+</div>
+```
+:::
+
+### Key Concepts
+- Difference between server-side forward and client-side redirect
+- Correct use of `RequestDispatcher` and `sendRedirect()`
+- Request attribute handling during navigation
+
+### Decision Rule
+- Use `forward()` when request attributes are needed on the next page
+- Use `sendRedirect()` after successful form submissions
+
+---
+
+## Lecture 21: Session Tracking using Cookies {#lecture-21}
+
+::: {.callout-note icon=false}
+## Lecture Materials
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-21-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-21.qmd){target="_blank" rel="noopener noreferrer"}
+```{=html}
+<div class="ratio ratio-16x9 mb-3">
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-21.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+</div>
+```
+:::
+
+### Key Concepts
+- Why session tracking is required in HTTP applications
+- Creating and reading cookies in servlet-based apps
+- Security and expiry considerations
+
+### Example
+```java
+Cookie c = new Cookie("username", "student1");
+c.setMaxAge(3600);
+response.addCookie(c);
+```
+
+---
+
+## Lab 5: Browser Information, Objects, and Script Reuse
+
+### Objectives
+- Inspect browser/client details from request objects
+- Practice reusable JavaScript modules and utility methods
+- Integrate dynamic client behaviour with server-side flow
+
+### Activities
+1. Build a page that shows browser details and request headers.
+2. Store a temporary user value using cookies.
+3. Add reusable JavaScript functions for validation/formatting.
+4. Test both success and failure flows.
+
+---
+
+## Key Takeaways
+
+✅ `doGet()` and `doPost()` solve different request needs  
+✅ Forward and redirect are both essential but used in different scenarios  
+✅ Cookies provide lightweight session tracking support
+
+## Next Week
+
+Continue Unit III with:
+- Lecture 22: Session Tracking with `HttpSession`
+- Lecture 23: JSP Introduction and implicit objects
+- Lecture 24: JSP directives, actions, and custom tags

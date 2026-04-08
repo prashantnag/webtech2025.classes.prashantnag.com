@@ -1,0 +1,299 @@
+﻿---
+title: "Lecture 26: Spring IoC & Bean Life Cycle"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 10, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title" background="#053660"}
+
+<div class="custom-title">
+[Lecture 26]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Spring IoC & Bean Life Cycle]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 7 | Unit IV: Spring Framework Basics<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain IoC container responsibilities
+- Understand bean lifecycle stages
+- Use lifecycle callbacks correctly
+:::
+
+---
+
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 25 before moving into Spring IoC & Bean Life Cycle
+:::
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Unit IV topic focus: Spring IoC & Bean Life Cycle
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
+:::
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- 5-minute recap from previous lecture
+- Concept deep dive: Spring IoC & Bean Life Cycle
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring IoC is not only about creating objects. It defines a complete lifecycle for beans:
+
+- bean creation and dependency resolution
+- initialization callbacks before business use
+- controlled shutdown and resource cleanup
+
+Lifecycle control becomes critical in enterprise systems where services open files,
+database connections, messaging clients, and thread pools.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Key lifecycle design questions:
+
+1. Which tasks belong in construction and which belong in initialization callbacks?
+2. What risks appear when cleanup logic is missing at shutdown?
+3. How does lifecycle management improve reliability in long-running applications?
+:::
+
+---
+
+## {data-menu-title="Why Lifecycle Matters"}
+
+[Why Bean Lifecycle Management Matters]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Without lifecycle discipline, enterprise applications face:
+
+- repeated heavy initialization on each request
+- resource leaks from unclosed connections/files
+- startup timing issues caused by incorrect dependency order
+- unpredictable behavior during application shutdown
+
+[Lifecycle callbacks provide deterministic startup and cleanup behavior.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Lifecycle Stages"}
+
+[Bean Lifecycle Stages in Spring]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Lifecycle stages in order:
+
+1. Bean instantiation
+2. Dependency injection
+3. `BeanNameAware`, `BeanFactoryAware`, etc. (if implemented)
+4. `BeanPostProcessor` before-initialization
+5. `@PostConstruct` / `afterPropertiesSet()` / custom `initMethod`
+6. Bean is ready for business use
+7. `@PreDestroy` / `DisposableBean` / custom `destroyMethod`
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[Bean Lifecycle]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+	A["Instantiate Bean"] --> B["Dependency Injection"]
+	B --> C["@PostConstruct / init-method"]
+	C --> D["Bean in Use"]
+	D --> E["@PreDestroy / destroy-method"]
+```
+
+::: {.body-text-m .topbr}
+- IoC container controls complete object lifecycle
+- Initialization hooks are ideal for setup logic
+- Destruction hooks release resources cleanly
+:::
+
+---
+
+## {data-menu-title="Lifecycle APIs"}
+
+[Lifecycle Callback Options]{.slide-title2}
+
+<hr>
+
+| Approach | Init | Destroy | Typical Use |
+|---|---|---|---|
+| JSR-250 | `@PostConstruct` | `@PreDestroy` | Clean, annotation-based lifecycle hooks |
+| Spring Interfaces | `InitializingBean` | `DisposableBean` | Framework-specific explicit callbacks |
+| Java Config | `initMethod` | `destroyMethod` | Externalized lifecycle in configuration |
+
+::: {.body-text-m .topbr}
+For most projects, `@PostConstruct` and `@PreDestroy` provide readable lifecycle logic.
+:::
+
+---
+
+## {data-menu-title="Code Walkthrough"}
+
+[Code Walkthrough]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3"}
+@PostConstruct
+public void init(){ System.out.println("bean ready"); }
+
+@PreDestroy
+public void close(){ System.out.println("bean destroyed"); }
+
+@Bean(initMethod = "init", destroyMethod = "close")
+public ReportService reportService() {
+	return new ReportService();
+}
+```
+
+::: {.body-text-m .topbr}
+[Walkthrough checkpoints:]{.teal-text}
+
+- callback sequence should appear in startup/shutdown logs
+- init logic must avoid business processing side effects
+- destroy logic should release external resources safely
+:::
+
+---
+
+## {data-menu-title="Prototype Caveat"}
+
+[Important Caveat: Prototype Bean Destruction]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+In Spring, `@PreDestroy` is not automatically called for prototype beans because the
+container does not fully manage their complete lifecycle after creation.
+
+Implication:
+- for prototype beans using external resources, application code must handle cleanup.
+:::
+
+```{.java}
+@Scope("prototype")
+class TempWorker {
+	@PreDestroy
+	void close() { /* may not be called automatically */ }
+}
+```
+
+---
+
+## {data-menu-title="Testing Lifecycle"}
+
+[Testing Lifecycle Behavior]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Lifecycle behavior should be verified explicitly:
+
+- assert init callbacks executed after dependency injection
+- assert destroy callbacks execute on context close
+- verify no resource leaks in repeated start/stop cycles
+:::
+
+```{.java}
+AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+ctx.getBean(ReportService.class);
+ctx.close(); // expect destroy callback
+```
+
+---
+## Memory Booster {data-menu-title="Memory Booster"}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus memory points for **Spring IoC & Bean Life Cycle**:
+
+- Core recall: bean instantiation and lifecycle callbacks
+- Exam compare: Manual object creation vs IoC-managed bean lifecycle
+- Practical anchor: Register bean and verify init/destroy callback execution
+:::
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Live implementation for Spring IoC & Bean Life Cycle:**
+
+?? **[Open Demo: Lecture 26 - Spring IoC & Bean Life Cycle](../demos/lecture-26-demo.html){target="_blank"}**
+
+Demo checklist:
+- Start app and inspect bean creation + init order in logs
+- Trigger a request and show bean usage phase
+- Stop context/application and verify destroy callback execution
+- Simulate missing callback annotation and diagnose behavior
+:::

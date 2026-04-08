@@ -1,0 +1,126 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 2 Demo - Web Request Journey</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 2 Demo</h1>
+      <p class="subtitle">History of Web and Internet, Protocols Governing the Web</p>
+
+      <div class="card">
+        <h2>1) Simulate DNS and HTTP Journey</h2>
+        <div class="grid">
+          <div>
+            <label for="urlInput">Website URL</label>
+            <input id="urlInput" type="text" value="https://www.example.com" />
+
+            <label for="methodInput">HTTP Method</label>
+            <select id="methodInput">
+              <option>GET</option>
+              <option>POST</option>
+              <option>PUT</option>
+              <option>DELETE</option>
+            </select>
+
+            <button id="runBtn">Run Request Journey</button>
+            <p class="status" id="statusText"></p>
+          </div>
+
+          <div>
+            <p>
+              <span class="pill">DNS Resolution</span>
+              <span class="pill">Request</span>
+              <span class="pill">Response</span>
+            </p>
+            <p>
+              This visual simulation demonstrates the same flow discussed in the lecture:
+              URL input, DNS lookup, request dispatch, and server response.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2) Request Timeline Output</h2>
+        <div id="timeline" class="timeline">Click "Run Request Journey" to start the simulation.</div>
+      </div>
+
+      <div class="card">
+        <h2>3) HTTPS vs HTTP Comparison</h2>
+        <div class="grid">
+          <div>
+            <h3>HTTP</h3>
+            <ul>
+              <li>No transport encryption</li>
+              <li>Susceptible to interception</li>
+              <li>Generally not recommended for login/forms</li>
+            </ul>
+          </div>
+          <div>
+            <h3>HTTPS</h3>
+            <ul>
+              <li>Encrypted with TLS</li>
+              <li>Improves privacy and integrity</li>
+              <li>Required for modern secure web apps</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const runBtn = document.getElementById("runBtn");
+      const timeline = document.getElementById("timeline");
+      const statusText = document.getElementById("statusText");
+      const urlInput = document.getElementById("urlInput");
+      const methodInput = document.getElementById("methodInput");
+
+      function parseProtocol(url) {
+        if (url.startsWith("https://")) {
+          return "https";
+        }
+        if (url.startsWith("http://")) {
+          return "http";
+        }
+        return "unknown";
+      }
+
+      runBtn.addEventListener("click", () => {
+        const url = urlInput.value.trim();
+        const method = methodInput.value;
+        const protocol = parseProtocol(url);
+        const domain = url.replace(/^https?:\/\//, "").split("/")[0] || "(invalid-domain)";
+        const isSecure = protocol === "https";
+
+        const sampleIp = "93.184.216.34";
+        const status = method === "GET" ? 200 : 201;
+
+        const lines = [
+          `1. Browser receives URL: ${url}`,
+          `2. Protocol detected: ${protocol.toUpperCase()}`,
+          `3. DNS query for domain: ${domain}`,
+          `4. DNS resolved ${domain} -> ${sampleIp}`,
+          `5. Browser sends ${method} request to server`,
+          `6. Server processes route and logic`,
+          `7. Server responds with HTTP status ${status}`,
+          `8. Browser renders response and requests extra assets`
+        ];
+
+        timeline.textContent = lines.join("\n");
+
+        if (isSecure) {
+          statusText.textContent = "Secure path selected: HTTPS with encryption.";
+          statusText.className = "status ok";
+        } else {
+          statusText.textContent = "Warning: HTTP path selected, traffic is not encrypted.";
+          statusText.className = "status warn";
+        }
+      });
+    </script>
+  </body>
+</html>
+

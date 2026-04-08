@@ -3,6 +3,7 @@ project:
   output-dir: _site
   resources:
     - CNAME
+    - demos/demo-shared.css
   render:
     - "*.qmd"
     - "content/"
@@ -80,6 +81,7 @@ website:
           - labs/lab-07.qmd
           - labs/lab-08.qmd
           - labs/lab-09.qmd
+          - labs/lab-10.qmd
       - section: "Quizzes"
         contents:
           - quiz/index.qmd

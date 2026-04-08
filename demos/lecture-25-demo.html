@@ -1,0 +1,304 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 25 Demo - Spring Core, IoC Container and DI</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 1100px; margin: 1.5rem auto; }
+    .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1rem; }
+    .stack { display: grid; gap: 1rem; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .mini { margin: 0; font-size: 0.9rem; color: #365171; }
+    .tag {
+      display: inline-block;
+      padding: .2rem .45rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 700;
+      border: 1px solid #bfd2ea;
+      color: #1f4f7b;
+      background: #eef5ff;
+      margin-right: .35rem;
+      margin-bottom: .35rem;
+    }
+    .steps { padding-left: 1.1rem; margin: .5rem 0 0; }
+    .steps li { margin: .3rem 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+    button.ctrl {
+      width: auto;
+      margin: 0;
+      background: #053660;
+      border-radius: 8px;
+      padding: .58rem .9rem;
+    }
+    button.alt { background: #0a7f5a; }
+    button.warn { background: #9a3412; }
+    select {
+      width: 100%;
+      padding: .55rem .65rem;
+      border-radius: 8px;
+      border: 1px solid #bfd2ea;
+      background: #fff;
+      color: #142941;
+      font-size: .95rem;
+    }
+    .code {
+      background: #0f172a;
+      color: #dbe7ff;
+      border-radius: 10px;
+      padding: .8rem;
+      font-family: Consolas, Monaco, monospace;
+      font-size: .86rem;
+      line-height: 1.35;
+      overflow: auto;
+      white-space: pre;
+      margin-top: .75rem;
+    }
+    .trace {
+      background: #091321;
+      color: #d5e3ff;
+      border-radius: 10px;
+      padding: .8rem;
+      font-family: Consolas, Monaco, monospace;
+      font-size: .84rem;
+      line-height: 1.4;
+      min-height: 220px;
+      white-space: pre-wrap;
+      border: 1px solid #1f2f4b;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+    th, td { border: 1px solid #d4e0ef; padding: .48rem; text-align: left; font-size: .88rem; }
+    th { background: #edf4ff; color: #163a63; }
+    .ok { color: #0a7f5a; font-weight: 700; }
+    .muted { color: #6b7f99; }
+    .badge {
+      display: inline-block;
+      min-width: 88px;
+      text-align: center;
+      padding: .15rem .45rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .single { background: #2563eb; }
+    .proto { background: #ea580c; }
+    @media (max-width: 900px) {
+      .grid, .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<main class="shell wrap">
+  <h1>Lecture 25 Demo: What Spring IoC + DI Actually Changes</h1>
+  <p class="subtitle">Interactive simulation of bean definition, container wiring, dependency injection, and implementation swap without changing service code.</p>
+
+  <section class="grid">
+    <article class="card">
+      <h2>1) Configure the Container</h2>
+      <div class="row">
+        <div>
+          <label for="impl">PaymentGateway implementation</label>
+          <select id="impl">
+            <option value="UpiGateway">UpiGateway (production)</option>
+            <option value="CardGateway">CardGateway (alternate)</option>
+            <option value="MockGateway">MockGateway (testing)</option>
+          </select>
+        </div>
+        <div>
+          <label for="scope">Bean scope</label>
+          <select id="scope">
+            <option value="singleton">singleton</option>
+            <option value="prototype">prototype</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="mini">Selected bean metadata:</p>
+      <div>
+        <span class="tag">Bean: paymentGateway</span>
+        <span class="tag">Type: PaymentGateway</span>
+        <span class="tag" id="tagImpl">Impl: UpiGateway</span>
+        <span class="tag" id="tagScope">Scope: singleton</span>
+      </div>
+
+      <div class="actions">
+        <button class="ctrl" id="boot">Boot IoC Container</button>
+        <button class="ctrl alt" id="run">Run OrderService.placeOrder()</button>
+        <button class="ctrl warn" id="tight">Run Tight Coupled Version</button>
+      </div>
+
+      <div class="code" id="serviceCode">class OrderService {
+  private final PaymentGateway gateway;
+
+  OrderService(PaymentGateway gateway) {
+    this.gateway = gateway;
+  }
+
+  void placeOrder() {
+    gateway.pay();
+  }
+}</div>
+    </article>
+
+    <article class="card stack">
+      <div>
+        <h2>2) IoC Container Trace</h2>
+        <div class="trace" id="trace">No actions yet. Click "Boot IoC Container" first.</div>
+      </div>
+
+      <div>
+        <h2>3) Bean Registry Snapshot</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Bean Name</th>
+              <th>Type</th>
+              <th>Implementation</th>
+              <th>Scope</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>paymentGateway</td>
+              <td>PaymentGateway</td>
+              <td id="cellImpl">UpiGateway</td>
+              <td id="cellScope"><span class="badge single">singleton</span></td>
+              <td class="ok" id="cellStatus">not created</td>
+            </tr>
+            <tr>
+              <td>orderService</td>
+              <td>OrderService</td>
+              <td>OrderService(PaymentGateway)</td>
+              <td><span class="badge single">singleton</span></td>
+              <td class="ok" id="svcStatus">not created</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <section class="card">
+    <h2>4) Mapping to Lecture Points</h2>
+    <ol class="steps">
+      <li><strong>Bean definition:</strong> metadata describing class, type, scope, and wiring.</li>
+      <li><strong>IoC:</strong> container owns object creation instead of business classes.</li>
+      <li><strong>DI:</strong> dependencies are injected into constructors/setters.</li>
+      <li><strong>Loose coupling:</strong> switch implementation in config, keep service code unchanged.</li>
+      <li><strong>Testing benefit:</strong> inject mock/stub bean without editing business logic.</li>
+    </ol>
+    <p class="mini">Try sequence: Boot with UpiGateway -> Run service -> switch to CardGateway -> Run again -> choose MockGateway and run test scenario.</p>
+  </section>
+</main>
+
+<script>
+  const implSelect = document.getElementById("impl");
+  const scopeSelect = document.getElementById("scope");
+  const traceEl = document.getElementById("trace");
+  const tagImpl = document.getElementById("tagImpl");
+  const tagScope = document.getElementById("tagScope");
+  const cellImpl = document.getElementById("cellImpl");
+  const cellScope = document.getElementById("cellScope");
+  const cellStatus = document.getElementById("cellStatus");
+  const svcStatus = document.getElementById("svcStatus");
+
+  let booted = false;
+  let singletonCreated = false;
+
+  function scopeBadge(scope) {
+    if (scope === "prototype") {
+      return '<span class="badge proto">prototype</span>';
+    }
+    return '<span class="badge single">singleton</span>';
+  }
+
+  function refreshMeta() {
+    const impl = implSelect.value;
+    const scope = scopeSelect.value;
+    tagImpl.textContent = "Impl: " + impl;
+    tagScope.textContent = "Scope: " + scope;
+    cellImpl.textContent = impl;
+    cellScope.innerHTML = scopeBadge(scope);
+  }
+
+  function setTrace(lines) {
+    traceEl.textContent = lines.join("\n");
+  }
+
+  function bootContainer() {
+    const impl = implSelect.value;
+    const scope = scopeSelect.value;
+    booted = true;
+    singletonCreated = scope === "singleton";
+
+    setTrace([
+      "[IOC] Step 1: Read configuration / component scan",
+      "[IOC] Step 2: Create bean definition: paymentGateway -> " + impl,
+      "[IOC] Step 3: Scope set to " + scope,
+      "[IOC] Step 4: Instantiate required beans",
+      "[IOC] Step 5: Resolve and inject PaymentGateway into OrderService",
+      "[IOC] ApplicationContext ready"
+    ]);
+
+    cellStatus.textContent = scope === "singleton" ? "created at startup" : "created on demand";
+    svcStatus.textContent = "created and injected";
+  }
+
+  function runService() {
+    if (!booted) {
+      setTrace([
+        "[WARN] Container not booted.",
+        "Action: click 'Boot IoC Container' first."
+      ]);
+      return;
+    }
+
+    const impl = implSelect.value;
+    const scope = scopeSelect.value;
+    const createdMsg = scope === "prototype"
+      ? "[IOC] Prototype bean created for this request"
+      : "[IOC] Singleton bean reused from container";
+
+    setTrace([
+      "OrderService.placeOrder() called",
+      createdMsg,
+      "Injected dependency resolved as: " + impl,
+      "Service code unchanged: constructor receives PaymentGateway",
+      impl + ".pay() executed",
+      "Result: loose coupling and config-driven behavior"
+    ]);
+
+    if (scope === "prototype") {
+      cellStatus.textContent = "new instance per request";
+    } else if (singletonCreated) {
+      cellStatus.textContent = "singleton reused";
+    }
+  }
+
+  function runTightCoupled() {
+    const impl = implSelect.value;
+    setTrace([
+      "Tight-coupled example:",
+      "OrderService creates dependency internally: new UpiGateway()",
+      "Business asks for " + impl + ", but service code cannot switch by config alone",
+      "Required change: edit and recompile service class",
+      "Conclusion: violates IoC and reduces testability"
+    ]);
+    cellStatus.textContent = "not managed by container";
+    svcStatus.textContent = "manual wiring in class";
+  }
+
+  implSelect.addEventListener("change", refreshMeta);
+  scopeSelect.addEventListener("change", refreshMeta);
+  document.getElementById("boot").addEventListener("click", bootContainer);
+  document.getElementById("run").addEventListener("click", runService);
+  document.getElementById("tight").addEventListener("click", runTightCoupled);
+
+  refreshMeta();
+</script>
+</body>
+</html>

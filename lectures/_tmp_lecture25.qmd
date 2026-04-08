@@ -1,0 +1,380 @@
+﻿---
+title: "Lecture 25: Spring Core Basics & Dependency Injection"
+subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
+author: "{{< meta instructor.name >}}"
+date: "March 9, 2026"
+code-annotations: below
+---
+
+## {#title-slide data-menu-title="Title Slide" background="#053660"}
+
+<div class="custom-title">
+[Lecture 25]{.baby-blue-text}
+</div>
+
+<div class="custom-subtitle">
+[Spring Core Basics & Dependency Injection]{.white-text}
+</div>
+
+<div class="custom-subtitle3">
+Week 7 | Unit IV: Spring Framework Basics<br>
+{{< meta course.number >}} - {{< meta course.title >}}<br>
+{{< meta instructor.name >}}, {{< meta instructor.title >}}
+</div>
+
+---
+
+
+
+## {data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<hr>
+
+::: {.incremental .body-text-m}
+- Explain Spring Core motivation
+- Understand dependency injection
+- Compare tight coupling vs DI
+:::
+
+---
+
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 24 before moving into Spring Core Basics & Dependency Injection
+:::
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Unit IV topic focus: Spring Core Basics & Dependency Injection
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
+:::
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- 5-minute recap from previous lecture
+- Concept deep dive: Spring Core Basics & Dependency Injection
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring Core promotes loose coupling via dependency injection.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+What changes when object creation is externalized?
+:::
+
+---
+
+## {data-menu-title="Problem Framing"}
+
+[Why Spring Core Was Needed]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+In large Java projects without a container:
+
+- classes create dependencies directly using `new`
+- switching implementation forces code changes in business classes
+- unit testing becomes difficult because real dependencies are tightly bound
+- object graph wiring logic gets repeated across modules
+
+[Spring Core solves this with IoC + DI]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Tight vs Loose"}
+
+[Tight Coupling vs Dependency Injection]{.slide-title2}
+
+<hr>
+
+::: columns
+::: {.column width="50%"}
+[**Tight Coupling (without DI)**]{.magenta-text}
+
+```{.java}
+class OrderService {
+  private final PaymentGateway gateway = new UpiGateway();
+}
+```
+
+- hard to replace implementation
+- hard to mock in tests
+- violates separation of concerns
+:::
+
+::: {.column width="50%"}
+[**Loose Coupling (with DI)**]{.teal-text}
+
+```{.java}
+class OrderService {
+  private final PaymentGateway gateway;
+  OrderService(PaymentGateway gateway){ this.gateway = gateway; }
+}
+```
+
+- implementation selected externally
+- easy test doubles/stubs
+- cleaner architecture
+:::
+:::
+
+---
+
+## {data-menu-title="DI Types"}
+
+[Types of Dependency Injection]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Main DI styles in Spring:
+
+1. **Constructor Injection** (recommended default)
+2. **Setter Injection** (optional dependencies)
+3. **Field Injection** (quick but less testable)
+:::
+
+```{.java}
+// Constructor Injection (preferred)
+public OrderService(PaymentGateway gateway) { this.gateway = gateway; }
+
+// Setter Injection
+public void setGateway(PaymentGateway gateway) { this.gateway = gateway; }
+```
+
+---
+
+## {data-menu-title="Container Role"}
+
+[What IoC Container Actually Does]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart TD
+  A["Read Configuration / Component Scan"] --> B["Create Bean Definitions"]
+  B --> C["Instantiate Beans"]
+  C --> D["Resolve Dependencies"]
+  D --> E["Inject Dependencies"]
+  E --> F["Ready Application Context"]
+```
+
+::: {.body-text-m .topbr}
+- container owns object creation lifecycle
+- application code asks for abstractions, not concrete classes
+- dependency graph is resolved once and reused
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[Dependency Injection Concept]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  C["Client: OrderService"] -->|depends on| A["Abstraction: PaymentGateway"]
+  I["Implementation: UpiGateway"] -->|wired by| S["Spring Container"]
+  S --> C
+```
+
+::: {.body-text-m .topbr}
+- Business class depends on interface, not concrete implementation
+- Spring container resolves and injects correct dependency
+- This improves testability and reduces coupling
+:::
+
+---
+
+## {data-menu-title="Configuration Styles"}
+
+[Java Config vs Annotation Scanning]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Spring supports multiple ways to register beans:
+
+- **Java Configuration** using `@Configuration` + `@Bean`
+- **Stereotype scanning** using `@Component`, `@Service`, `@Repository`
+
+Both lead to the same goal: dependency graph managed by container.
+:::
+
+```{.java}
+@Service
+class OrderService {
+  private final PaymentGateway gateway;
+  OrderService(PaymentGateway gateway) { this.gateway = gateway; }
+}
+```
+
+---
+
+## {data-menu-title="Code Walkthrough"}
+
+[Code Walkthrough]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3"}
+interface PaymentGateway {}
+class UpiGateway implements PaymentGateway {}
+class OrderService {
+  private final PaymentGateway gateway;
+  OrderService(PaymentGateway gateway) { this.gateway = gateway; }
+}
+
+@Configuration
+class AppConfig {
+  @Bean PaymentGateway gateway() { return new UpiGateway(); }
+  @Bean OrderService orderService(PaymentGateway gateway) { return new OrderService(gateway); }
+}
+```
+
+::: {.body-text-m .topbr}
+[Walkthrough checkpoints:]{.teal-text}
+
+- `OrderService` never creates gateway directly
+- implementation can be swapped in config only
+- test setup can inject fake gateway without changing business logic
+:::
+
+---
+
+## {data-menu-title="Mini Case"}
+
+[Mini Case Study: Payment Mode Switch]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Festival sale scenario: enable `CardGateway` offer flow.
+
+**Without DI**
+- modify service code and redeploy risky changes
+
+**With DI**
+- switch bean wiring from `UpiGateway` to `CardGateway`
+- no change in `OrderService`
+- faster rollout, lower bug risk
+:::
+
+```{.java}
+@Bean PaymentGateway gateway() { return new CardGateway(); }
+```
+
+---
+## Memory Booster {data-menu-title="Memory Booster"}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus memory points for **Spring Core Basics & Dependency Injection**:
+
+- Core recall: constructor-based DI and inversion of control
+- Exam compare: Tight coupling vs dependency injection
+- Practical anchor: Refactor class to inject dependency via constructor
+:::
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Live implementation for Spring Core Basics & Dependency Injection:**
+
+?? **[Open Demo: Lecture 25 - Spring Core Basics & Dependency Injection](../demos/lecture-25-demo.html){target="_blank"}**
+
+Demo checklist:
+- Run same service with two implementations (`UpiGateway`, `CardGateway`)
+- Show constructor injection and no `new` inside service class
+- Replace dependency in config and verify behavior change without modifying service
+- Demonstrate one test stub/mock injection case
+- Ask students to identify where coupling exists and remove it live
+:::
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
+- [Spring Guides](https://spring.io/guides)
+- [Baeldung: Dependency Injection in Spring](https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring)
+- Classroom notes + lecture demo file for Lecture 25
+:::
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **Spring Core Basics & Dependency Injection** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **Spring Core Basics & Dependency Injection** with one practical use case.

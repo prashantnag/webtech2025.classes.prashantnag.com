@@ -52,7 +52,7 @@ Contents:
 ## Lab Schedule
 
 ### Lab 1: HTML Page Foundation
-**Week 1 | Due: January 28, 2026**
+**Week 1 | Due: January 30, 2026**
 
 Create a simple HTML page and a paragraph-alignment page with an image.
 
@@ -61,7 +61,7 @@ Create a simple HTML page and a paragraph-alignment page with an image.
 ---
 
 ### Lab 2: Lists, Frames, and Media Embedding
-**Week 2 | Due: February 4, 2026**
+**Week 2 | Due: February 6, 2026**
 
 Create lists in multiple styles and build an iframe-based media page.
 
@@ -70,7 +70,7 @@ Create lists in multiple styles and build an iframe-based media page.
 ---
 
 ### Lab 3: CSS Design and JavaScript Validation
-**Week 3 | Due: February 11, 2026**
+**Week 3 | Due: February 13, 2026**
 
 Design a page using external CSS and validate a form with JavaScript.
 
@@ -79,7 +79,7 @@ Design a page using external CSS and validate a form with JavaScript.
 ---
 
 ### Lab 4: JavaScript Array Methods and Nested Functions
-**Week 4 | Due: February 18, 2026**
+**Week 4 | Due: February 20, 2026**
 
 Practice array methods, nested functions, and JavaScript scope.
 
@@ -88,7 +88,7 @@ Practice array methods, nested functions, and JavaScript scope.
 ---
 
 ### Lab 5: Browser Information, Objects, and Script Reuse
-**Week 5 | Due: February 25, 2026**
+**Week 5 | Due: February 27, 2026**
 
 Use browser APIs, merge objects, and split reusable JavaScript across files.
 
@@ -97,7 +97,7 @@ Use browser APIs, merge objects, and split reusable JavaScript across files.
 ---
 
 ### Lab 6: Servlet Authentication with Database Validation
-**Week 8 | Due: March 18, 2026**
+**Week 6 | Due: March 6, 2026**
 
 Build a login servlet that validates credentials from a database.
 
@@ -106,7 +106,7 @@ Build a login servlet that validates credentials from a database.
 ---
 
 ### Lab 7: JSP Registration and CRUD with Session Management
-**Week 9 | Due: March 25, 2026**
+**Week 7 | Due: March 13, 2026**
 
 Create JSP and Servlet pages for registration, CRUD, and session-protected workflows.
 
@@ -115,7 +115,7 @@ Create JSP and Servlet pages for registration, CRUD, and session-protected workf
 ---
 
 ### Lab 8: JDBC Retrieval and Spring Fundamentals
-**Week 10 | Due: April 1, 2026**
+**Week 8 | Due: March 20, 2026**
 
 Retrieve employee data with JDBC and build a basic Spring Boot application.
 
@@ -124,11 +124,20 @@ Retrieve employee data with JDBC and build a basic Spring Boot application.
 ---
 
 ### Lab 9: REST Service and Spring Boot Web Application
-**Week 11 | Due: April 8, 2026**
+**Week 9 | Due: March 27, 2026**
 
 Create REST endpoints and a simple Spring Boot web application.
 
 [**View Lab Manual →**](/labs/lab-09.qmd)
+
+---
+
+### Lab 10: Capstone Integration and Final Project Workshop
+**Week 10 | Due: April 3, 2026**
+
+Integrate frontend and backend modules, validate complete workflows, and finalize project packaging.
+
+[**View Lab Manual →**](/labs/lab-10.qmd)
 
 ---
 

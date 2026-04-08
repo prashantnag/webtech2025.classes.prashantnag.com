@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 7 Demo - HTML Tables &amp; Iframes</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 7 Demo</h1>
+      <p class="subtitle">HTML Tables &amp; Iframes</p>
+
+      <div class="card">
+        <p>
+          <strong>[Classroom Tip]</strong> This demo demonstrates semantic table structure,
+          colspan &amp; rowspan cell merging, table accessibility with <code class="c">scope</code>,
+          and iframe sandboxing — all interactive.
+        </p>
+      </div>
+
+      <!-- Section 1: Basic Semantic Table -->
+      <div class="card">
+        <h2>1) Semantic Table Structure</h2>
+        <p>A well-structured table uses <code class="c">&lt;caption&gt;</code>, <code class="c">&lt;thead&gt;</code>, <code class="c">&lt;tbody&gt;</code>, and <code class="c">&lt;tfoot&gt;</code>.</p>
+        <div class="grid">
+          <div>
+            <pre class="code-block">&lt;table&gt;
+  &lt;caption&gt;Course Grades&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th scope="col"&gt;Student&lt;/th&gt;
+      &lt;th scope="col"&gt;Assignment&lt;/th&gt;
+      &lt;th scope="col"&gt;Score&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Alice&lt;/td&gt;
+      &lt;td&gt;Lab 1&lt;/td&gt;
+      &lt;td&gt;92%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot&gt;
+    &lt;tr&gt;
+      &lt;td colspan="2"&gt;Average&lt;/td&gt;
+      &lt;td&gt;87%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tfoot&gt;
+&lt;/table&gt;</pre>
+          </div>
+          <div>
+            <strong>Result:</strong>
+            <div style="margin-top:8px; overflow-x:auto;">
+              <table class="demo-table">
+                <caption>Course Grades — WebTech 2026</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Student</th>
+                    <th scope="col">Assignment</th>
+                    <th scope="col">Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Alice</td><td>Lab 1</td><td>92%</td></tr>
+                  <tr><td>Bob</td><td>Lab 1</td><td>85%</td></tr>
+                  <tr><td>Carol</td><td>Lab 1</td><td>89%</td></tr>
+                  <tr><td>Alice</td><td>Lab 2</td><td>95%</td></tr>
+                  <tr><td>Bob</td><td>Lab 2</td><td>78%</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr><td colspan="2">Average</td><td>87.8%</td></tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Colspan & Rowspan -->
+      <div class="card">
+        <h2>2) Colspan &amp; Rowspan — Cell Merging</h2>
+        <p>Click a header row button to highlight how cells span across columns or rows.</p>
+        <div class="grid">
+          <div>
+            <strong>Colspan (across columns):</strong>
+            <div style="overflow-x:auto; margin-top:8px;">
+              <table class="span-grid" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th colspan="3" style="background:#053660; color:white;">Monthly Schedule (colspan="3")</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="background:#e3f2fd;">Lecture</td>
+                    <td style="background:#e3f2fd;">Lab</td>
+                    <td style="background:#e3f2fd;">Tutorial</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="background:#fff3e0;">Combined Lecture+Lab</td>
+                    <td style="background:#e8f5e9;">Tutorial</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <pre class="code-block" style="margin-top:10px;">&lt;th colspan="3"&gt;Monthly Schedule&lt;/th&gt;
+&lt;td colspan="2"&gt;Combined Lecture+Lab&lt;/td&gt;</pre>
+          </div>
+          <div>
+            <strong>Rowspan (across rows):</strong>
+            <div style="overflow-x:auto; margin-top:8px;">
+              <table class="span-grid" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Session</th>
+                    <th>Room</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td rowspan="2" style="background:#e8f5e9; vertical-align:middle;">Mon</td>
+                    <td>Lecture</td>
+                    <td>A101</td>
+                  </tr>
+                  <tr>
+                    <td>Tutorial</td>
+                    <td>B204</td>
+                  </tr>
+                  <tr>
+                    <td>Tue</td>
+                    <td>Lab</td>
+                    <td>Lab03</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <pre class="code-block" style="margin-top:10px;">&lt;td rowspan="2"&gt;Mon&lt;/td&gt;</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Table Accessibility -->
+      <div class="card">
+        <h2>3) Accessibility: <code class="c">scope</code> Attribute</h2>
+        <p>The <code class="c">scope</code> attribute tells screen readers whether a <code class="c">&lt;th&gt;</code> applies to a column or a row.</p>
+        <div class="grid">
+          <div>
+            <pre class="code-block">&lt;th scope="col"&gt;...&lt;/th&gt;
+&lt;!-- Header for an entire column --&gt;
+
+&lt;th scope="row"&gt;...&lt;/th&gt;
+&lt;!-- Header for an entire row --&gt;</pre>
+            <p style="font-size:12px; margin-top:8px;">Without <code class="c">scope</code>, screen readers cannot determine which header belongs to which cell — breaking table navigation for blind users.</p>
+          </div>
+          <div>
+            <div style="overflow-x:auto;">
+              <table class="demo-table scope-demo">
+                <caption>Exam Scores (with scope attributes)</caption>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th scope="col">Midterm</th>
+                    <th scope="col">Final</th>
+                    <th scope="col">Average</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Alice</th>
+                    <td>82</td><td>91</td><td>86.5</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Bob</th>
+                    <td>74</td><td>80</td><td>77</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Carol</th>
+                    <td>90</td><td>95</td><td>92.5</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="font-size:12px; color:#0a58ca;">Blue headers = <code class="c">scope="col"</code> | Navy headers = <code class="c">scope="row"</code></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Table Builder -->
+      <div class="card">
+        <h2>4) Live Table Builder</h2>
+        <p>Set rows and columns, then click Generate to build a table skeleton.</p>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+          <label style="font-size:13px;">Rows: <input id="tbl-rows" type="number" value="3" min="1" max="8" style="width:50px; padding:4px; border:1px solid #ccc; border-radius:4px;"></label>
+          <label style="font-size:13px;">Columns: <input id="tbl-cols" type="number" value="3" min="1" max="6" style="width:50px; padding:4px; border:1px solid #ccc; border-radius:4px;"></label>
+          <label style="font-size:13px;"><input type="checkbox" id="tbl-caption" checked> Caption</label>
+          <label style="font-size:13px;"><input type="checkbox" id="tbl-tfoot"> tfoot row</label>
+          <button class="toggle-btn" onclick="buildTable()">Generate Table</button>
+        </div>
+        <div id="table-result" style="overflow-x:auto;"></div>
+      </div>
+
+      <!-- Section 5: iframe Sandbox -->
+      <div class="card">
+        <h2>5) &lt;iframe&gt; &amp; the Sandbox Attribute</h2>
+        <p>The <code class="c">sandbox</code> attribute restricts what embedded content can do. Toggle features on/off below.</p>
+
+        <div class="grid">
+          <div>
+            <strong>Sandbox permissions:</strong><br>
+            <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px; font-size:13px;">
+              <label><input type="checkbox" id="sb-scripts" onchange="updateSandbox()"> <code class="c">allow-scripts</code> — allow JavaScript execution</label>
+              <label><input type="checkbox" id="sb-forms" onchange="updateSandbox()"> <code class="c">allow-forms</code> — allow form submission</label>
+              <label><input type="checkbox" id="sb-popups" onchange="updateSandbox()"> <code class="c">allow-popups</code> — allow new windows/tabs</label>
+              <label><input type="checkbox" id="sb-same-origin" onchange="updateSandbox()"> <code class="c">allow-same-origin</code> — allow reading cookies</label>
+            </div>
+            <div style="margin-top:14px;">
+              <strong>Generated attribute:</strong>
+              <pre id="sandbox-code" class="code-block">&lt;iframe
+  src="embed.html"
+  sandbox=""
+  width="400"
+  height="200"&gt;
+&lt;/iframe&gt;</pre>
+            </div>
+          </div>
+          <div>
+            <strong>Security note:</strong>
+            <div style="background:#fff8e1; border:1px solid #ffc107; border-radius:8px; padding:14px; font-size:13px; margin-top:8px;">
+              <ul style="margin:0; padding-left:18px; line-height:2;">
+                <li><strong>No sandbox</strong> → embedded page has full access (risky for user content)</li>
+                <li><strong>sandbox=""</strong> → most restrictive — scripts, forms, popups all blocked</li>
+                <li>Add only the permissions you actually need</li>
+                <li>Never use <code class="c">allow-same-origin</code> + <code class="c">allow-scripts</code> together — it can escape the sandbox</li>
+              </ul>
+            </div>
+            <div class="iframe-sandbox-box" style="margin-top:12px;" id="sandbox-preview">
+              <div>
+                <span style="font-size:22px;">🔒</span><br>
+                <span>iframe sandbox state: fully locked</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      function buildTable() {
+        const rows = Math.min(8, Math.max(1, parseInt(document.getElementById('tbl-rows').value) || 3));
+        const cols = Math.min(6, Math.max(1, parseInt(document.getElementById('tbl-cols').value) || 3));
+        const hasCaption = document.getElementById('tbl-caption').checked;
+        const hasTfoot = document.getElementById('tbl-tfoot').checked;
+
+        let html = '<table class="demo-table">';
+        if (hasCaption) html += '<caption>My Data Table</caption>';
+        html += '<thead><tr>';
+        for (let c = 1; c <= cols; c++) html += `<th scope="col">Heading ${c}</th>`;
+        html += '</tr></thead><tbody>';
+        for (let r = 1; r <= rows; r++) {
+          html += '<tr>';
+          for (let c = 1; c <= cols; c++) html += `<td>Row ${r}, Col ${c}</td>`;
+          html += '</tr>';
+        }
+        html += '</tbody>';
+        if (hasTfoot) {
+          html += `<tfoot><tr><td colspan="${cols}">Total row</td></tr></tfoot>`;
+        }
+        html += '</table>';
+        document.getElementById('table-result').innerHTML = html;
+      }
+
+      // init table
+      buildTable();
+
+      function updateSandbox() {
+        const perms = [];
+        if (document.getElementById('sb-scripts').checked) perms.push('allow-scripts');
+        if (document.getElementById('sb-forms').checked) perms.push('allow-forms');
+        if (document.getElementById('sb-popups').checked) perms.push('allow-popups');
+        if (document.getElementById('sb-same-origin').checked) perms.push('allow-same-origin');
+
+        const val = perms.join(' ');
+        document.getElementById('sandbox-code').textContent =
+          `&lt;iframe\n  src="embed.html"\n  sandbox="${val}"\n  width="400"\n  height="200"&gt;\n&lt;/iframe&gt;`;
+
+        const preview = document.getElementById('sandbox-preview');
+        const risk = perms.includes('allow-scripts') && perms.includes('allow-same-origin');
+        if (risk) {
+          preview.style.background = '#fff3f3';
+          preview.style.borderColor = '#dc3545';
+          preview.innerHTML = '<div><span style="font-size:22px;">⚠️</span><br><span style="color:#dc3545;font-weight:bold;">Warning: allow-scripts + allow-same-origin together can escape the sandbox!</span></div>';
+        } else if (perms.length === 0) {
+          preview.style.background = '#f8f9fa';
+          preview.style.borderColor = '#dee2e6';
+          preview.innerHTML = '<div><span style="font-size:22px;">🔒</span><br><span>iframe sandbox state: fully locked</span></div>';
+        } else {
+          preview.style.background = '#f3fff3';
+          preview.style.borderColor = '#198754';
+          preview.innerHTML = `<div><span style="font-size:22px;">✅</span><br><span>Allowed: <strong>${perms.join(', ')}</strong></span></div>`;
+        }
+      }
+    </script>
+  </body>
+</html>

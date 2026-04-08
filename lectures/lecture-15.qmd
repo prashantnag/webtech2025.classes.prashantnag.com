@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 15: Introduction to JavaScript & Variables"
+---
+title: "Lecture 15: DOM Manipulation & Array Methods"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 18, 2026"
@@ -14,11 +14,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Objects & Scope]{.white-text}
+[DOM Manipulation & Array Methods]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 4 | Unit II: JavaScript Functions & Events<br>
+Week 4 | Unit II: Scripting with JavaScript<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -203,7 +203,7 @@ Inner scopes can access outer variables.
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[DOM Manipulation & Array Methods]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 16 - Arrow Functions & Callbacks

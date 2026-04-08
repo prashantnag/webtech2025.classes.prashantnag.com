@@ -1,19 +1,19 @@
 ﻿---
 title: "Week 3: Feb 9 - Feb 15, 2026"
-subtitle: "Unit I: CSS Styling & Unit II: JavaScript Introduction"
+subtitle: "Unit II: JavaScript Introduction"
 ---
 
 ## Week Overview
 
-This week covers CSS fundamentals including selectors, properties, and the Box Model, plus introduces JavaScript basics.
+This week introduces JavaScript — the programming language that makes web pages interactive. You will learn variables, data types, functions, event handling, and control flow.
 
-**Course Outcome:** CO-1 & CO-2 (K3 - Application)  
+**Course Outcome:** CO-2 (K3 - Application)
 **Duration:** 1 week (4 lectures + 1 lab)  
 **Lab:** CSS Styling & Responsive Design
 
 ---
 
-## Lecture 9: CSS Introduction & CSS Syntax {#lecture-9}
+## Lecture 9: JavaScript Introduction & Variables {#lecture-9}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -27,55 +27,48 @@ This week covers CSS fundamentals including selectors, properties, and the Box M
 :::
 
 
-### CSS Units
-- **Absolute**: `px` (pixels), `pt` (points), `cm`, `mm`
-- **Relative**: `em` (relative to font-size), `rem` (relative to root), `%` (percentage)
-- **Viewport**: `vw` (viewport width), `vh` (viewport height)
+### What is JavaScript?
+- Programming language that runs in the browser
+- Makes HTML pages interactive and dynamic
+- Complements HTML (structure) and CSS (styling)
 
-### CSS Selectors
-```css
-/* Universal */
-* { margin: 0; }
-
-/* Element */
-p { color: black; }
-
-/* Class */
-.intro { font-size: 18px; }
-
-/* ID */
-#header { background: navy; }
-
-/* Attribute */
-input[type="text"] { width: 100%; }
-
-/* Pseudo-class */
-a:hover { color: red; }
-,a:visited { color: purple; }
-button:focus { outline: 2px solid blue; }
-
-/* Combinators */
-div > p { margin: 10px; }  /* Direct child */
-div p { margin: 10px; }    /* Any descendant */
-h1 + p { margin-top: 0; }  /* Adjacent sibling */
+### Declaring Variables
+```javascript
+var   legacy = "old style";  // function-scoped (avoid in modern JS)
+let   count  = 0;             // block-scoped, reassignable
+const PI     = 3.14;          // block-scoped, cannot be reassigned
 ```
 
-### Text & Font Properties
-```css
-p {
-  color: #333;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.5;
-  letter-spacing: 2px;
-}
+### Data Types
+```javascript
+let str   = "hello";           // string
+let num   = 42;                // number
+let flag  = true;              // boolean
+let obj   = { name: "Ana" };   // object
+let arr   = [1, 2, 3];         // array
+let empty = null;              // null
+let undef;                     // undefined
+```
+
+### Operators
+```javascript
+// Arithmetic
+let sum = 10 + 5;    // 15
+let mod = 10 % 3;    // 1 (remainder)
+
+// Comparison — always prefer ===
+5 === 5    // true  (strict equality)
+5 == "5"   // true  (loose — avoid this)
+
+// Logical
+true && false  // false
+true || false  // true
+!true          // false
 ```
 
 ---
 
-## Lecture 10: External Style Sheets, Multiple Style Sheets {#lecture-10}
+## Lecture 10: Functions in JavaScript & Returning Data {#lecture-10}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -89,54 +82,43 @@ p {
 :::
 
 
-### Box Model
-```
-┌─────────────────────────┐
-│      Margin             │
-│  ┌───────────────────┐  │
-│  │  Border           │  │
-│  │  ┌─────────────┐  │  │
-│  │  │ Padding     │  │  │
-│  │  │ ┌─────────┐ │  │  │
-│  │  │ │ Content │ │  │  │
-│  │  │ └─────────┘ │  │  │
-│  │  └─────────────┘  │  │
-│  └───────────────────┘  │
-└─────────────────────────┘
-```
-
-```css
-div {
-  margin: 20px;      /* Outside space */
-  border: 2px solid black;
-  padding: 15px;     /* Inside space */
-  width: 300px;
-  height: 200px;
+### Function Declaration
+```javascript
+function greet(name) {
+  return "Hello, " + name + "!";
 }
+console.log(greet("Alice")); // Hello, Alice!
 ```
 
-### Display Property
-```css
-.block { display: block; }         /* Full width */
-.inline { display: inline; }       /* Inline with text */
-.inline-block { display: inline-block; } /* Hybrid */
-.flex { display: flex; }           /* Flexible layout */
-.grid { display: grid; }           /* Grid layout */
-.none { display: none; }           /* Hidden */
+### Function Expression & Arrow Functions
+```javascript
+const square = function(x) { return x * x; };      // expression
+const double = x => x * 2;                         // arrow (implicit return)
+const add    = (a, b) => a + b;                    // arrow (two params)
+const greetFn = () => "Hello!";                    // arrow (no params)
 ```
 
-### Positioning
-```css
-.static { position: static; }        /* Default */
-.relative { position: relative; top: 10px; } /* Relative to normal */
-.absolute { position: absolute; }    /* Relative to parent */
-.fixed { position: fixed; }          /* Fixed to viewport */
-.sticky { position: sticky; }        /* Scrolls with page */
+### Return Values
+```javascript
+function divide(a, b) {
+  if (b === 0) return null;    // guard clause
+  return a / b;
+}
+const result = divide(10, 2);  // 5
+```
+
+### Default Parameters
+```javascript
+function greet(name = "Guest") {
+  return `Hello, ${name}!`;
+}
+greet();        // "Hello, Guest!"
+greet("Riya");  // "Hello, Riya!"
 ```
 
 ---
 
-## Lecture 11: CSS Value Lengths, Percentages, Selectors {#lecture-11}
+## Lecture 11: UI Events & Event Handling {#lecture-11}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -150,43 +132,49 @@ div {
 :::
 
 
-### What is Bootstrap?
-- Popular CSS framework
-- Responsive grid system
-- Pre-built components
-- Mobile-first approach
-
-### Bootstrap Setup
-```html
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS (optional) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+### Adding Event Listeners
+```javascript
+const btn = document.querySelector('#myBtn');
+btn.addEventListener('click', function() {
+  alert('Button clicked!');
+});
 ```
 
-### Grid System
-```html
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">Half width on medium screens</div>
-    <div class="col-md-6">Half width on medium screens</div>
-  </div>
-</div>
+### Common Events
+```javascript
+element.addEventListener('click',     handleClick);
+element.addEventListener('input',     handleInput);
+element.addEventListener('change',    handleChange);
+element.addEventListener('submit',    handleSubmit);
+element.addEventListener('mouseover', handleHover);
+element.addEventListener('keydown',   handleKey);
 ```
 
-### Common Classes
-- `.container`, `.container-fluid`: Width management
-- `.row`: Horizontal layout
-- `.col-*`: Column sizing
-- `.btn`, `.btn-primary`: Buttons
-- `.alert`: Alerts and notifications
-- `.card`: Content cards
-- `.navbar`: Navigation bar
+### Event Object
+```javascript
+btn.addEventListener('click', function(event) {
+  console.log(event.type);    // 'click'
+  console.log(event.target);  // the element that was clicked
+  event.preventDefault();     // stop default action
+  event.stopPropagation();    // stop event bubbling
+});
+```
+
+### Form Event Validation
+```javascript
+const form = document.querySelector('form');
+form.addEventListener('submit', function(e) {
+  const email = document.getElementById('email').value;
+  if (!email.includes('@')) {
+    e.preventDefault();
+    alert('Enter a valid email address');
+  }
+});
+```
 
 ---
 
-## Lecture 12: CSS Box Model, Float & Clear {#lecture-12}
+## Lecture 12: Conditions & Looping in JavaScript {#lecture-12}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
@@ -202,107 +190,86 @@ div {
 :::
 
 
-### What is JavaScript?
-- Programming language for web browsers
-- Makes web pages interactive
-- Runs on client-side (in browser)
-- Complementary to HTML (structure) and CSS (styling)
-
-### Why JavaScript?
-- Add interactivity to pages
-- Validate form inputs
-- Animate elements
-- Communicate with servers
-
-### JavaScript Syntax
+### if / else if / else
 ```javascript
-// Comments
-/* Multi-line comment */
-
-// Variables
-let name = "John";
-const age = 30;
-var city = "New York";
-
-// Data types
-let string = "text";
-let number = 42;
-let boolean = true;
-let object = { name: "John", age: 30 };
-let array = [1, 2, 3, 4, 5];
-let nullValue = null;
-let undefined;
+if (score >= 90) {
+  grade = 'A';
+} else if (score >= 75) {
+  grade = 'B';
+} else {
+  grade = 'F';
+}
 ```
 
-### Operators
+### switch Statement
 ```javascript
-// Arithmetic
-let sum = 10 + 5;
-let product = 10 * 5;
-
-// Comparison
-5 === 5  // true (strict equality)
-5 == "5" // true (loose equality)
-5 !== 4  // true (not equal)
-
-// Logical
-true && false  // false (AND)
-true || false  // true (OR)
-!true          // false (NOT)
+switch (day) {
+  case 'Monday':  console.log("Start of week"); break;
+  case 'Friday':  console.log("TGIF!");         break;
+  default:        console.log("Regular day");
+}
 ```
 
-### Naming Conventions
+### Loops
 ```javascript
-// camelCase for variables and functions
-let firstName = "John";
-function calculateTotal() {}
+// for loop
+for (let i = 0; i < 5; i++) { console.log(i); }
 
-// PascalCase for classes
-class UserProfile {}
+// while loop
+let count = 0;
+while (count < 5) { count++; }
 
-// UPPER_CASE for constants
-const MAX_USERS = 100;
+// for...of  (values in an iterable)
+for (const item of ['a', 'b', 'c']) { console.log(item); }
+
+// for...in  (keys of an object)
+for (const key in { x: 1, y: 2 }) { console.log(key); }
+```
+
+### Ternary Operator
+```javascript
+const status = age >= 18 ? 'adult' : 'minor';
 ```
 
 ---
 
-## Lab 3: CSS Styling & Responsive Design
+## Lab 3: CSS Design and JavaScript Validation
 
 ### Objectives
-- Apply CSS styling to HTML
-- Create responsive layouts
-- Use Bootstrap or custom CSS
+- Apply CSS design to the HTML pages from Week 2
+- Add basic JavaScript form validation
+- Practice event listeners
 
 ### Activities
-1. Style the form from Week 2
-2. Create a multi-column layout
-3. Add responsive design for mobile
-4. Implement hover effects
-5. Use Bootstrap or CSS Grid
+1. Style the registration form with CSS (box model, colours, fonts)
+2. Add a `submit` event listener that validates required fields
+3. Highlight invalid fields with a red border using JavaScript
+4. Create a toggle button that shows/hides a section
+5. Practice using `console.log` for debugging
 
 ### Deliverables
-- Styled HTML with external CSS
-- Responsive layout (mobile-friendly)
-- commit to GitHub
+- HTML with external CSS and linked JavaScript file
+- Working form validation
+- GitHub commit with changes
 
 ---
 
 ## Key Takeaways
 
-✅ CSS selectors target specific elements  
-✅ Box Model controls spacing (margin, padding, border)  
-✅ Positioning allows precise element placement  
-✅ Bootstrap accelerates responsive design  
-✅ JavaScript adds interactivity to pages  
-✅ Variables store and manage data
+✅ Use `const` by default; `let` when the value needs to change  
+✅ JavaScript functions encapsulate reusable logic and can return values  
+✅ Events link user actions (click, input, submit) to handler functions  
+✅ `if/else`, `switch`, `for`, and `while` control program flow  
+✅ Always use `===` (strict equality) — avoid `==`
 
 ---
 
 ## Next Week
 
-We'll dive deeper into JavaScript:
-- Functions and events
-- Control flow (if/else, loops)
-- Working with the DOM
+We'll advance your JavaScript knowledge:
+- Lecture 13: Block Scope Variables (`let` vs `const` deep dive)
+- Lecture 14: Objects & Object Literals
+- Lecture 15: DOM Manipulation & Array Methods
+- Lecture 16: Revision & Practical (JavaScript + DOM)
 
 

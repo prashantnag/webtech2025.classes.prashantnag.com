@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 11: CSS Value Lengths, Percentages, Selectors"
+---
+title: "Lecture 11: UI Events & Event Handling"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 11, 2026"
@@ -14,11 +14,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Bootstrap Framework]{.white-text}
+[UI Events & Event Handling]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 3 | Unit II: CSS Styling & JavaScript<br>
+Week 3 | Unit II: Scripting with JavaScript<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -200,10 +200,10 @@ Change layout based on screen size:
 
 **Breakpoints:**
 - `col-*`: Extra small (< 576px)
-- `col-sm-*`: Small (≥ 576px)
-- `col-md-*`: Medium (≥ 768px)
-- `col-lg-*`: Large (≥ 992px)
-- `col-xl-*`: Extra large (≥ 1200px)
+- `col-sm-*`: Small (= 576px)
+- `col-md-*`: Medium (= 768px)
+- `col-lg-*`: Large (= 992px)
+- `col-xl-*`: Extra large (= 1200px)
 
 ---
 
@@ -394,7 +394,7 @@ Beautifully styled form inputs:
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[UI Events & Event Handling]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 12 - JavaScript Variables & Data Types

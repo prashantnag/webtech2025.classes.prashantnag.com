@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 21 Demo - Session Tracking using Cookies</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 980px; margin: 2rem auto; padding: 1rem; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+    .card { background:#fff; border:1px solid #d9dde3; border-radius:10px; padding:1rem; }
+    label { display:block; margin:.35rem 0 .2rem; font-weight:600; }
+    input, select, textarea { width:100%; padding:.55rem; border:1px solid #c9d3df; border-radius:8px; }
+    button { background:#053660; color:#fff; border:0; padding:.55rem .9rem; border-radius:8px; cursor:pointer; margin-right:.4rem; }
+    pre { background:#0f172a; color:#e2e8f0; border-radius:8px; padding:.8rem; overflow:auto; }
+    .hint { color:#475569; }
+    @media (max-width: 800px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <h1>Lecture 21 Demo: Cookies</h1>
+    <p class="hint">Set cookie values, simulate next request, and inspect behavior when cookie is cleared.</p>
+    <section class="grid">
+      <article class="card">
+        <h3>Set Cookie</h3>
+        <label>Username</label>
+        <input id="username" value="student1">
+        <label>Theme</label>
+        <select id="theme"><option>light</option><option>dark</option></select>
+        <p style="margin-top:.8rem;">
+          <button id="setCookie">Set Cookies</button>
+          <button id="clearCookie">Clear Cookies</button>
+          <button id="simulateRequest">Simulate Next Request</button>
+        </p>
+      </article>
+      <article class="card">
+        <h3>Server Log Simulation</h3>
+        <pre id="log">No events yet.</pre>
+      </article>
+    </section>
+  </main>
+  <script>
+    const log = document.getElementById('log');
+    const user = document.getElementById('username');
+    const theme = document.getElementById('theme');
+    const append = (lines) => { log.textContent = lines.join('\n'); };
+
+    document.getElementById('setCookie').addEventListener('click', () => {
+      document.cookie = `username=${encodeURIComponent(user.value)}; max-age=3600; path=/`;
+      document.cookie = `theme=${encodeURIComponent(theme.value)}; max-age=3600; path=/`;
+      append([
+        'Response header: Set-Cookie username=...; Max-Age=3600',
+        'Response header: Set-Cookie theme=...; Max-Age=3600',
+        'Browser stored cookies successfully.'
+      ]);
+    });
+
+    document.getElementById('clearCookie').addEventListener('click', () => {
+      document.cookie = 'username=; max-age=0; path=/';
+      document.cookie = 'theme=; max-age=0; path=/';
+      append(['Cookies expired (max-age=0).', 'Next request will not include username/theme.']);
+    });
+
+    document.getElementById('simulateRequest').addEventListener('click', () => {
+      const pairs = document.cookie.split(';').map(s => s.trim()).filter(Boolean);
+      const map = Object.fromEntries(pairs.map(p => p.split('=')));
+      append([
+        'Incoming request headers:',
+        `Cookie: ${document.cookie || '(none)'}`,
+        `Resolved username: ${map.username ? decodeURIComponent(map.username) : '(missing)'}`,
+        `Resolved theme: ${map.theme ? decodeURIComponent(map.theme) : '(missing)'}`
+      ]);
+    });
+  </script>
+</body>
+</html>

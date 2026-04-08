@@ -1,8 +1,8 @@
----
-title: "Lecture 32: Revision & Practical (Servlets + JSP)"
+﻿---
+title: "Lecture 32: AOP & Bean Configuration Styles (XML and Annotation)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
-date: "March 24, 2026"
+date: "March 18, 2026"
 code-annotations: below
 ---
 
@@ -13,196 +13,257 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Revision & Practical (Servlets + JSP)]{.white-text}
+[AOP & Bean Configuration Styles (XML and Annotation)]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 10 | Unit III: Servlets + JSP<br>
+Week 8 | Unit IV: Spring Framework Basics<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Session Plan"}
 
-[Today: Revision + Practical]{.slide-title}
 
-<hr>
+## {data-menu-title="Learning Objectives"}
 
-::: {.body-text-m}
-We will do a complete flow revision:
-
-1. Servlet receives request
-2. Business logic + validation
-3. Data sent to JSP via attributes
-4. JSP renders view using EL/JSTL
-5. Session controls login and protected routes
-:::
-
----
-
-## {data-menu-title="Quick Revision"}
-
-[Servlet + JSP Quick Revision]{.slide-title2}
-
-<hr>
-
-| Topic | Key Point |
-|---|---|
-| Servlet life cycle | `init`, `service/doGet/doPost`, `destroy` |
-| Request dispatcher | `forward` keeps same request |
-| Redirect | new request from browser |
-| JSP role | presentation/view layer |
-| Session | user state across requests |
-
----
-
-## {data-menu-title="Flow Diagram"}
-
-[MVC Flow for Unit III]{.slide-title}
-
-<hr>
-
-```{mermaid}
-flowchart LR
-  A[Browser Form Submit] --> B[Servlet Controller]
-  B --> C[Validate Inputs]
-  C --> D[Set request attributes]
-  D --> E[Forward to JSP]
-  E --> F[Render HTML Response]
-```
-
----
-
-## {data-menu-title="Practical Problem"}
-
-[Practical Task Statement]{.slide-title2}
-
-<hr>
-
-::: {.body-text-m}
-Build a mini Student Portal module:
-
-- Login servlet validates mock credentials
-- Store logged-in user in session
-- Dashboard JSP greets user and shows enrollment number
-- Logout servlet invalidates session
-:::
-
----
-
-## {data-menu-title="Controller Code"}
-
-[Servlet Controller Skeleton]{.slide-title}
-
-<hr>
-
-```{.java code-line-numbers="|1-4|6-8|10-12"}
-String user = request.getParameter("user");
-String pass = request.getParameter("pass");
-
-if ("student".equals(user) && "bmc201".equals(pass)) {
-  HttpSession session = request.getSession();
-  session.setAttribute("loggedInUser", user);
-  request.setAttribute("message", "Login successful");
-  request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-} else {
-  response.sendRedirect("login.jsp?error=1");
-}
-```
-
----
-
-## {data-menu-title="JSP View"}
-
-[Dashboard JSP Skeleton]{.slide-title2}
-
-<hr>
-
-```{.jsp code-line-numbers="|1|3-5|7"}
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<c:if test="${empty sessionScope.loggedInUser}">
-  <jsp:forward page="login.jsp" />
-</c:if>
-
-<h2>Welcome, ${sessionScope.loggedInUser}</h2>
-```
-
----
-
-## {data-menu-title="Checklist"}
-
-[Practical Evaluation Checklist]{.slide-title}
+[Learning Objectives]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Form submits to correct servlet mapping
-- Input validation handled in servlet
-- Correct use of forward vs redirect
-- Session set on login and removed on logout
-- JSP uses EL/JSTL for display logic
-- No sensitive values printed in response
+- Explain core AOP terms
+- Compare XML and annotation bean configuration
+- Use AOP for cross-cutting concerns
 :::
 
 ---
 
-## {data-menu-title="Common Errors"}
+## {data-menu-title="Prerequisites"}
 
-[Debugging Common Errors]{.slide-title2}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Frequent issues in labs:
-
-- HTTP 404 due to wrong URL mapping
-- `NullPointerException` from missing request parameter checks
-- Session not found because of direct JSP access
-- JSTL tags not working due to missing taglib declaration/JAR
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 31 before moving into AOP & Bean Configuration Styles (XML and Annotation)
 :::
-
 ---
 
-## {data-menu-title="Exam Revision"}
+## {data-menu-title="Syllabus Mapping"}
 
-[Exam-Oriented Revision Questions]{.slide-title}
+[Syllabus Mapping]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Prepare short and long answers for:
-
-1. Servlet life cycle with diagram
-2. Forward vs redirect differences
-3. JSP implicit objects and directives
-4. Session tracking in servlet/JSP applications
-5. MVC approach using servlet controller and JSP view
+- Unit IV topic focus: AOP & Bean Configuration Styles (XML and Annotation)
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
 :::
-
 ---
 
-## {data-menu-title="Summary"}
+## {data-menu-title="Agenda"}
 
-[Summary]{.slide-title2}
+[Agenda]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-- Unit III is strongest when servlet and JSP responsibilities are separated
-- Session + request attributes are central to app flow
-- Clean JSP with EL/JSTL improves readability and marks
-- Practical implementation confidence comes from full-flow practice
+- 5-minute recap from previous lecture
+- Concept deep dive: AOP & Bean Configuration Styles (XML and Annotation)
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+AOP separates logging/security/transactions from core business logic.
 :::
 
 ---
 
-## Questions
+## {data-menu-title="Think About It"}
 
-[Thank You]{.slide-title}
+[Think About It]{.slide-title2}
 
-::: {.body-text-l}
-Ready for Week 11: Spring Core.
+<hr>
+
+::: {.body-text-m}
+Should logging be repeated in every method?
 :::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[AOP and Config Styles]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Aspect, advice, pointcut; XML and annotation configuration approaches
+:::
+
+---
+
+## {data-menu-title="Code Walkthrough"}
+
+[Code Walkthrough]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3"}
+@Configuration
+@ComponentScan("com.app")
+class AppConfig {}
+
+@Aspect
+class LoggingAspect { }
+```
+## Memory Booster {data-menu-title="Memory Booster"}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus memory points for **AOP & Bean Configuration Styles (XML and Annotation)**:
+
+- Core recall: Aspect, advice, pointcut, XML/annotation config
+- Exam compare: Cross-cutting with AOP vs duplicated inline concerns
+- Practical anchor: Apply logging aspect and compare XML vs annotation config
+:::
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Live implementation for AOP & Bean Configuration Styles (XML and Annotation):**
+
+?? **[Open Demo: Lecture 32 - AOP & Bean Configuration Styles (XML and Annotation)](../demos/lecture-32-demo.html){target="_blank"}**
+
+Demo checklist:
+- implement the key flow for this lecture
+- verify expected output for one success case
+- trigger one failure case and explain the fix
+:::
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
+- [Spring Guides](https://spring.io/guides)
+- Classroom notes + lecture demo file for Lecture 32
+:::
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **AOP & Bean Configuration Styles (XML and Annotation)** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **AOP & Bean Configuration Styles (XML and Annotation)** with one practical use case.
+- Write/identify the key API or construct: **Aspect, advice, pointcut, XML/annotation config**.
+- Differentiate: **Cross-cutting with AOP vs duplicated inline concerns**.
+- Mention one common implementation error and correction.
+:::
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **AOP & Bean Configuration Styles (XML and Annotation)** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+:::
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implement: **Apply logging aspect and compare XML vs annotation config**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
+:::
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain **AOP & Bean Configuration Styles (XML and Annotation)** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
+:::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 33 - Spring Boot Configuration & Setup
+- Preparation required: revise this lecture summary and code walkthrough
+:::
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 33
+</div>
+</div>
+
+

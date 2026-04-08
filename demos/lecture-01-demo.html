@@ -1,0 +1,225 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 1 Demo - Web Development Fundamentals</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 1 Demo</h1>
+      <p class="subtitle">
+        Introduction to Web Page Designing & Web Development Strategies
+      </p>
+
+      <div class="card">
+        <p>
+          <strong>[Classroom Tip]</strong> This demo shows how HTML (structure),
+          CSS (styling), and JavaScript (behavior) work together to create a
+          functioning web page. Try each section below!
+        </p>
+        <p style="font-size: 12px; color: #666; margin: 0;">
+          [Tip] Open DevTools (F12 or Right-click -> Inspect) to see the HTML, CSS,
+          and Network tabs
+        </p>
+      </div>
+
+      <!-- HTML Structure Demo -->
+      <div class="card">
+        <h2>1) HTML - Structure (The Skeleton)</h2>
+        <p>
+          HTML provides the <strong>semantic structure</strong> of a web page.
+          It defines what content exists and its meaning.
+        </p>
+
+        <p><strong>Pure HTML Example (No CSS styling yet):</strong></p>
+        <p style="background: #f0f6ff; padding: 12px; border-left: 4px solid #0d6efd; margin: 12px 0; font-size: 12px;">
+          This is what raw HTML looks like - structured but not pretty. The content is organized with semantic tags, but it has no colors, no special layout, no decorations.
+        </p>
+
+        <div style="background: #f9f9f9; border: 1px solid #ddd; padding: 12px; border-radius: 4px; margin: 12px 0; font-size: 12px; font-family: monospace; overflow-x: auto;">
+&lt;div&gt;<br>
+&nbsp;&nbsp;&lt;div&gt;My Profile&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;ul&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;strong&gt;Name:&lt;/strong&gt; Alex Chen&lt;/li&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;strong&gt;Role:&lt;/strong&gt; Web Developer&lt;/li&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;strong&gt;Skills:&lt;/strong&gt; HTML, CSS, JavaScript&lt;/li&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;strong&gt;Status:&lt;/strong&gt; Learning&lt;/li&gt;<br>
+&nbsp;&nbsp;&lt;/ul&gt;<br>
+&lt;/div&gt;
+        </div>
+
+        <p><strong>Now with CSS Styling Applied (Same HTML):</strong></p>
+        <div class="profile-card">
+          <div class="profile-header">My Profile (HTML + CSS Styling)</div>
+          <ul class="profile-info">
+            <li><strong>Name:</strong> Alex Chen</li>
+            <li><strong>Role:</strong> Web Developer</li>
+            <li><strong>Skills:</strong> HTML, CSS, JavaScript</li>
+            <li><strong>Status:</strong> Learning Responsive Design</li>
+          </ul>
+        </div>
+
+        <p class="tip">
+          [Note] <strong>Note:</strong> Same HTML structure above, but NOW with CSS
+          styling! The colors, border, padding, and layout are all from CSS, not
+          from HTML. HTML didn't change - only CSS was added!
+        </p>
+
+        <p>
+          <span class="pill">Semantic Tags</span>
+          <span class="pill">Content</span>
+          <span class="pill">Structure</span>
+        </p>
+      </div>
+
+      <!-- CSS Styling Demo -->
+      <div class="card">
+        <h2>2) CSS - Styling (The Clothes)</h2>
+        <p>
+          CSS controls the <strong>visual appearance</strong> of the HTML
+          structure. Colors, fonts, layouts, and animations all use CSS.
+        </p>
+
+        <div class="grid">
+          <div class="tech-box html">HTML<br><small>Structure</small></div>
+          <div class="tech-box css">CSS<br><small>Styling</small></div>
+          <div class="tech-box js">JS<br><small>Behavior</small></div>
+        </div>
+
+        <p class="tip">
+          [Tip] <strong>Try this:</strong> Hover over the boxes above to see CSS
+          transitions in action!
+        </p>
+
+        <p>
+          <span class="pill">Colors</span>
+          <span class="pill">Typography</span>
+          <span class="pill">Layout</span>
+          <span class="pill">Animations</span>
+        </p>
+      </div>
+
+      <!-- JavaScript Interactivity Demo -->
+      <div class="card">
+        <h2>3) JavaScript - Behavior (The Brain)</h2>
+        <p>
+          JavaScript adds <strong>interactivity and dynamic behavior</strong>.
+          Try the input fields and buttons below to see JavaScript in action!
+        </p>
+
+        <div class="demo-section">
+          <h3>Welcome Form (JavaScript Interactivity)</h3>
+
+          <div class="input-group">
+            <label for="userName">Enter Your Name:</label>
+            <input
+              id="userName"
+              type="text"
+              placeholder="Type your name here..."
+              value="Student"
+            />
+          </div>
+
+          <button id="greetBtn">Click Me - See JavaScript Work!</button>
+
+          <div id="greetMessage" class="success-message"></div>
+
+          <div id="jsOutput" class="output-section" style="display: none;"></div>
+        </div>
+
+        <p class="tip">
+          [Tip] <strong>What happens:</strong> When you click the button, JavaScript
+          reads the input, creates a message, and updates the page instantly!
+        </p>
+
+        <p>
+          <span class="pill">Event Handling</span>
+          <span class="pill">DOM Manipulation</span>
+          <span class="pill">User Input</span>
+          <span class="pill">Dynamic Content</span>
+        </p>
+      </div>
+
+      <!-- How Frontend Works Demo -->
+      <div class="card">
+        <h2>How It All Works Together</h2>
+        <p>
+          This is how frontend web development happens. Let's trace a real
+          interaction:
+        </p>
+
+        <div class="input-group">
+          <label for="userName2">Your Email (for "Login" simulation):</label>
+          <input
+            id="userName2"
+            type="email"
+            placeholder="user@example.com"
+            value="student@college.edu"
+          />
+        </div>
+
+        <button id="loginBtn">Simulate Login (Frontend Only)</button>
+
+        <div id="loginMessage" class="success-message"></div>
+
+        <div id="flowOutput" class="output-section" style="display: none;"></div>
+
+        <div class="code-block" style="margin-top: 12px;">
+          <strong>What JavaScript Does (Behind the Scenes):</strong><br>
+          1. Frontend collects email from input field<br>
+          2. Frontend validates format<br>
+          3. Frontend displays feedback immediately<br>
+          (In real apps: Frontend would send data to backend server)
+        </div>
+
+        <p class="tip">
+          [Tip] <strong>Remember:</strong> This demo shows only FRONTEND (browser
+          side). Real login would send data to a backend server!
+        </p>
+
+        <p>
+          <span class="pill">Frontend</span>
+          <span class="pill">User Input</span>
+          <span class="pill">Validation</span>
+          <span class="pill">Feedback</span>
+        </p>
+      </div>
+
+      <!-- Learning Checklist -->
+      <div class="card">
+        <h2>What You've Just Learned</h2>
+        <ul style="line-height: 1.8;">
+          <li>
+            <strong>HTML</strong> provides structure and semantic meaning
+          </li>
+          <li><strong>CSS</strong> makes websites look beautiful and usable</li>
+          <li>
+            <strong>JavaScript</strong> adds interactivity and behavior
+          </li>
+          <li>
+            All three work <strong>together</strong> in modern web pages
+          </li>
+          <li>
+            <strong>Frontend</strong> is what runs in your browser
+          </li>
+          <li>
+            <strong>Backend</strong> (not shown here) handles server logic
+          </li>
+        </ul>
+      </div>
+
+      <div class="card" style="background: #f0f6ff; border-color: #0d6efd;">
+        <p style="margin: 0; font-size: 13px;">
+          <strong>Next Steps:</strong> Open your code editor, create a file
+          called <code>index.html</code>, copy this code, modify it, and open
+          it in your browser.
+        </p>
+      </div>
+    </div>
+
+    <script src="./lecture-01/app.js"></script>
+  </body>
+</html>
+

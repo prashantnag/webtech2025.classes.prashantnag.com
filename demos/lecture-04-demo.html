@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 4 Demo - HTML Grouping: Div &amp; Span</title>
+    <link rel="stylesheet" href="./demo-shared.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lecture 4 Demo</h1>
+      <p class="subtitle">HTML Grouping: Div &amp; Span</p>
+
+      <div class="card">
+        <p>
+          <strong>[Classroom Tip]</strong> This demo makes block vs inline behavior visible,
+          shows div layout building, and demonstrates semantic HTML5 structure.
+          Click the toggle buttons to watch the differences live!
+        </p>
+      </div>
+
+      <!-- Section 1: Block vs Inline Comparison -->
+      <div class="card">
+        <h2>1) Block vs Inline Elements – Side by Side</h2>
+        <p>The key difference: <strong>block elements stack vertically</strong>, <strong>inline elements flow horizontally</strong> with text.</p>
+
+        <div class="grid">
+          <div>
+            <h3>Block Elements (<code class="inline-code">&lt;div&gt;</code>)</h3>
+            <div style="background: #f0f6ff; padding: 12px; border-radius: 8px;">
+              <div class="block-demo">div — Block 1 (takes full width)</div>
+              <div class="block-demo">div — Block 2 (pushed to next line)</div>
+              <div class="block-demo">div — Block 3 (own line again)</div>
+            </div>
+            <p style="font-size: 12px; color: #555; margin: 6px 0;">Each div starts on a new line and stretches to full width.</p>
+          </div>
+          <div>
+            <h3>Inline Elements (<code class="inline-code">&lt;span&gt;</code>)</h3>
+            <div style="background: #f0fff0; padding: 12px; border-radius: 8px;">
+              <p>Words in a sentence: <span style="background: #e6ffe6; border: 2px solid #198754; padding: 2px 6px; border-radius: 4px;">span 1</span> flows with <span style="background: #ffe6e6; border: 2px solid #dc3545; padding: 2px 6px; border-radius: 4px;">span 2</span> text naturally.</p>
+            </div>
+            <p style="font-size: 12px; color: #555; margin: 6px 0;">Spans sit side by side, flowing like words in a sentence.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Div Layout Building -->
+      <div class="card">
+        <h2>2) Building Page Layout with &lt;div&gt;</h2>
+        <p>This is how developers use <code class="inline-code">&lt;div&gt;</code> to create classic page layouts.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <strong>HTML Structure:</strong>
+            <pre style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 12px; margin-top: 8px; font-size: 12px;">&lt;div class="container"&gt;
+  &lt;div class="header"&gt;
+    &lt;h1&gt;Website&lt;/h1&gt;
+  &lt;/div&gt;
+  &lt;div class="content-area"&gt;
+    &lt;div class="main"&gt;Main Area&lt;/div&gt;
+    &lt;div class="sidebar"&gt;Sidebar&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="footer"&gt;Footer&lt;/div&gt;
+&lt;/div&gt;</pre>
+          </div>
+          <div>
+            <strong>Visual Result:</strong>
+            <div style="border: 2px solid #333; padding: 6px; border-radius: 6px; margin-top: 8px; background: #fafafa;">
+              <div class="layout-header">Website Title</div>
+              <div class="layout-content-area">
+                <div class="layout-main">
+                  <strong>Main Content</strong><br>
+                  <small>Primary page content goes here — articles, products, etc.</small>
+                </div>
+                <div class="layout-sidebar">
+                  <strong>Sidebar</strong><br>
+                  <small>Links, ads, widgets</small>
+                </div>
+              </div>
+              <div class="layout-footer">Footer © 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Span for Text Styling -->
+      <div class="card">
+        <h2>3) Using &lt;span&gt; for Inline Styling</h2>
+        <p>Click each button to see how span can highlight parts of text without affecting paragraph flow.</p>
+
+        <div id="span-demo-text" style="font-size: 16px; line-height: 2; padding: 12px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px;">
+          The <span id="s1">exam is on Friday</span>, so please revise all <span id="s2">HTML tags</span> covered this <span id="s3">semester</span>.
+        </div>
+
+        <div style="margin-top: 12px;">
+          <button class="toggle-btn" onclick="highlightSpan('s1', 'red')">Highlight "exam is on Friday"</button>
+          <button class="toggle-btn" onclick="highlightSpan('s2', 'blue')">Highlight "HTML tags"</button>
+          <button class="toggle-btn" onclick="highlightSpan('s3', 'green')">Highlight "semester"</button>
+          <button class="toggle-btn" style="background: #6c757d;" onclick="resetSpans()">Reset</button>
+        </div>
+        <p style="font-size: 12px; color: #555; margin-top: 8px;">Notice: The paragraph structure doesn't change — only the specific word gets styled via &lt;span&gt;.</p>
+      </div>
+
+      <!-- Section 4: Generic vs Semantic HTML5 -->
+      <div class="card">
+        <h2>4) Generic &lt;div&gt; vs Semantic HTML5 Elements</h2>
+        <p>Both approaches render identically in the browser, but semantic elements communicate meaning to search engines and screen readers.</p>
+
+        <div class="semantic-compare">
+          <div class="bad-code">
+            <strong style="color: #dc3545;">Div-only approach (not ideal):</strong>
+            <pre style="margin-top:8px;">&lt;div id="header"&gt;
+  &lt;h1&gt;My Site&lt;/h1&gt;
+&lt;/div&gt;
+&lt;div id="nav"&gt;...links&lt;/div&gt;
+&lt;div id="main"&gt;
+  &lt;div class="article"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="footer"&gt;...&lt;/div&gt;</pre>
+          </div>
+          <div class="good-code">
+            <strong style="color: #198754;">Semantic HTML5 approach (preferred):</strong>
+            <pre style="margin-top:8px;">&lt;header&gt;
+  &lt;h1&gt;My Site&lt;/h1&gt;
+&lt;/header&gt;
+&lt;nav&gt;...links&lt;/nav&gt;
+&lt;main&gt;
+  &lt;article&gt;...&lt;/article&gt;
+&lt;/main&gt;
+&lt;footer&gt;...&lt;/footer&gt;</pre>
+          </div>
+        </div>
+        <p style="margin-top: 12px; font-size: 13px;">Both render the same in the browser. But <code class="inline-code">&lt;header&gt;</code>, <code class="inline-code">&lt;nav&gt;</code>, <code class="inline-code">&lt;main&gt;</code>, <code class="inline-code">&lt;article&gt;</code>, and <code class="inline-code">&lt;footer&gt;</code> tell Google and screen readers <em>what the content means</em>.</p>
+      </div>
+
+      <!-- Section 5: Interactive Box Model -->
+      <div class="card">
+        <h2>5) Box Model Preview</h2>
+        <p>Every div (and every HTML element) has margin, border, padding, and content. Hover the box to see the DevTools-style breakdown.</p>
+
+        <div style="display: flex; justify-content: center; margin: 16px 0;">
+          <div id="box-model-outer" style="background: #ffd93d; padding: 20px; border-radius: 4px; cursor: pointer;" onmouseenter="showBoxLabel('margin')" onmouseleave="resetBoxLabel()">
+            <div style="background: #4d96ff; padding: 16px; border: 4px solid #0a58ca; border-radius: 2px;">
+              <div style="background: #ff6b6b; padding: 20px; border-radius: 2px; text-align: center; color: white; font-weight: bold;">
+                CONTENT
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="box-label" style="text-align: center; font-weight: 600; font-size: 13px; color: #053660;">← Yellow = Margin | Blue border = Border | Red = Padding + Content →</p>
+      </div>
+
+    </div>
+
+    <script>
+      function highlightSpan(id, color) {
+        const s = document.getElementById(id);
+        const colors = { red: '#ffe0e0', blue: '#e0e8ff', green: '#e0ffe0' };
+        const borders = { red: '#dc3545', blue: '#0d6efd', green: '#198754' };
+        s.style.background = colors[color];
+        s.style.border = '2px solid ' + borders[color];
+        s.style.borderRadius = '4px';
+        s.style.padding = '2px 4px';
+      }
+      function resetSpans() {
+        ['s1','s2','s3'].forEach(id => {
+          const s = document.getElementById(id);
+          s.style.background = '';
+          s.style.border = '';
+          s.style.padding = '';
+        });
+      }
+      function showBoxLabel(part) {
+        document.getElementById('box-label').textContent = 'Hovering: ' + part + ' layer — surrounds content with invisible space';
+      }
+      function resetBoxLabel() {
+        document.getElementById('box-label').textContent = '← Yellow = Margin | Blue border = Border | Red = Padding + Content →';
+      }
+    </script>
+  </body>
+</html>

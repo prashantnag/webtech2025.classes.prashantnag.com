@@ -1,8 +1,8 @@
----
-title: "Lecture 29: JSP Introduction & JSP Overview"
+﻿---
+title: "Lecture 29: Introduction to Design Patterns in Spring"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
-date: "March 24, 2026"
+date: "March 13, 2026"
 code-annotations: below
 ---
 
@@ -13,16 +13,18 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[JSP Introduction & JSP Overview]{.white-text}
+[Introduction to Design Patterns in Spring]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 10 | Unit III: JSP<br>
+Week 8 | Unit IV: Spring Framework Basics<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
+
+
 
 ## {data-menu-title="Learning Objectives"}
 
@@ -31,248 +33,642 @@ Week 10 | Unit III: JSP<br>
 <hr>
 
 ::: {.incremental .body-text-m}
-- Define JSP and explain why it is used in Java web applications
-- Understand how a JSP is translated and executed by a servlet container
-- Differentiate JSP from servlets for presentation and controller responsibilities
-- Use basic JSP elements: directives, scriptlets, expressions, and declarations
-- Recognize common implicit objects used inside JSP pages
-- Follow beginner-safe practices for JSP coding in exam and lab scenarios
+- Explain role of design patterns in Spring
+- Map core patterns to framework components
+- Select patterns for maintainability
 :::
 
 ---
 
-## {data-menu-title="Why JSP"}
+## {data-menu-title="Prerequisites"}
 
-[Why JSP Was Introduced]{.slide-title2}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Writing full HTML in servlets quickly becomes difficult to read and maintain.
-
-JSP solves this by allowing HTML-first pages with embedded Java when needed.
-
-- Servlet focus: request handling and business logic
-- JSP focus: rendering UI/view
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 28 before moving into Introduction to Design Patterns in Spring
 :::
-
 ---
 
-## {data-menu-title="What is JSP"}
+## {data-menu-title="Syllabus Mapping"}
 
-[What is JSP?]{.slide-title}
+[Syllabus Mapping]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-**JSP (JavaServer Pages)** is a server-side technology used to generate dynamic web pages.
+- Unit IV topic focus: Introduction to Design Patterns in Spring
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
+:::
+---
 
-- File extension: `.jsp`
-- Processed on server, output sent as HTML to browser
-- Runs inside servlet containers like Tomcat
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- 5-minute recap from previous lecture
+- Concept deep dive: Introduction to Design Patterns in Spring
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring uses multiple patterns to stay extensible and testable.
 :::
 
 ---
 
-## {data-menu-title="Lifecycle"}
+## {data-menu-title="Think About It"}
 
-[JSP Lifecycle in Container]{.slide-title2}
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Which pattern centralizes object creation?
+:::
+
+---
+
+## {data-menu-title="What Are Design Patterns"}
+
+[What Are Design Patterns?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Design Patterns** are reusable solutions to commonly occurring problems in software design.
+
+They provide:
+
+- **Proven solutions** — tested approaches that work
+- **Common vocabulary** — shared language for developers
+- **Best practices** — accumulated wisdom from experienced developers
+- **Flexible design** — adaptable to different contexts
+
+[Design patterns are not code templates but conceptual solutions.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Why Patterns Matter"}
+
+[Why Design Patterns Matter in Spring]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Spring Framework is built on design patterns:
+
+- **Maintainability** — patterns make code easier to understand and modify
+- **Extensibility** — new features integrate cleanly using established patterns
+- **Testability** — patterns like Dependency Injection enable easy testing
+- **Scalability** — proven patterns handle growth gracefully
+
+[Understanding patterns helps you leverage Spring's power effectively.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Pattern Categories"}
+
+[GoF Pattern Categories]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Gang of Four (GoF) patterns fall into three categories:
+
+**Creational Patterns** — Object creation mechanisms
+- Factory, Abstract Factory, Singleton, Builder, Prototype
+
+**Structural Patterns** — Object composition and relationships
+- Proxy, Adapter, Decorator, Composite, Facade
+
+**Behavioral Patterns** — Communication between objects
+- Template Method, Strategy, Observer, Command, Iterator
+:::
+
+---
+
+## {data-menu-title="Spring Core Patterns"}
+
+[Core Patterns in Spring Framework]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring extensively uses several key patterns:
+
+| Pattern | Purpose in Spring | Example |
+|---|---|---|
+| **Factory** | Create beans dynamically | `BeanFactory`, `ApplicationContext` |
+| **Singleton** | Single instance per container | Default bean scope |
+| **Proxy** | Add behavior dynamically | AOP, Transactions, Lazy loading |
+| **Template Method** | Define algorithm skeleton | `JdbcTemplate`, `RestTemplate` |
+| **Dependency Injection** | Invert control flow | `@Autowired`, Constructor injection |
+
+:::
+
+---
+
+## {data-menu-title="Factory Pattern Intro"}
+
+[Factory Pattern in Spring]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Factory Pattern** provides an interface for creating objects without specifying exact classes.
+
+**Spring's Implementation:**
+
+- `BeanFactory` — basic container for bean creation
+- `ApplicationContext` — advanced factory with enterprise features
+- `FactoryBean<T>` — custom bean creation logic
+
+```java
+ApplicationContext ctx = 
+    new AnnotationConfigApplicationContext(AppConfig.class);
+UserService service = ctx.getBean(UserService.class);
+```
+
+[Spring's IoC container is essentially a sophisticated factory.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Singleton Pattern Intro"}
+
+[Singleton Pattern in Spring]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Singleton Pattern** ensures only one instance of a class exists.
+
+**Spring's Implementation:**
+
+- Default scope for all beans is singleton
+- Container manages the single instance
+- Thread-safe creation and caching
+
+```java
+@Component  // singleton by default
+public class ConfigurationService {
+    // Only one instance created per container
+}
+```
+
+[Spring's singleton is per-container, not per-JVM like classic singleton.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Proxy Pattern Intro"}
+
+[Proxy Pattern in Spring]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Proxy Pattern** provides a surrogate that controls access to another object.
+
+**Spring's Implementation:**
+
+- **AOP proxies** — add cross-cutting concerns (logging, security)
+- **Transaction proxies** — wrap methods with transaction boundaries
+- **Lazy-loading proxies** — defer object creation until needed
+
+```java
+@Transactional  // Spring creates proxy with transaction logic
+public void saveUser(User user) {
+    userRepository.save(user);
+}
+```
+
+[Spring uses JDK dynamic proxies or CGLIB proxies automatically.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Template Method Intro"}
+
+[Template Method Pattern in Spring]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Template Method** defines algorithm structure, allowing subclasses to override specific steps.
+
+**Spring's Implementation:**
+
+- `JdbcTemplate` — eliminates JDBC boilerplate
+- `RestTemplate` — simplifies REST client code
+- `JmsTemplate` — reduces JMS complexity
+
+```java
+List<User> users = jdbcTemplate.query(
+    "SELECT * FROM users",
+    (rs, rowNum) -> new User(rs.getLong("id"), rs.getString("name"))
+);
+```
+
+[Template classes handle resource management; you provide business logic.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Dependency Injection"}
+
+[Dependency Injection Pattern]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Dependency Injection (DI)** is a specialization of Inversion of Control.
+
+Instead of objects creating dependencies, they receive them:
+
+```java
+// Without DI (tight coupling)
+class OrderService {
+    private PaymentGateway gateway = new PaymentGateway();
+}
+
+// With DI (loose coupling)
+@Service
+class OrderService {
+    private final PaymentGateway gateway;
+    
+    @Autowired
+    public OrderService(PaymentGateway gateway) {
+        this.gateway = gateway;
+    }
+}
+```
+:::
+
+---
+
+## {data-menu-title="Pattern Benefits"}
+
+[Benefits of Pattern-Based Design]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Why patterns improve Spring applications:
+
+1. **Code Reusability** — common solutions across projects
+2. **Easier Communication** — "we need a factory here" is understood
+3. **Proven Architecture** — patterns have stood the test of time
+4. **Better Testing** — patterns enable mocking and isolation
+5. **Predictable Structure** — new developers recognize familiar patterns
+6. **Flexibility** — change implementations without changing interfaces
+
+[Patterns provide a shared mental model for the team.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Pattern Identification"}
+
+[Identifying Patterns in Spring Code]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+How to recognize patterns in Spring applications:
+
+**Factory** → Classes with `create()`, `build()`, or `getBean()` methods
+
+**Singleton** → `@Component`, `@Service`, `@Repository` without explicit scope
+
+**Proxy** → `@Transactional`, `@Async`, `@Cacheable` annotations
+
+**Template Method** → Classes ending in `Template` (`JdbcTemplate`)
+
+**Strategy** → Multiple implementations of same interface with `@Qualifier`
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[Pattern Landscape]{.slide-title}
 
 <hr>
 
 ```{mermaid}
-%%| fig-height: 4.0
-flowchart LR
-  A[Browser requests JSP] --> B[Container translates JSP to servlet]
-  B --> C[Compiles servlet class]
-  C --> D[Creates servlet instance]
-  D --> E[jspInit called once]
-  E --> F[_jspService called per request]
-  F --> G[jspDestroy at unload]
+flowchart TD
+    A["Spring Container"] --> B["Factory Pattern\nBean Creation"]
+    A --> C["Singleton Pattern\nBean Scope"]
+    A --> D["Proxy Pattern\nAOP/Transactions"]
+    A --> E["Template Method\nJdbcTemplate/RestTemplate"]
+    B --> F["Flexible Object Creation"]
+    C --> F
+    D --> F
+    E --> F
+    F --> G["Maintainable Spring Applications"]
 ```
 
-::: {.body-text-s}
-Translation + compilation happens first time (or after change), then normal request handling continues.
+::: {.body-text-m .topbr}
+Spring combines multiple patterns to achieve loose coupling and flexibility.
 :::
 
 ---
 
-## {data-menu-title="JSP vs Servlet"}
+## {data-menu-title="Pattern Interactions"}
 
-[JSP vs Servlet]{.slide-title}
-
-<hr>
-
-| Aspect | JSP | Servlet |
-|---|---|---|
-| Main role | View/presentation | Controller/request processing |
-| Authoring style | HTML with JSP tags/code | Java class with response writing |
-| Maintainability for UI | Better | Harder for large HTML |
-| Compilation | Auto-translated to servlet | Already Java servlet class |
-
----
-
-## {data-menu-title="JSP Elements"}
-
-[Core JSP Elements]{.slide-title2}
+[How Patterns Work Together]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Common JSP syntax forms:
+Patterns in Spring often collaborate:
 
-- **Directive**: `<%@ ... %>`
-- **Scriptlet**: `<% ... %>`
-- **Expression**: `<%= ... %>`
-- **Declaration**: `<%! ... %>`
+**Factory + Singleton:**
+```java
+// Factory creates singleton beans
+ApplicationContext ctx = new AnnotationConfigApplicationContext();
+UserService service = ctx.getBean(UserService.class); // singleton
+```
 
-In modern apps, use EL/JSTL where possible and keep Java code minimal in JSP.
+**Proxy + Template Method:**
+```java
+@Transactional // Proxy wraps this method
+public void processOrder(Order order) {
+    jdbcTemplate.update(...); // Template simplifies JDBC
+}
+```
 :::
 
 ---
 
-## {data-menu-title="Directive Example"}
+## {data-menu-title="Code Walkthrough"}
 
-[Page Directive Example]{.slide-title}
-
-<hr>
-
-```{.jsp code-line-numbers="|1|2|3"}
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page errorPage="error.jsp" %>
-```
-
-::: {.body-text-s}
-The `page` directive configures the JSP page-level behavior.
-:::
-
----
-
-## {data-menu-title="Scriptlet Expression"}
-
-[Scriptlet and Expression Example]{.slide-title2}
+[Code Walkthrough: Pattern Usage]{.slide-title2}
 
 <hr>
 
-```{.jsp code-line-numbers="|1-3|5|7"}
-<%
-  String name = request.getParameter("name");
-  if (name == null || name.isBlank()) name = "Student";
-%>
+```java
+// Factory: ApplicationContext creates beans
+@Configuration
+public class AppConfig {
+    @Bean
+    public DataSource dataSource() {  // Factory method
+        return new HikariDataSource();
+    }
+}
 
-<h2>Welcome, <%= name %></h2>
-<p>Today is <%= java.time.LocalDate.now() %></p>
+// Singleton: Default scope
+@Service
+public class NotificationService { }
+
+// Proxy: AOP adds behavior
+@Transactional
+public void updateUser(User user) { }
+
+// Template Method: JdbcTemplate
+jdbcTemplate.query("SELECT * FROM users", 
+    new UserRowMapper());
 ```
-
-::: {.body-text-s}
-Scriptlet runs Java code; expression prints evaluated value into HTML output.
-:::
-
----
-
-## {data-menu-title="Implicit Objects"}
-
-[Important JSP Implicit Objects]{.slide-title}
-
-<hr>
-
-| Object | Type | Use |
-|---|---|---|
-| `request` | `HttpServletRequest` | Read form/query input |
-| `response` | `HttpServletResponse` | Set headers/status |
-| `session` | `HttpSession` | Per-user session state |
-| `application` | `ServletContext` | App-wide shared context |
-| `out` | `JspWriter` | Write output stream |
-| `pageContext` | `PageContext` | Access scoped attributes |
-
----
-
-## {data-menu-title="MVC Flow"}
-
-[Servlet + JSP MVC Flow]{.slide-title2}
-
-<hr>
-
-```{.java code-line-numbers="|1-2|4|5"}
-String name = request.getParameter("name");
-request.setAttribute("userName", name);
-
-RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
-rd.forward(request, response);
-```
-
-```{.jsp code-line-numbers="|1"}
-<h2>Hello, ${userName}</h2>
-```
-
-::: {.body-text-s}
-Controller servlet prepares data; JSP renders it.
-:::
 
 ---
 
 ## {data-menu-title="Best Practices"}
 
-[Best Practices for Beginners]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Keep business logic in servlets/services, not in JSP pages
-- Prefer EL/JSTL over heavy scriptlets
-- Never print sensitive data directly in responses
-- Validate request parameters before use
-- Use forwarding from servlet to JSP for clean MVC structure
-:::
-
----
-
-## {data-menu-title="Common Mistakes"}
-
-[Common Mistakes to Avoid]{.slide-title2}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Writing full database logic inside JSP
-- Using scriptlets everywhere instead of EL/JSTL
-- Forgetting null checks for `request.getParameter(...)`
-- Mixing redirect and forward without clear control flow
-- Ignoring character encoding (`UTF-8`) in page setup
-:::
-
----
-
-## {data-menu-title="Exam Focus"}
-
-[AKTU Exam-Oriented Checklist]{.slide-title}
+[Pattern Selection Best Practices]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Prepare these high-probability questions:
+Guidelines for using patterns in Spring:
 
-1. Define JSP and explain why it is needed
-2. Explain JSP lifecycle steps in container
-3. Differentiate JSP and servlet with examples
-4. List and explain JSP implicit objects
-5. Explain directive, scriptlet, expression, declaration
+1. **Don't force patterns** — use them when they solve real problems
+2. **Understand the intent** — know why a pattern exists, not just how
+3. **Keep it simple** — patterns should simplify, not complicate
+4. **Leverage Spring's patterns** — don't reinvent what Spring provides
+5. **Document unusual patterns** — explain why you chose a pattern
+6. **Refactor to patterns** — start simple, introduce patterns as needed
+
+[Patterns are tools, not goals. Use them judiciously.]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="Summary"}
+## {data-menu-title="Anti-Patterns"}
 
-[Summary]{.slide-title2}
+[Common Anti-Patterns to Avoid]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-You are now ready to:
+**Pattern Overload** — using patterns when simple code would work
 
-- explain JSP fundamentals clearly
-- write basic JSP pages with proper structure
-- connect servlet controller flow to JSP views
-- avoid common beginner mistakes in labs and exams
+```java
+// OVERKILL: Factory for trivial object
+class StringFactory {
+    public String create() { return new String(); }
+}
+```
+
+**Service Locator** — looking up dependencies manually
+
+```java
+// AVOID: Defeats DI benefits
+UserService service = ServiceLocator.getService(UserService.class);
+```
+
+[Let Spring manage dependencies; avoid manual lookups.]{.teal-text}
 :::
+
+---
+
+## {data-menu-title="Real World Example"}
+
+[Real-World Pattern Example]{.slide-title2}
+
+<hr>
+
+```java
+@Configuration
+public class PaymentConfig {
+    @Bean
+    public PaymentProcessorFactory processorFactory() {
+        return new PaymentProcessorFactory();  // Factory
+    }
+}
+
+@Service
+public class OrderService {  // Singleton
+    private final PaymentProcessorFactory factory;
+    
+    @Autowired
+    public OrderService(PaymentProcessorFactory factory) {
+        this.factory = factory;  // Dependency Injection
+    }
+    
+    @Transactional  // Proxy
+    public void checkout(Order order) {
+        PaymentProcessor processor = factory.create(order.getMethod());
+        processor.process(order.getAmount());
+    }
+}
+```
+
+---
+
+## {data-menu-title="Code Walkthrough"}
+## Memory Booster {data-menu-title="Memory Booster"}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus memory points for **Introduction to Design Patterns in Spring**:
+
+- Core recall: Factory, Proxy, Singleton, Template Method usage
+- Exam compare: Pattern-based architecture vs ad-hoc implementation
+- Practical anchor: Identify and justify pattern usage in a Spring component
+:::
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Live implementation for Introduction to Design Patterns in Spring:**
+
+?? **[Open Demo: Lecture 29 - Introduction to Design Patterns in Spring](../demos/lecture-29-demo.html){target="_blank"}**
+
+Demo checklist:
+- implement the key flow for this lecture
+- verify expected output for one success case
+- trigger one failure case and explain the fix
+:::
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
+- [Spring Guides](https://spring.io/guides)
+- Classroom notes + lecture demo file for Lecture 29
+:::
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **Introduction to Design Patterns in Spring** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **Introduction to Design Patterns in Spring** with one practical use case.
+- Write/identify the key API or construct: **Factory, Proxy, Singleton, Template Method usage**.
+- Differentiate: **Pattern-based architecture vs ad-hoc implementation**.
+- Mention one common implementation error and correction.
+:::
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **Introduction to Design Patterns in Spring** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+:::
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implement: **Identify and justify pattern usage in a Spring component**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
+:::
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain **Introduction to Design Patterns in Spring** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
+:::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 30 - Factory Design Pattern in Spring
+- Preparation required: revise this lecture summary and code walkthrough
+:::
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 30
+</div>
+</div>
+
+

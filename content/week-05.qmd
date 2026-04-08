@@ -1,285 +1,114 @@
 ﻿---
-title: "Week 5: Feb 23 - Mar 1, 2026"
-subtitle: "Unit II: DOM Manipulation & Advanced JavaScript"
+title: "Week 5: JavaScript Recap & Pre-Exam Review"
+subtitle: "Unit I–II Revision: HTML, CSS & JavaScript"
 ---
 
 ## Week Overview
 
-This week focuses on DOM (Document Object Model) manipulation, form validation, ES6+ features, and revision before mid-semester exam.
+This is a consolidation week. No new lectures are assigned — focus on revising Units I and II, completing Lab 5 and Home Assignment 2, and preparing for the mid-semester examination.
 
-**Course Outcome:** CO-2 (K3 - Application)  
-**Duration:** 1 week (4 lectures + 1 lab)  
+**Course Outcome:** CO-1, CO-2 (Review & Assessment)  
 **Home Assignment 2 Due:** Feb 25  
-**Lab:** DOM Manipulation & Interactive Pages
+**Lab 5:** Browser Information, Objects, and Script Reuse
 
 ::: {.callout-tip icon=false}
-## Quick Practice Quizzes (Lectures 17-20)
-Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
-
-- [Lecture 17 Quiz](/quiz/lecture-17-quiz.qmd)
-- [Lecture 18 Quiz](/quiz/lecture-18-quiz.qmd)
-- [Lecture 19 Quiz](/quiz/lecture-19-quiz.qmd)
-- [Lecture 20 Quiz](/quiz/lecture-20-quiz.qmd)
+## Quiz Revision
+Revisit all quizzes from Lectures 1–16 via the [Quiz Hub](/quiz/index.qmd).
 :::
 
 ::: {.callout-note icon=false}
-## Lecture Materials
-This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.qmd) for all available slides.
+## Content Covered So Far
+- **Unit I: Web Page Designing** (Lectures 1–8) → [Week 1](/content/week-01.qmd) | [Week 2](/content/week-02.qmd)
+- **Unit II: JavaScript** (Lectures 9–16) → [Week 3](/content/week-03.qmd) | [Week 4](/content/week-04.qmd)
 :::
 
 ---
 
-## Lecture 17: UI Events & Event Handling {#lecture-17}
+## Revision: Unit I — HTML & CSS
 
-::: {.callout-note icon=false}
-## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/lecture-17.qmd){target="_blank" rel="noopener noreferrer"}
-```{=html}
-<div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-17.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
-</div>
-```
-:::
+### HTML Checklist
+- [ ] Semantic structure: `<header>`, `<nav>`, `<main>`, `<footer>`
+- [ ] Lists: `<ul>`, `<ol>`, `<dl>` and their items
+- [ ] Images: `<img alt="...">` + `srcset` for multiple resolutions
+- [ ] Hyperlinks: absolute vs relative URLs, `target="_blank"`
+- [ ] Tables: `<thead>`, `<tbody>`, `<tfoot>`, `<th scope="...">`
+- [ ] Forms: `<form>`, `<input>`, `<label>`, `<fieldset>`, HTML5 validation attrs
+- [ ] Iframes: embed external content with `<iframe src="...">`
 
+### CSS Checklist
+- [ ] Selectors: element, class, ID, pseudo-class, combinators
+- [ ] Box Model: margin, border, padding, content; `box-sizing: border-box`
+- [ ] Layout: float, clear, flexbox basics
+- [ ] Bootstrap: `.container`, `.row`, `.col-*`, `.btn`, `.card`, `.navbar`
 
-### DOM Selection
+---
+
+## Revision: Unit II — JavaScript
+
+### Variables & Data Types
 ```javascript
-// Get elements
-document.getElementById('id');
-document.querySelector('.class');
-document.querySelectorAll('p');
-document.getElementsByClassName('class');
+const PI  = 3.14;   // never changes — use const
+let count = 0;      // may change — use let
+// avoid var in modern JS
 ```
 
-### DOM Manipulation
+### Functions
 ```javascript
-// Get/Set HTML
-element.innerHTML = "<p>New content</p>";
-element.textContent = "Text only";
+const greet = name => `Hello, ${name}!`;
+function divide(a, b) { return b === 0 ? null : a / b; }
+```
 
-// Add/Remove classes
-element.classList.add('active');
-element.classList.remove('active');
-element.classList.toggle('active');
+### Events
+```javascript
+btn.addEventListener('click', e => { e.preventDefault(); /* handler */ });
+```
 
-// Modify styles
-element.style.color = 'red';
-element.style.fontSize = '20px';
+### Control Flow
+```javascript
+if (x > 0) { console.log("positive"); } else { console.log("non-positive"); }
+for (const item of arr) { console.log(item); }
+```
 
-// Create elements
-const newDiv = document.createElement('div');
-parent.appendChild(newDiv);
-parent.removeChild(child);
+### Objects & DOM
+```javascript
+const obj = { key: "value", method() { return this.key; } };
+const el  = document.querySelector('#id');
+el.textContent = "Updated with JS!";
 ```
 
 ### Array Methods
 ```javascript
-const arr = [1, 2, 3, 4, 5];
-
-arr.map(x => x * 2);           // [2, 4, 6, 8, 10]
-arr.filter(x => x > 2);        // [3, 4, 5]
-arr.reduce((sum, x) => sum + x, 0);  // 15
-arr.find(x => x > 3);          // 4
-arr.includes(3);               // true
-arr.indexOf(3);                // 2
-arr.slice(1, 3);               // [2, 3]
-arr.reverse();                 // [5, 4, 3, 2, 1]
+arr.map(fn).filter(fn).reduce(fn, init);
 ```
 
 ---
 
-## Lecture 18: Conditions & Looping in JavaScript {#lecture-18}
+## Practice Tasks
 
-::: {.callout-note icon=false}
-## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/lecture-18.qmd){target="_blank" rel="noopener noreferrer"}
-```{=html}
-<div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-18.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
-</div>
-```
-:::
-
-
-### HTML5 Validation
-```html
-<input type="email" required>
-<input type="number" min="1" max="100">
-<input type="text" pattern="[A-Za-z]+">
-```
-
-### JavaScript Validation
-```javascript
-const form = document.querySelector('form');
-
-form.addEventListener('submit', function(e) {
-  if (!validateForm()) {
-    e.preventDefault();
-    alert('Please fill all fields correctly');
-  }
-});
-
-function validateForm() {
-  const email = document.getElementById('email').value;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
-  if (!emailRegex.test(email)) {
-    return false;
-  }
-  return true;
-}
-```
-
-### Real-time Validation
-```javascript
-const emailInput = document.getElementById('email');
-
-emailInput.addEventListener('blur', function() {
-  const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value);
-  
-  if (!isValid) {
-    this.classList.add('error');
-    this.style.borderColor = 'red';
-  } else {
-    this.classList.remove('error');
-    this.style.borderColor = 'green';
-  }
-});
-```
-
----
-
-## Lecture 19: Block Scope Variables (let, const) {#lecture-19}
-
-::: {.callout-note icon=false}
-## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/lecture-19.qmd){target="_blank" rel="noopener noreferrer"}
-```{=html}
-<div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-19.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
-</div>
-```
-:::
-
-
-### Template Literals
-```javascript
-const name = "John";
-const age = 30;
-const message = `Name: ${name}, Age: ${age}`;
-```
-
-### Destructuring
-```javascript
-// Array destructuring
-const [a, b, c] = [1, 2, 3];
-
-// Object destructuring
-const { name, age } = { name: "John", age: 30 };
-```
-
-### Spread Operator
-```javascript
-const arr1 = [1, 2, 3];
-const arr2 = [...arr1, 4, 5];  // [1, 2, 3, 4, 5]
-
-const obj1 = { a: 1, b: 2 };
-const obj2 = { ...obj1, c: 3 }; // { a: 1, b: 2, c: 3 }
-```
-
-### Default Parameters
-```javascript
-function greet(name = "Guest") {
-  return "Hello, " + name;
-}
-
-greet();        // "Hello, Guest"
-greet("John");  // "Hello, John"
-```
-
-### let and const
-```javascript
-// let: block scoped, reassignable
-let x = 10;
-x = 20; // OK
-
-// const: block scoped, not reassignable
-const y = 10;
-y = 20; // Error
-```
-
----
-
-## Lecture 20: Objects & Object Literals {#lecture-20}
-
-::: {.callout-note icon=false}
-## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/lecture-20.qmd){target="_blank" rel="noopener noreferrer"}
-```{=html}
-<div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-20.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
-</div>
-```
-:::
-
-
-### Key Concepts to Review
-- HTML semantic structure
-- CSS selectors and box model
-- JavaScript fundamentals
-- DOM manipulation
-- Event handling
-- Form validation
-
-### Practice Exercises
-1. Build a complete web page with HTML, CSS, JS
-2. Create interactive form with validation
-3. Implement DOM manipulation examples
-4. Review JavaScript control flow
-5. Practice array methods
-
----
-
-## Lab 5: DOM Manipulation & Interactive Pages
-
-### Objectives
-- Manipulate DOM with JavaScript
-- Create dynamic content
-- Implement form validation
-
-### Activities
-1. Create a todo list app
-2. Add/remove DOM elements dynamically
-3. Implement form validation
-4. Add interactivity with events
-5. Update page without reload
-
-### Deliverables
-- Fully functional interactive page
-- Working form validation
-- Dynamic DOM updates
+1. Build an HTML registration page with `<fieldset>`, `<label>`, and HTML5 validation.
+2. Style it with CSS: apply the box model, external stylesheet, and Bootstrap grid.
+3. Add JavaScript to validate the form on `submit` and show an error message.
+4. Use `map` + DOM manipulation to render a list of items from an array.
+5. Create an interactive counter (increment/decrement/reset) using event listeners.
 
 ---
 
 ## Key Takeaways
 
-✅ DOM API allows dynamic page manipulation  
-✅ Form validation improves user experience  
-✅ ES6+ features make JavaScript more powerful  
-✅ Array methods enable functional programming  
-✅ Event-driven architecture creates responsiveness
+✅ HTML, CSS, and JavaScript work together — structure, style, behaviour  
+✅ Always use semantic HTML for accessibility and SEO  
+✅ CSS Box Model governs all spacing and layout  
+✅ JavaScript variables: prefer `const`, use `let`, avoid `var`  
+✅ DOM manipulation and event handling are the core of frontend interactivity
 
 ---
 
-## Mid-Semester Exam Preparation
+## After the Mid-Semester Exam
 
-Study these topics:
-- HTML elements and semantics
-- CSS selectors and Box Model
-- JavaScript fundamentals
-- DOM manipulation
-- Event handling
-- Form validation
+Unit III begins — Java Servlet Programming (Server-Side Web):
+- [Week 8: Servlet Foundations](/content/week-08.qmd) (Lectures 17–20)
+- [Week 9: Session Tracking & JSP](/content/week-09.qmd) (Lectures 21–24)
+- [Week 10: Spring Core Foundations](/content/week-10.qmd) (Lectures 25–28)
 
 
 

@@ -1,0 +1,65 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 24 Demo - JSP Scripting, Directives, Actions & Custom Tags</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 980px; margin: 2rem auto; padding: 1rem; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+    .card { background:#fff; border:1px solid #d9dde3; border-radius:10px; padding:1rem; }
+    button { background:#053660; color:#fff; border:0; padding:.55rem .9rem; border-radius:8px; cursor:pointer; margin-right:.4rem; }
+    pre { background:#111827; color:#e5e7eb; border-radius:8px; padding:.8rem; overflow:auto; }
+    .ok { color:#166534; }
+    @media (max-width: 800px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <h1>Lecture 24 Demo: Directives, Actions, Reuse</h1>
+    <p>Compare repetitive JSP markup with directive/action-based composition.</p>
+    <section class="grid">
+      <article class="card">
+        <h3>Actions</h3>
+        <p>
+          <button id="showRaw">Raw JSP (Repeated)</button>
+          <button id="showComposed">Composed JSP (Include + Action)</button>
+        </p>
+        <pre id="code"></pre>
+      </article>
+      <article class="card">
+        <h3>Review Notes</h3>
+        <pre id="notes">Choose an option to compare.</pre>
+      </article>
+    </section>
+  </main>
+  <script>
+    const code = document.getElementById('code');
+    const notes = document.getElementById('notes');
+
+    document.getElementById('showRaw').addEventListener('click', () => {
+      code.textContent = [
+        '<%@ page contentType="text/html" %>',
+        '<html><body>',
+        '  <header>... repeated ...</header>',
+        '  <nav>... repeated ...</nav>',
+        '  <h2>Dashboard</h2>',
+        '</body></html>'
+      ].join('\n');
+      notes.textContent = 'Issue: header/nav duplication across pages increases maintenance cost.';
+    });
+
+    document.getElementById('showComposed').addEventListener('click', () => {
+      code.textContent = [
+        '<%@ page contentType="text/html" %>',
+        '<%@ include file="/fragments/header.jsp" %>',
+        '<jsp:include page="/fragments/menu.jsp" />',
+        '<h2>Dashboard</h2>',
+        '<my:badge text="Active" />'
+      ].join('\n');
+      notes.innerHTML = '<span class="ok">Better:</span> reusable fragments + tag abstraction reduce duplication and errors.';
+    });
+  </script>
+</body>
+</html>

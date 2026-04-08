@@ -1,0 +1,40 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 28 Demo - Autowiring & Annotations</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 980px; margin: 2rem auto; padding: 1rem; }
+    .card { background:#fff; border:1px solid #d9dde3; border-radius:10px; padding:1rem; }
+    button { background:#053660; color:#fff; border:0; padding:.55rem .9rem; border-radius:8px; cursor:pointer; margin-right:.4rem; }
+    pre { background:#111827; color:#e5e7eb; border-radius:8px; padding:.8rem; overflow:auto; }
+  </style>
+</head>
+<body>
+<main class="shell">
+  <h1>Lecture 28 Demo: Autowiring Resolution</h1>
+  <article class="card">
+    <p>
+      <button id="ambiguous">Autowired by Type (Ambiguous)</button>
+      <button id="primary">Resolve with @Primary</button>
+      <button id="qualifier">Resolve with @Qualifier("emailNotifier")</button>
+    </p>
+    <pre id="trace">Run a resolution mode.</pre>
+  </article>
+</main>
+<script>
+  const trace = document.getElementById('trace');
+  document.getElementById('ambiguous').addEventListener('click', () => {
+    trace.textContent = 'NoUniqueBeanDefinitionException\nCandidates: emailNotifier, smsNotifier';
+  });
+  document.getElementById('primary').addEventListener('click', () => {
+    trace.textContent = '@Primary applied on smsNotifier\nAutowired bean resolved: smsNotifier';
+  });
+  document.getElementById('qualifier').addEventListener('click', () => {
+    trace.textContent = '@Qualifier("emailNotifier") on injection point\nAutowired bean resolved: emailNotifier';
+  });
+</script>
+</body>
+</html>

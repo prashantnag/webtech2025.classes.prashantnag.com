@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 6: HTML Images & Hyperlinks"
+---
+title: "Lecture 6: HTML Tables, Iframes & Forms"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 3, 2026"
@@ -14,372 +14,561 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[HTML Hyperlinks & Tables]{.white-text}
+[HTML Tables, Iframes & Forms]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 2 | Unit I: HTML Forms & CSS Introduction<br>
+Week 2 | Unit I: Web Page Designing<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
+[Learning Outcomes]{.slide-title}
 
 <hr>
 
-::: {.incremental .body-text-m}
-- Create different types of hyperlinks
-- Understand internal vs external links
-- Build and format HTML tables
-- Use semantic table elements
-- Implement accessibility best practices
+::: {.body-text-m}
+After this lecture, students will be able to:
+
+- insert and optimize images with proper attributes
+- apply accessibility requirements for images
+- create all four types of hyperlinks
+- differentiate absolute and relative paths
+- build accessible navigation using anchor elements
 :::
 
 ::: {.notes}
-Links are what make the web interconnected. Tables organize data. Both are essential for web structure.
+Images and links are the two features that made the web visual and interconnected. Understanding them fully is essential.
 :::
 
 ---
 
-## {data-menu-title="Hyperlinks Basics"}
+## {data-menu-title="Prerequisites"}
 
-[The Anchor Element `<a>`]{.slide-title}
+[Prerequisites]{.slide-title2}
 
 <hr>
 
-Hyperlinks connect web pages and resources:
+::: {.body-text-m}
+- HTML document and tag fundamentals
+- Basic understanding of attributes and file paths
+- Familiarity with browser preview tools
+:::
 
-```{.html code-line-numbers="|1"}
-<a href="https://example.com">Click Here</a>
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus mapping:
+
+- HTML image element: src, alt, width, height, figure
+- Image formats and responsive images
+- HTML hyperlinks: all types, target, rel attributes
+- Navigation patterns and accessibility
+
+Prerequisites used:
+
+- HTML semantic structure from Lectures 3-5
+- understanding of attributes and file paths
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Introduction and motivation
+- HTML images: attributes and best practices
+- Image formats and responsiveness
+- Figure and figcaption semantics
+- Hyperlinks: all four types
+- Navigation patterns and accessibility
+- Summary and exam preparation
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Images make web pages visual and engaging, but incorrectly used they slow pages down and break accessibility.
+- Hyperlinks are what make the web a web - without them every page would be an isolated island.
+- Alt text on images is not optional: it is required by accessibility standards and affects SEO directly.
+- Every navigation menu, every "read more" button, every social media icon is a hyperlink.
+- Mastering these two elements unlocks the ability to build visually rich, fully navigable web pages.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Before we dive into details, think about these:**
+
+- What does a screen reader say when it encounters an image with no alt text?
+- What is the difference between clicking a link that opens in the same tab vs a new tab?
+- Why does a relative path like `images/photo.jpg` work on your computer but fail on another?
+- Why might a developer choose WebP over JPEG for product photos on an e-commerce site?
+:::
+
+---
+
+## {data-menu-title="Image Overview"}
+
+[The HTML Image Element]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  IMG["img element"]
+  SRC["src attribute\nFile path or URL"]
+  ALT["alt attribute\nText description"]
+  SIZE["width and height\nDimensions"]
+  FIG["figure + figcaption\nSemantic wrapper"]
+  IMG --> SRC
+  IMG --> ALT
+  IMG --> SIZE
+  IMG --> FIG
+```
+
+::: {.body-text-m}
+- `<img>` is a self-closing void element with no closing tag.
+- `src` and `alt` are both required for accessible, standards-compliant pages.
+:::
+
+---
+
+## {data-menu-title="Image Syntax"}
+
+[Basic Image Syntax]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2|3"}
+<img src="images/photo.jpg" alt="Mountain landscape at sunset" width="600" height="400">
+
+<img src="logo.png" alt="Company Logo" width="200">
+
+<img src="https://example.com/banner.jpg" alt="Welcome banner">
 ```
 
 ::: {.body-text-m .topbr}
-**Key attributes:**
-- `href`: URL to navigate to
-- `title`: Tooltip text
-- `target`: Where to open (_blank for new tab)
-- `rel`: Relationship to target
-:::
+**Required attributes:**
 
-::: {.fragment .body-text-m .center-text .topbr}
-[The text between `<a>` and `</a>` is what users see]{.teal-text}
+- `src` -> file path or URL of the image
+- `alt` -> description read by screen readers and shown when image fails to load
 :::
 
 ---
 
-## {data-menu-title="Types of Links"}
+## {data-menu-title="Image Formats"}
 
-[Four Types of Links]{.slide-title2}
+[Choosing the Right Image Format]{.slide-title}
+
+<hr>
+
+| Format | Best For | Transparency | Notes |
+|---|---|---|---|
+| **JPEG** | Photographs | No | Lossy, small file size |
+| **PNG** | Graphics, UI | Yes | Lossless, larger file |
+| **GIF** | Simple animation | Yes | Limited 256 colors |
+| **WebP** | All types | Yes | Best modern compression |
+| **SVG** | Logos, icons | Yes | Scales infinitely |
+
+::: {.body-text-m .topbr}
+[**Rule of thumb:** JPEG for photos, PNG for UI graphics, SVG for icons, WebP for modern sites]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Image Paths"}
+
+[Relative vs Absolute Image Paths]{.slide-title2}
 
 <hr>
 
 ::: columns
 ::: {.column width="50%"}
-[**1. External Links**]{.teal-text}
+[**Relative Paths (Recommended)**]{.teal-text}
 
 ```html
-<a href="https://google.com">
-  Google
-</a>
+<!-- Same folder -->
+<img src="photo.jpg" alt="">
+
+<!-- Subfolder -->
+<img src="images/photo.jpg" alt="">
+
+<!-- Parent folder -->
+<img src="../images/logo.png" alt="">
 ```
 
-Full URL to another website
+Works when files move together
 :::
 
 ::: {.column width="50%"}
-[**2. Internal Links**]{.teal-text}
+[**Absolute Paths (Use with care)**]{.teal-text}
 
 ```html
-<a href="about.html">
-  About
-</a>
+<!-- Full external URL -->
+<img src="https://example.com/logo.png"
+     alt="">
+
+<!-- NEVER use local disk paths -->
+<!-- C:/Users/name/photo.jpg
+     breaks on other computers -->
 ```
-
-Link to page in same site
 :::
 :::
 
-. . .
+---
+
+## {data-menu-title="Alt Text"}
+
+[Writing Effective Alt Text]{.slide-title}
+
+<hr>
 
 ::: columns
 ::: {.column width="50%"}
-[**3. Anchor Links**]{.teal-text}
+[**Poor alt text:**]{.magenta-text}
 
 ```html
-<a href="#section2">
-  Jump to Section
-</a>
-```
+<img src="dog.jpg" alt="image">
 
-Link to specific section
+<img src="dog.jpg" alt="photo">
+```
 :::
 
 ::: {.column width="50%"}
-[**4. Email Links**]{.teal-text}
+[**Good alt text:**]{.teal-text}
 
 ```html
-<a href="mailto:test@example.com">
-  Email Us
-</a>
+<img src="dog.jpg"
+  alt="Golden retriever playing
+       fetch on a sunny beach">
+
+<img src="chart.png"
+  alt="Bar chart: 40% sales
+       increase Q1 to Q2 2026">
+```
+:::
+:::
+
+::: {.body-text-m .topbr}
+**Rule:** Describe the image as if reading aloud to someone who cannot see it.
+:::
+
+---
+
+## {data-menu-title="Responsive Images"}
+
+[Responsive Images]{.slide-title2}
+
+<hr>
+
+```{.html code-line-numbers="|1-3|4-9"}
+<!-- CSS-based responsiveness -->
+<img src="photo.jpg" alt="Description"
+     style="max-width: 100%; height: auto;">
+
+<!-- srcset for different resolutions -->
+<img src="photo-800.jpg"
+     srcset="photo-400.jpg 400w,
+             photo-800.jpg 800w,
+             photo-1200.jpg 1200w"
+     sizes="(max-width: 600px) 400px, 800px"
+     alt="Product photograph">
 ```
 
-Send email directly
+::: {.body-text-m .topbr}
+- `max-width: 100%` makes images shrink on mobile without distortion
+- `srcset` lets the browser download only the image size it needs
 :::
+
+---
+
+## {data-menu-title="Figure Element"}
+
+[Semantic Image: Figure & Figcaption]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2-4|5|6"}
+<figure>
+    <img src="images/architecture.jpg"
+         alt="Burj Khalifa tower in Dubai against blue sky"
+         width="600" height="400">
+    <figcaption>Burj Khalifa, Dubai - world's tallest building (828m)</figcaption>
+</figure>
+```
+
+::: {.body-text-m .topbr}
+- `<figure>` = self-contained, referenceable media block
+- `<figcaption>` = caption semantically linked to the image
+- Screen readers announce the figcaption as part of the figure group
+- Unlike a plain `<p>` below the image, figcaption is semantically bound to the figure
+:::
+
+---
+
+## {data-menu-title="Hyperlinks Overview"}
+
+[The Anchor Element]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  A["anchor element a"]
+  E["External Link\nhttps://..."]
+  I["Internal Link\npage.html"]
+  AN["Anchor Link\n#section-id"]
+  EM["Email and Tel\nmailto: tel:"]
+  A --> E
+  A --> I
+  A --> AN
+  A --> EM
+```
+
+::: {.body-text-m}
+- The `href` attribute defines WHERE the link goes.
+- The text between `<a>` and `</a>` is what users click.
+- Links can wrap images too: `<a href="..."><img></a>`
 :::
 
 ---
 
 ## {data-menu-title="External Links"}
 
-[External Links (Absolute URLs)]{.slide-title}
+[External Links]{.slide-title}
 
 <hr>
 
-Link to other websites with full URLs:
-
-```{.html code-line-numbers="|1|2"}
+```{.html code-line-numbers="|1|2-5"}
 <a href="https://www.example.com">Visit Example</a>
 
-<a href="https://github.com" target="_blank">GitHub (New Tab)</a>
+<a href="https://github.com"
+   target="_blank"
+   rel="noopener noreferrer">GitHub (New Tab)</a>
 ```
 
-::: {.body-text-m .topbr}
-**Key points:**
-- Must start with `https://` or `http://`
-- Use `target="_blank"` to open in new tab
-- Consider using `rel="noopener noreferrer"` for security
-:::
-
-::: {.fragment}
-```html
-<a href="https://github.com" 
-   target="_blank" 
-   rel="noopener noreferrer">GitHub</a>
-```
+::: {.incremental .body-text-m .topbr}
+- Always use full URL including `https://`
+- `target="_blank"` opens in a new browser tab
+- `rel="noopener noreferrer"` prevents the new tab from accessing your page (security)
+- Inform users when a link opens in a new tab (accessibility)
 :::
 
 ---
 
 ## {data-menu-title="Internal Links"}
 
-[Internal Links (Relative URLs)]{.slide-title2}
+[Internal Links]{.slide-title2}
 
 <hr>
 
-Link to pages within the same website:
-
-```{.html code-line-numbers="|1|2|3"}
-<a href="about.html">About Page</a>
+```{.html code-line-numbers="|1|2|3|4"}
+<a href="about.html">About Us</a>
 
 <a href="pages/contact.html">Contact</a>
 
-<a href="../index.html">Home</a>
+<a href="../index.html">Home (parent folder)</a>
+
+<a href="/about.html">About (root-relative)</a>
 ```
 
 ::: {.body-text-m .topbr}
-- Use relative paths (no `https://`)
-- Goes to other HTML files in project
-- Paths relative to current file location
+- Use relative paths for internal links
+- Root-relative paths starting with `/` work from any page on the site
 :::
 
 ---
 
 ## {data-menu-title="Anchor Links"}
 
-[Anchor Links (Jump within Page)]{.slide-title2}
+[Anchor Links - Jump Within a Page]{.slide-title2}
 
 <hr>
 
-Link to specific sections on page:
+**Step 1 - Create targets using `id`:**
 
-```{.html code-line-numbers="|1-2|3|4-5|6-7"}
-<!-- At the top, create navigation -->
-<nav>
-    <a href="#services">Services</a>
-    <a href="#team">Team</a>
-    <a href="#contact">Contact</a>
-</nav>
-
-<!-- Later on page, create sections -->
+```html
 <h2 id="services">Our Services</h2>
 <h2 id="team">Our Team</h2>
 <h2 id="contact">Contact Us</h2>
 ```
 
-::: {.fragment .body-text-m .center-text .topbr}
-[Clicking "Services" jumps directly to that section]{.magenta-text}
-:::
-
----
-
-## {data-menu-title="Email Links"}
-
-[Email Links]{.slide-title}
-
-<hr>
-
-Allow users to send emails directly:
-
-```{.html code-line-numbers="|1"}
-<a href="mailto:contact@example.com">Email Us</a>
-```
-
-**Advanced email link with subject:**
+**Step 2 - Create jump links:**
 
 ```html
-<a href="mailto:contact@example.com?subject=Question">
-  Send Question
-</a>
-```
-
-**With subject and body:**
-
-```html
-<a href="mailto:contact@example.com?subject=Support&body=Please help with...">
-  Contact Support
-</a>
-```
-
----
-
-## {data-menu-title="HTML Tables"}
-
-[Creating Tables]{.slide-title}
-
-<hr>
-
-Tables organize data in rows and columns:
-
-```{.html code-line-numbers="|1|2|3-4|5|6"}
-<table border="1">
-    <tr>
-        <td>Cell 1</td>
-        <td>Cell 2</td>
-    </tr>
-</table>
-```
-
-::: {.body-text-m .topbr}
-**Elements:**
-- `<table>`: Container
-- `<tr>`: Table row
-- `<td>`: Table data cell
-- `<th>`: Table header cell
-:::
-
----
-
-## {data-menu-title="Table Structure"}
-
-[Complete Table Structure]{.slide-title}
-
-<hr>
-
-```{.html code-line-numbers="|1|2-4|5-10|11"}
-<table border="1">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>City</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Alice</td>
-            <td>25</td>
-            <td>New York</td>
-        </tr>
-    </tbody>
-</table>
-```
-
-::: {.fragment .body-text-m .topbr}
-- `<thead>`: Header rows
-- `<tbody>`: Data rows
-- `<tfoot>`: Footer rows (optional)
-:::
-
----
-
-## {data-menu-title="Table Example"}
-
-[Table Example: Student Grades]{.slide-title}
-
-<hr>
-
-```{.html code-line-numbers="|2-6|7-13"}
-<table border="1">
-    <thead>
-        <tr>
-            <th>Student</th>
-            <th>Math</th>
-            <th>Science</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>John</td>
-            <td>85</td>
-            <td>90</td>
-        </tr>
-        <tr>
-            <td>Sarah</td>
-            <td>92</td>
-            <td>88</td>
-        </tr>
-    </tbody>
-</table>
-```
-
----
-
-## {data-menu-title="Table Best Practices"}
-
-[Table Best Practices]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-1. **Use semantic structure** - `<thead>`, `<tbody>`, `<tfoot>`
-2. **Header cells** - Use `<th>` for headers, not `<td>`
-3. **Captions** - Add `<caption>` above table
-4. **Scope attribute** - Help accessibility: `scope="col"`
-5. **Keep simple** - Avoid super complex nested tables
-6. **CSS for styling** - Don't use `border` attribute, use CSS
-7. **Responsive** - On mobile, consider different layouts
-:::
-
----
-
-## {data-menu-title="Navigation Example"}
-
-[Building Navigation with Links]{.slide-title}
-
-<hr>
-
-```{.html code-line-numbers="|1|2-5|6"}
 <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="services.html">Services</a>
-    <a href="contact.html">Contact</a>
+    <a href="#services">Services</a>
+    <a href="#team">Team</a>
+    <a href="#contact">Contact</a>
 </nav>
 ```
 
-::: {.fragment}
-**With styling (later in CSS):**
-```css
-nav a {
-    margin: 10px;
-    text-decoration: none;
-    color: #333;
-}
+::: {.fragment .body-text-m .center-text .topbr}
+[The `#` symbol means "scroll to the element with this id on the same page"]{.magenta-text}
+:::
+
+---
+
+## {data-menu-title="Email and Tel Links"}
+
+[Email & Telephone Links]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2-4|5"}
+<a href="mailto:contact@example.com">Email Us</a>
+
+<a href="mailto:support@example.com?subject=Help&body=Hello...">
+    Send Support Request
+</a>
+
+<a href="tel:+911234567890">Call: +91 12345 67890</a>
 ```
+
+::: {.body-text-m .topbr}
+- `mailto:` opens the user's email client with the address pre-filled
+- `tel:` opens the phone dialer on mobile devices
+- Include country code in `tel:` links for international compatibility
+:::
+
+---
+
+## {data-menu-title="Linked Images"}
+
+[Images as Links]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1-3|4-7"}
+<a href="index.html">
+    <img src="images/logo.png" alt="Company Logo - Go to Homepage" width="150">
+</a>
+
+<a href="products.html">
+    <img src="images/banner.jpg" alt="Summer Sale - Up to 50% off" width="800">
+</a>
+```
+
+::: {.body-text-m .topbr}
+[**Important:** The `alt` text of a linked image should describe the link destination, not just the image content.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Navigation Pattern"}
+
+[Building a Navigation Menu]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2|3-8|9"}
+<header>
+    <a href="index.html"><img src="logo.png" alt="Site Logo"></a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+```
+
+::: {.body-text-m .topbr}
+- Use `<nav>` to wrap navigational link groups for semantic clarity
+- Screen readers announce `<nav>` regions to help users navigate the page structure
+:::
+
+---
+
+## {data-menu-title="Link Accessibility"}
+
+[Link Accessibility Best Practices]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+| Bad Practice | Better Practice |
+|---|---|
+| `Click here` | `Read our accessibility guide` |
+| `Read more` | `Read more about HTML images` |
+| Empty alt on linked image | Alt text describes the destination |
+| URL as link text | Descriptive anchor text |
+:::
+
+::: {.body-text-m .topbr}
+**Rule:** A screen reader user should understand where the link goes from the link text alone, with no surrounding context.
+:::
+
+---
+
+## {data-menu-title="Memory Booster"}
+
+[Memory Booster: Images and Links Together]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Think of a **magazine page**:
+
+- **`<img>`** = The **photograph** - visual media that communicates instantly
+- **`alt` text** = The **photo caption** that explains it to those who cannot see it
+- **`<figure>`** = The **photo box** that frames image + caption together as a unit
+- **`<a>` hyperlink** = The **"see page 42"** reference that connects to related content
+- **`target="_blank"`** = Opening a **new bookmarked page** to not lose your place
+- **Anchor `#id`** = The **article index** at the start of a magazine directing you to sections
+
+Documents connected by hyperlinks form the World Wide Web!
+:::
+
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo: Images & Hyperlinks Explorer]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Interactive demonstration of image elements and all four hyperlink types:**
+
+?? **[Open Interactive Demo: HTML Images & Hyperlinks](../demos/lecture-06-demo.html){target="_blank"}**
+
+**What you'll see:**
+
+- Image with correct alt text vs missing alt text comparison
+- Responsive image sizing
+- Figure/figcaption semantic demonstration
+- All four link types: external, internal, anchor, email
+- Navigation menu built with semantic `<nav>` elements
+
+?? **Key insight:** DevTools shows the exact `href` and `alt` values of any element!
 :::
 
 ---
@@ -391,10 +580,136 @@ nav a {
 <hr>
 
 ::: {.body-text-m}
-- [MDN: Links](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)
-- [MDN: Tables](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table)
-- [Accessible Tables](https://www.w3.org/WAI/tutorials/tables/)
+- [MDN: The Image element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
+- [MDN: The Anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)
+- [WebAIM: Alt Text Guide](https://webaim.org/techniques/alttext/)
 - [Course content: Week 2](/content/week-02.qmd)
+:::
+
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist for Images & Links]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**When an image does not appear:**
+
+1. check `src` attribute path (relative vs absolute)
+2. verify file extension matches real file (`.jpg` vs `.jpeg`)
+3. test direct URL in browser address bar
+4. inspect DevTools Network tab for 404 errors
+5. confirm file exists in the correct folder
+
+**When a link does not work:**
+
+1. verify `href` attribute is present and not empty
+2. check file path or full external URL is correct
+3. for anchor links, confirm the target `id` exists on the page
+4. inspect DevTools Console for errors blocking navigation
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, you should understand:
+
+- `<img>` element attributes: src, alt, width, height
+- Image formats and when to use each one
+- Responsive images using max-width and srcset
+- `<figure>` and `<figcaption>` for semantic image wrapping
+- All four hyperlink types: external, internal, anchor, email
+- Security: `rel="noopener noreferrer"` with `target="_blank"`
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- What is the purpose of the `alt` attribute?
+- Name two required attributes for `<img>`.
+- What is the difference between absolute and relative paths?
+- What does `target="_blank"` do?
+- Why use `rel="noopener noreferrer"` with external links?
+- What is an anchor link and how is it created?
+- What is `<figure>` with `<figcaption>` used for?
+- Which image format is best for logos and icons?
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain the `<img>` element with all attributes and accessibility requirements.
+- Compare image file formats with suitable use cases.
+- Explain all four types of hyperlinks with examples.
+- Discuss how to build an accessible navigation menu using semantic HTML.
+- Design a product page using images, figure/figcaption, and navigation hyperlinks.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- create a page with three images using proper `alt` text
+- wrap one image in `<figure>` with `<figcaption>`
+- make one image responsive using `max-width: 100%`
+- create a navigation using all four link types
+- test all links in browser and verify alt text in DevTools
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- insert images with all required attributes?
+- write descriptive and meaningful alt text?
+- create all four types of hyperlinks?
+- build a semantic navigation menu?
+- answer short and long exam questions?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: HTML Tables & Iframes
+- Preparation required: revise attributes and semantic structure from Lectures 3-6
 :::
 
 ---
@@ -403,15 +718,10 @@ nav a {
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[HTML Tables, Iframes & Forms]{.white-text}
 </div>
 <div class="custom-subtitle3">
-Next: Lecture 7 - HTML Forms & Form Elements
+Next: Lecture 7 - HTML Tables & Iframes
 </div>
 </div>
-
-
-
-
-
 

@@ -1,5 +1,10 @@
 format:
   revealjs:
+    incremental: false
+    code-annotations: hover
+    logo: ../files/gcet_logo.png
+    footer: >-
+      <span><a href="https://www.prashantnag.com" target="_blank">Prashant Kumar Nag, Assistant Professor</a> 
     slide-number: true
     code-link: true
     code-copy: false

@@ -1,25 +1,24 @@
 ﻿---
-title: "Week 8: Mar 16 - Mar 22, 2026"
-subtitle: "Unit III: Servlets & JSP Introduction"
+title: "Unit III Block 1: Servlet Foundations"
+subtitle: "Lectures 17-20 - servlet architecture, lifecycle, request handling, and dispatching"
 ---
 
-## Week Overview
+## Block Overview
 
-This week introduces server-side programming with Servlets and Java Server Pages (JSP), covering architecture, lifecycle, and request/response handling.
+This block starts Unit III and moves from client-side pages to server-side request processing. The focus is on what a servlet is, how the container manages it, and how requests are received, processed, and routed.
 
 **Course Outcome:** CO-3 (K3 - Application)  
-**Duration:** 1 week (4 lectures + 1 lab)  
-**Lab:** Servlet Development  
-**Home Assignment 3 Due:** Mar 18
+**Lectures Covered:** 17-20  
+**Theme:** Core servlet programming
 
 ::: {.callout-tip icon=false}
-## Quick Practice Quizzes (Lectures 21-24)
+## Quick Practice Quizzes (Lectures 17-20)
 Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
 
-- [Lecture 21 Quiz](/quiz/lecture-21-quiz.qmd)
-- [Lecture 22 Quiz](/quiz/lecture-22-quiz.qmd)
-- [Lecture 23 Quiz](/quiz/lecture-23-quiz.qmd)
-- [Lecture 24 Quiz](/quiz/lecture-24-quiz.qmd)
+- [Lecture 17 Quiz](/quiz/lecture-17-quiz.qmd)
+- [Lecture 18 Quiz](/quiz/lecture-18-quiz.qmd)
+- [Lecture 19 Quiz](/quiz/lecture-19-quiz.qmd)
+- [Lecture 20 Quiz](/quiz/lecture-20-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -29,194 +28,141 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 21: DOM Manipulation using JavaScript {#lecture-21}
+## Lecture 17: Servlet Overview & Architecture {#lecture-17}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/lecture-21.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa desktop >}} View Lecture](/lectures/lecture-17.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-21.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-17.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### Core Ideas
+- What a servlet container does in a Java web application
+- How browser requests reach a servlet
+- Role of `web.xml`, annotations, and deployment descriptors
+- Basic request-response flow in server-side applications
 
-### DOM Essentials
-- DOM as a tree representation of HTML
-- Selecting elements with `getElementById` and `querySelector`
-- Updating text, attributes, and classes dynamically
-- Creating and removing elements using `createElement` and `appendChild`
-
-### Event-Driven Interactivity
-```javascript
-const btn = document.querySelector('#saveBtn');
-btn.addEventListener('click', (e) => {
-  e.preventDefault();
-  document.querySelector('#status').textContent = 'Saved';
-});
+### Typical Request Flow
+```text
+Browser -> Web Server -> Servlet Container -> Servlet -> Response
 ```
 
-### Practical Use Cases
-- Live character counters
-- Dynamic lists and cards
-- Input-driven UI updates
-- Lightweight client-side validation
+### Focus Points
+- Difference between static page delivery and dynamic response generation
+- Why servlets are used for business logic and request processing
+- Where JSP fits relative to servlets
 
 ---
 
-## Lecture 22: Revision & Mini Project (JavaScript & DOM) {#lecture-22}
+## Lecture 18: Servlet Interface & Life Cycle {#lecture-18}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/lecture-22.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa desktop >}} View Lecture](/lectures/lecture-18.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-22.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-18.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### Lifecycle Methods
+- `init()` for one-time startup work
+- `service()` for request handling
+- `destroy()` for cleanup before shutdown
 
-### Revision Focus Areas
-- Variables, scope, and function reuse
-- DOM selection and state updates
-- Event handling and form validation
-- Class-based UI state (`classList.add/remove/toggle`)
+### Lifecycle Sequence
+```text
+Load class -> Create instance -> init() -> service() -> destroy()
+```
 
-### Mini Project: Smart Task Tracker
-Build a single-page app where students can:
+### Why It Matters
+- Explains when servlet objects are created
+- Helps avoid repeated setup work inside request processing
+- Introduces thread-safety concerns in shared servlet instances
 
-- Add task items
-- Mark tasks complete
-- Show pending task count
-- Prevent empty submissions
-- Extend with localStorage as bonus
+---
 
-### Sample Core Logic
-```javascript
-const input = document.querySelector('#taskInput');
-const list = document.querySelector('#taskList');
+## Lecture 19: Handling HTTP GET & POST Requests {#lecture-19}
 
-function addTask() {
-  const text = input.value.trim();
-  if (!text) return;
-  const li = document.createElement('li');
-  li.textContent = text;
-  list.appendChild(li);
-  input.value = '';
+::: {.callout-note icon=false}
+## Lecture Materials
+[{{< fa desktop >}} View Lecture](/lectures/lecture-19.qmd){target="_blank" rel="noopener noreferrer"}
+```{=html}
+<div class="ratio ratio-16x9 mb-3">
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-19.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+</div>
+```
+:::
+
+### Request Handling
+- `doGet()` for safe reads and page fetches
+- `doPost()` for form submission and state-changing operations
+- Parameters read through `request.getParameter()`
+
+### Example
+```java
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+  String username = request.getParameter("username");
+  response.getWriter().println("Welcome " + username);
 }
 ```
 
+### Comparison
+- GET data is visible in URL and suitable for retrieval
+- POST sends data in request body and is used for submit/update flows
+
 ---
 
-## Lecture 23: Servlet Overview & Architecture {#lecture-23}
+## Lecture 20: Redirecting Requests & Request Dispatching {#lecture-20}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa desktop >}} View Lecture](/lectures/lecture-23.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-20-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-20.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-23.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-20.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
+### Forward vs Redirect
+- `forward()` keeps processing on the server and usually preserves request data
+- `sendRedirect()` tells the browser to make a fresh request
+- Redirect changes the URL; forward usually does not
 
-### Servlet Architecture Components
-- Client browser and HTTP request
-- Web server and servlet container
-- Servlet class for request processing
-- Optional database integration layer
-
-### Core Responsibilities
-- Parse incoming request data
-- Execute business logic
-- Generate response (HTML, JSON, redirects)
-- Coordinate with service and persistence layers
-
-### Typical Flow
-```
-Browser -> Web Server -> Servlet Container -> Servlet -> Database
-Browser <- Web Server <- Servlet Container <- Servlet <- Database
+### Example
+```java
+if (validUser) {
+  response.sendRedirect("home.jsp");
+} else {
+  request.setAttribute("error", "Invalid credentials");
+  request.getRequestDispatcher("login.jsp").forward(request, response);
+}
 ```
 
----
-
-## Lecture 24: Servlet Interface & Life Cycle {#lecture-24}
-
-::: {.callout-note icon=false}
-## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-24-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-24.qmd){target="_blank" rel="noopener noreferrer"}
-```{=html}
-<div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-24.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
-</div>
-```
-:::
-
-
-### Servlet Interface Methods
-- `init(ServletConfig config)`
-- `service(ServletRequest req, ServletResponse res)`
-- `destroy()`
-- `getServletConfig()`
-- `getServletInfo()`
-
-### Lifecycle Sequence
-```
-Load class -> Instantiate -> init() -> service() for each request -> destroy()
-```
-
-### Lifecycle Notes
-- `init()` runs once during startup
-- `service()` runs per request (delegates to doGet/doPost in HttpServlet)
-- `destroy()` runs once before removal
-- Avoid unsafe mutable shared fields due to multi-threaded requests
-
----
-
-## Lab 6: Servlet Development
-
-### Objectives
-- Create functional servlets
-- Handle GET/POST requests
-- Manage sessions
-- Basic JSP pages
-
-### Activities
-1. Create login servlet
-2. Implement form processing
-3. Add session management
-4. Create simple JSP page
-5. Deploy to application server
-
-### Deliverables
-- Working servlet application
-- Functional login system
-- Session management
+### Decision Rule
+- Use redirect after successful submit flows
+- Use forward when the next page needs the current request attributes
 
 ---
 
 ## Key Takeaways
 
-✅ Servlets run on server and process requests  
-✅ Lifecycle manages servlet creation/destruction  
-✅ GET for safe, bookmarkable requests  
-✅ POST for secure data submission  
-✅ Sessions track user across requests  
-✅ JSP simplifies server-side programming
+- A servlet container manages creation, execution, and cleanup of servlets  
+- `doGet()` and `doPost()` solve different request scenarios  
+- Request dispatching controls how the user moves between server resources  
+- This block prepares the shift to session management and JSP
 
----
+## Next Block
 
-## Next Week
-
-Unit III continues:
-- JSP implicit objects and directives
-- JSTL (JSP Standard Tag Library)
-- MVC architecture
-- Database connectivity
+Unit III continues with cookies, `HttpSession`, JSP basics, and JSP tags.
 
 
 

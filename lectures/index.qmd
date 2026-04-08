@@ -33,48 +33,48 @@ This folder contains all lectures for BMC201 - Web Technology course.
 - [Lecture 16: Functions in JavaScript & Returning Data](lecture-16.qmd)
 - [Practice Quiz Set (Lectures 13-16)](/quiz/index.qmd)
 
-### Week 5: JavaScript Control & Objects
-- [Lecture 17: UI Events & Event Handling](lecture-17.qmd)
-- [Lecture 18: Conditions & Looping in JavaScript](lecture-18.qmd)
-- [Lecture 19: Block Scope Variables (let, const)](lecture-19.qmd)
-- [Lecture 20: Objects & Object Literals](lecture-20.qmd)
-- [Practice Quiz Set (Lectures 17-20)](/quiz/index.qmd)
-
 ### Weeks 6-7: Mid-Semester Exam Preparation
 - [Revision: Unit I - Web Page Designing](revision-unit-1.qmd)
 - [Revision: Unit II - JavaScript](revision-unit-2.qmd)
 
-### Week 8: JavaScript DOM to Servlet Introduction
-- [Lecture 21: DOM Manipulation using JavaScript](lecture-21.qmd)
-- [Lecture 22: Revision & Mini Project (JavaScript & DOM)](lecture-22.qmd)
-- [Lecture 23: Servlet Overview & Architecture](lecture-23.qmd)
-- [Lecture 24: Servlet Interface & Life Cycle](lecture-24.qmd)
+### Unit III: Servlet Foundations
+- [Lecture 17: Servlet Overview & Architecture](lecture-17.qmd)
+- [Lecture 18: Servlet Interface & Life Cycle](lecture-18.qmd)
+- [Lecture 19: Handling HTTP GET & POST Requests](lecture-19.qmd)
+- [Lecture 20: Redirecting Requests & Request Dispatching](lecture-20.qmd)
+- [Practice Quiz Set (Lectures 17-20)](/quiz/index.qmd)
 
-### Week 9: Servlet HTTP & Session Management
-- [Lecture 25: Handling HTTP GET & POST Requests](lecture-25.qmd)
-- [Lecture 26: Redirecting Requests & Request Dispatching](lecture-26.qmd)
-- [Lecture 27: Cookies & Session Tracking](lecture-27.qmd)
-- [Lecture 28: Session Tracking using HttpSession](lecture-28.qmd)
+### Unit III: Session Tracking and JSP
+- [Lecture 21: Session Tracking using Cookies](lecture-21.qmd)
+- [Lecture 22: Session Tracking with HttpSession](lecture-22.qmd)
+- [Lecture 23: JSP Introduction & Implicit Objects](lecture-23.qmd)
+- [Lecture 24: JSP Scripting, Directives, Actions & Custom Tags](lecture-24.qmd)
+- [Practice Quiz Set (Lectures 21-24)](/quiz/index.qmd)
 
-### Week 10: JSP Core & Practical Revision
-- [Lecture 29: JSP Introduction & JSP Overview](lecture-29.qmd)
-- [Lecture 30: JSP Implicit Objects & Scripting](lecture-30.qmd)
-- [Lecture 31: JSP Directives, Standard Actions & Custom Tag Libraries](lecture-31.qmd)
-- [Lecture 32: Revision & Practical (Servlets + JSP)](lecture-32.qmd)
+### Unit IV: Spring Core Foundations
+- [Lecture 25: Spring Core Basics & Dependency Injection](lecture-25.qmd)
+- [Lecture 26: Spring IoC & Bean Life Cycle](lecture-26.qmd)
+- [Lecture 27: Bean Scopes: Singleton, Prototype, Request, Session, Application](lecture-27.qmd)
+- [Lecture 28: Autowiring & Annotations in Spring](lecture-28.qmd)
+- [Practice Quiz Set (Lectures 25-28)](/quiz/index.qmd)
 
-### Week 11: Spring Core
-- [Lecture 33: Spring Core Basics & Dependency Injection](lecture-33.qmd)
-- [Lecture 34: Design Patterns: Factory & Strategy](lecture-34.qmd)
-- [Lecture 35: Spring IoC, Bean Scopes & Life Cycle Callbacks](lecture-35.qmd)
-- [Lecture 36: AOP, Autowiring, Annotations, Bean Configuration Styles](lecture-36.qmd)
-- [Practice Quiz Set (Lectures 33-36)](/quiz/index.qmd)
+### Unit IV: Spring Design Patterns and Configuration
+- [Lecture 29: Introduction to Design Patterns in Spring](lecture-29.qmd)
+- [Lecture 30: Factory Design Pattern in Spring](lecture-30.qmd)
+- [Lecture 31: Strategy Design Pattern in Spring](lecture-31.qmd)
+- [Lecture 32: AOP & Bean Configuration Styles (XML and Annotation)](lecture-32.qmd)
+- [Practice Quiz Set (Lectures 29-32)](/quiz/index.qmd)
 
-### Week 12: Spring Boot & REST Services
-- [Lecture 37: Revision & Hands-on (Spring Core)](lecture-37.qmd)
-- [Lecture 38: Spring Boot Configuration, Annotations & Build Systems](lecture-38.qmd)
-- [Lecture 39: RESTful Web Services: Controllers, Request Mapping, CRUD APIs](lecture-39.qmd)
-- [Lecture 40: Spring Boot Actuator, Logger, Web App Build & Final Revision](lecture-40.qmd)
-- [Practice Quiz Set (Lectures 37-40)](/quiz/index.qmd)
+### Unit V: Spring Boot and REST APIs
+- [Lecture 33: Spring Boot Configuration & Setup](lecture-33.qmd)
+- [Lecture 34: Spring Boot Annotations & Build Systems](lecture-34.qmd)
+- [Lecture 35: Spring Boot Actuator, Runners & Logging](lecture-35.qmd)
+- [Lecture 36: REST Controllers & Request Mapping](lecture-36.qmd)
+- [Lecture 37: Request Body, Path Variable & Request Parameter](lecture-37.qmd)
+- [Lecture 38: HTTP Methods & CRUD APIs (GET, POST, PUT, DELETE)](lecture-38.qmd)
+- [Lecture 39: Spring Boot Code Structure & Best Practices](lecture-39.qmd)
+- [Lecture 40: Final Revision & Hands-on Integration (Spring Boot + REST)](lecture-40.qmd)
+- [Practice Quiz Set (Lectures 33-40)](/quiz/index.qmd)
 
 ---
 

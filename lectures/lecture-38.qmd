@@ -1,5 +1,5 @@
 ---
-title: "Lecture 38: Spring Boot Configuration, Annotations & Build Systems"
+title: "Lecture 38: HTTP Methods & CRUD APIs (GET, POST, PUT, DELETE)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "March 26, 2026"
@@ -13,11 +13,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Spring Boot Configuration, Annotations & Build Systems]{.white-text}
+[HTTP Methods & CRUD APIs (GET, POST, PUT, DELETE)]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 12 | Unit V: Spring Boot<br>
+Week 10 | Unit V: Spring Boot & REST Services<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -257,7 +257,7 @@ management.endpoint.health.show-details=always
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[HTTP Methods & CRUD APIs (GET, POST, PUT, DELETE)]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 39 - RESTful Web Services: Controllers, Request Mapping, CRUD APIs

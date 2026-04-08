@@ -1,24 +1,24 @@
 ﻿---
-title: "Week 11: Apr 6 - Apr 12, 2026"
-subtitle: "Unit IV-V: Spring Data, Security, and Spring Boot"
+title: "Unit IV Block 2: Spring Patterns and Configuration"
+subtitle: "Lectures 29-32 - design patterns, AOP, and configuration styles"
 ---
 
-## Week Overview
+## Block Overview
 
-This week covers Spring Data JPA, Spring Security, and introduces Spring Boot as a modern way to build Spring applications.
+This block deepens Unit IV by showing how Spring applies classic design patterns and how cross-cutting concerns and bean configuration are handled in real projects.
 
-**Course Outcome:** CO-4, CO-5 (K4-K5 - Analysis & Synthesis)  
-**Duration:** 1 week (4 lectures + 1 lab)  
-**Lab:** Spring Boot Application Development
+**Course Outcome:** CO-4 (K4 - Analysis)  
+**Lectures Covered:** 29-32  
+**Theme:** Patterns, AOP, and configuration
 
 ::: {.callout-tip icon=false}
-## Quick Practice Quizzes (Lectures 33-36)
+## Quick Practice Quizzes (Lectures 29-32)
 Use the [Quiz Hub](/quiz/index.qmd) or jump directly to:
 
-- [Lecture 33 Quiz](/quiz/lecture-33-quiz.qmd)
-- [Lecture 34 Quiz](/quiz/lecture-34-quiz.qmd)
-- [Lecture 35 Quiz](/quiz/lecture-35-quiz.qmd)
-- [Lecture 36 Quiz](/quiz/lecture-36-quiz.qmd)
+- [Lecture 29 Quiz](/quiz/lecture-29-quiz.qmd)
+- [Lecture 30 Quiz](/quiz/lecture-30-quiz.qmd)
+- [Lecture 31 Quiz](/quiz/lecture-31-quiz.qmd)
+- [Lecture 32 Quiz](/quiz/lecture-32-quiz.qmd)
 :::
 
 ::: {.callout-note icon=false}
@@ -28,15 +28,15 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 33: Spring Core Basics & Dependency Injection {#lecture-33}
+## Lecture 29: Introduction to Design Patterns in Spring {#lecture-29}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-33-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-33.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-29-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-29.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-33.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-29.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
@@ -68,21 +68,21 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 
 ---
 
-## Lecture 34: Design Patterns: Factory & Strategy {#lecture-34}
+## Lecture 30: Factory Design Pattern in Spring {#lecture-30}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-34-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-34.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-30-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-30.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-34.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-30.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
 
 
-### Design Pattern Categories
+### Factory Pattern Focus
 
 | Category | Purpose | Examples |
 |---|---|---|
@@ -90,10 +90,10 @@ This week uses upcoming lecture decks. Use the [Lectures Index](/lectures/index.
 | Structural | Object composition | Adapter, Decorator, Proxy |
 | Behavioral | Object communication | Strategy, Observer, Template |
 
-### Factory Pattern
-- Intent: centralise object creation behind a factory method
-- Caller uses only the interface — not the concrete class
-- Spring's `BeanFactory` and `ApplicationContext` implement this pattern
+### Why It Matters
+- Centralizes object creation
+- Hides implementation details from callers
+- Matches how Spring containers supply managed beans
 
 ```java
 // Factory method
@@ -106,15 +106,28 @@ public static Notification create(String type) {
 }
 ```
 
-### Strategy Pattern
-- Intent: swap algorithms/behaviours at runtime via a shared interface
-- Context holds a reference to the strategy — can be changed
-- Spring DI naturally implements Strategy via `@Autowired` + `@Qualifier`
+## Lecture 31: Strategy Design Pattern in Spring {#lecture-31}
+
+::: {.callout-note icon=false}
+## Lecture Materials
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-31-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-31.qmd){target="_blank" rel="noopener noreferrer"}
+```{=html}
+<div class="ratio ratio-16x9 mb-3">
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-31.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+</div>
+```
+:::
+
+### Strategy Pattern Focus
+- Encapsulates interchangeable algorithms behind one interface
+- Works naturally with Spring DI using multiple bean implementations
+- Often combined with `@Qualifier` to choose behavior
 
 ```java
 public interface SortStrategy { void sort(int[] data); }
-class QuickSort  implements SortStrategy { ... }
-class MergeSort  implements SortStrategy { ... }
+class QuickSort implements SortStrategy { /* ... */ }
+class MergeSort implements SortStrategy { /* ... */ }
 
 public class Sorter {
   private SortStrategy strategy;
@@ -123,67 +136,18 @@ public class Sorter {
 }
 ```
 
----
-
-## Lecture 35: Spring IoC, Bean Scopes & Life Cycle Callbacks {#lecture-35}
+## Lecture 32: AOP & Bean Configuration Styles (XML and Annotation) {#lecture-32}
 
 ::: {.callout-note icon=false}
 ## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-35-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-35.qmd){target="_blank" rel="noopener noreferrer"}
+[{{< fa list-check >}} Take Quiz](/quiz/lecture-32-quiz.qmd)
+[{{< fa desktop >}} View Lecture](/lectures/lecture-32.qmd){target="_blank" rel="noopener noreferrer"}
 ```{=html}
 <div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-35.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
+  <iframe class="lecture-preview-frame" src="/lectures/lecture-32.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
 </div>
 ```
 :::
-
-
-### Bean Scopes
-
-| Scope | Instances | Lifetime |
-|---|---|---|
-| `singleton` | One per container | Until container shuts down |
-| `prototype` | New per `getBean()` | Caller managed |
-| `request` | One per HTTP request | Until response sent |
-| `session` | One per HTTP session | Until session expires |
-| `application` | One per `ServletContext` | Until app stops |
-
-### Bean Lifecycle
-Instantiate → Inject Dependencies → `@PostConstruct` / `afterPropertiesSet` / init-method → Bean Ready → `@PreDestroy` / `destroy` / destroy-method
-
-### Lifecycle Callback Approaches
-```java
-@Component
-public class DatabasePool {
-
-  @PostConstruct
-  public void init()    { /* open connections  */ }
-
-  @PreDestroy
-  public void cleanup() { /* close connections */ }
-}
-```
-
-- `@PostConstruct` / `@PreDestroy` — preferred (no Spring API coupling)
-- `InitializingBean` / `DisposableBean` interfaces — programmatic
-- `@Bean(initMethod, destroyMethod)` — for third-party classes
-
----
-
-## Lecture 36: AOP, Autowiring, Annotations, Bean Configuration Styles {#lecture-36}
-
-::: {.callout-note icon=false}
-## Lecture Materials
-[{{< fa list-check >}} Take Quiz](/quiz/lecture-36-quiz.qmd)
-[{{< fa desktop >}} View Lecture](/lectures/lecture-36.qmd){target="_blank" rel="noopener noreferrer"}
-```{=html}
-<div class="ratio ratio-16x9 mb-3">
-  <iframe class="lecture-preview-frame" src="/lectures/lecture-36.html" title="Lecture presentation preview" loading="lazy" style="border: 1px solid #343a40;" allowfullscreen></iframe>
-</div>
-```
-:::
-
 
 ### AOP Terminology
 
@@ -239,47 +203,15 @@ public class LoggingAspect {
 
 ---
 
-## Lab 9: Spring Boot Application
-
-### Objectives
-- Create Spring Boot REST API
-- Implement JPA repositories
-- Add security
-- Deploy application
-
-### Activities
-1. Create Spring Boot project
-2. Configure database connection
-3. Create User entity and repository
-4. Build REST API endpoints
-5. Add basic security
-6. Test endpoints with Postman
-
-### Deliverables
-- Working Spring Boot application
-- Complete CRUD REST API
-- Database integration
-- Running on localhost
-
----
-
 ## Key Takeaways
 
-✅ Spring IoC container manages object creation and wiring  
-✅ Constructor injection is preferred for mandatory dependencies  
-✅ Factory pattern centralises creation; Strategy pattern swaps behaviour  
-✅ Bean scopes control how many instances Spring creates  
-✅ Lifecycle callbacks (`@PostConstruct`, `@PreDestroy`) handle setup and cleanup  
-✅ AOP separates cross-cutting concerns from business logic  
-✅ Stereotype annotations (`@Service`, `@Repository`) organise application layers
+- Design patterns explain how Spring organizes flexibility and object creation  
+- Factory and Strategy appear naturally in container-managed applications  
+- AOP handles cross-cutting concerns without mixing them into core logic  
+- XML, Java config, and annotations are three major configuration approaches
 
----
+## Next Block
 
-## Next Week
-
-Unit V final topics:
-- REST API best practices
-- Testing strategies
-- Deployment and production
+Unit V begins with Spring Boot configuration, REST controllers, and API design.
 
 

@@ -1,0 +1,65 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 29 Demo - Introduction to Design Patterns in Spring</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .demo-shell { max-width: 980px; margin: 2rem auto; padding: 1.2rem; }
+    .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .card { border: 1px solid #d9dde3; border-radius: 10px; padding: 1rem; background: #fff; }
+    .card h3 { margin-top: 0; }
+    .io { width: 100%; min-height: 120px; font-family: Consolas, monospace; font-size: 14px; }
+    .btn { border: 0; background: #053660; color: #fff; padding: 0.55rem 0.9rem; border-radius: 8px; cursor: pointer; }
+    .hint { color: #4b5563; font-size: 0.95rem; }
+    @media (max-width: 800px) { .demo-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="demo-shell">
+    <h1>Lecture 29 Demo</h1>
+    <p><strong>Unit IV:</strong> Introduction to Design Patterns in Spring</p>
+    <p class="hint">Use this guided demo in class: enter sample input, run simulation, and discuss output plus debug checks.</p>
+
+    <section class="demo-grid">
+      <article class="card">
+        <h3>Input</h3>
+        <textarea id="demoInput" class="io">Sample request/context for: Introduction to Design Patterns in Spring</textarea>
+        <p><button id="runBtn" class="btn">Run Demo Simulation</button></p>
+      </article>
+      <article class="card">
+        <h3>Output</h3>
+        <textarea id="demoOutput" class="io" readonly>Output will appear here.</textarea>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:1rem;">
+      <h3>Classroom Prompts</h3>
+      <ul>
+        <li>What is the core flow in this topic?</li>
+        <li>Which annotation/configuration line is critical?</li>
+        <li>What is one common runtime mistake and fix?</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    const topic = "Introduction to Design Patterns in Spring";
+    const runBtn = document.getElementById('runBtn');
+    const input = document.getElementById('demoInput');
+    const output = document.getElementById('demoOutput');
+
+    runBtn.addEventListener('click', () => {
+      const text = input.value.trim();
+      output.value = [
+        "Lecture: 29",
+        "Topic: " + topic,
+        "Status: Simulation successful",
+        "Input length: " + text.length,
+        "Next check: verify config and logs"
+      ].join("\n");
+    });
+  </script>
+</body>
+</html>

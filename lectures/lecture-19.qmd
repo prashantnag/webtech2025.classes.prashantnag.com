@@ -1,5 +1,5 @@
----
-title: "Lecture 19: Block Scope Variables (let, const)"
+﻿---
+title: "Lecture 19: Handling HTTP GET & POST Requests"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 25, 2026"
@@ -14,16 +14,18 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[ES6+ Features]{.white-text}
+[Handling HTTP GET & POST Requests]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 5 | Unit II: DOM Manipulation<br>
+Week 5 | Unit III: Web App Development (Servlets + JSP)<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
+
+
 
 ## {data-menu-title="Learning Objectives"}
 
@@ -32,358 +34,229 @@ Week 5 | Unit II: DOM Manipulation<br>
 <hr>
 
 ::: {.incremental .body-text-m}
-- Use template literals for string interpolation
-- Destructure arrays and objects
-- Apply the spread operator effectively
-- Set default function parameters
-- Understand `let` and `const` scope rules
+- Differentiate GET and POST semantics
+- Handle request parameters in servlet methods
+- Apply server-side input validation
 :::
 
 ---
 
-## {data-menu-title="What is ES6"}
+## {data-menu-title="Prerequisites"}
 
-[What is ES6+?]{.slide-title}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-**ES6** (ECMAScript 2015) introduced major improvements to JavaScript:
-
-- Cleaner syntax
-- Better scoping with `let` and `const`
-- Powerful new features (spread, destructuring)
-- Modern coding patterns
+- Java basics: classes, methods, objects, and exception handling
+- HTTP request-response fundamentals from Unit I/II web context
+- Revision of Lecture 18 before moving into Handling HTTP GET & POST Requests
 :::
-
 ---
 
-## {data-menu-title="Template Literals"}
+## {data-menu-title="Syllabus Mapping"}
 
-[Template Literals]{.slide-title}
+[Syllabus Mapping]{.slide-title2}
 
 <hr>
-
-```{.javascript code-line-numbers="|1-2|3|4"}
-const name = "Priya";
-const age = 22;
-const message = `Hello, ${name}! You are ${age} years old.`;
-console.log(message);
-```
 
 ::: {.body-text-m}
-Use backticks (`` ` ``) and `${}` for dynamic values.
+- Unit III topic focus: Handling HTTP GET & POST Requests
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
 :::
-
 ---
 
-## {data-menu-title="Multi-line Strings"}
+## {data-menu-title="Agenda"}
 
-[Multi-line Strings]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1-4"}
-const poem = `Roses are red,
-Violets are blue,
-JavaScript rocks,
-And so do you!`;
-console.log(poem);
-```
-
-No need for `\n` or concatenation.
-
----
-
-## {data-menu-title="let and const"}
-
-[let and const]{.slide-title}
+[Agenda]{.slide-title2}
 
 <hr>
-
-```{.javascript code-line-numbers="|1-2|4-5|7-8"}
-// let: reassignable
-let score = 50;
-score = 60; // OK
-
-// const: not reassignable
-const pi = 3.14;
-pi = 3.15; // Error
-
-const user = { name: "Aman" };
-user.name = "Vikram"; // OK (object mutation allowed)
-```
-
----
-
-## {data-menu-title="Block Scope"}
-
-[Block Scope with let/const]{.slide-title2}
-
-<hr>
-
-```{.javascript code-line-numbers="|1-3|4"}
-if (true) {
-  let x = 10;
-}
-console.log(x); // Error: x not defined
-```
 
 ::: {.body-text-m}
-`let` and `const` are block-scoped, unlike `var`.
+- 5-minute recap from previous lecture
+- Concept deep dive: Handling HTTP GET & POST Requests
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+HTTP method choice impacts semantics, security, and behavior.
 :::
 
 ---
 
-## {data-menu-title="Default Parameters"}
+## {data-menu-title="Think About It"}
 
-[Default Function Parameters]{.slide-title2}
+[Think About It]{.slide-title2}
 
 <hr>
 
-```{.javascript code-line-numbers="|1|2|5|6"}
-function greet(name = "Guest") {
-  return `Hello, ${name}`;
+::: {.body-text-m}
+Should credentials be visible in URL query strings?
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[GET vs POST]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+GET: retrieval/query string, POST: submission/request body
+:::
+
+---
+
+## {data-menu-title="Code Walkthrough"}
+
+[Code Walkthrough]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3"}
+protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+  String q = req.getParameter("q");
+  res.getWriter().println("Search: " + q);
 }
 
-console.log(greet());        // Hello, Guest
-console.log(greet("Neha"));  // Hello, Neha
-```
-
-Provide fallback values when arguments are missing.
-
----
-
-## {data-menu-title="Array Destructuring"}
-
-[Array Destructuring]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2|3|5|6"}
-const colors = ['red', 'green', 'blue'];
-const [first, second, third] = colors;
-console.log(first); // red
-
-const [a, , c] = colors;
-console.log(a, c); // red blue
-```
-
-Extract values from arrays into variables.
-
----
-
-## {data-menu-title="Object Destructuring"}
-
-[Object Destructuring]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2|3|5|6"}
-const student = { name: "Asha", age: 21, course: "CSE" };
-const { name, age } = student;
-console.log(name, age); // Asha 21
-
-const { name: studentName, age: studentAge } = student;
-console.log(studentName); // Asha
-```
-
-Extract properties from objects.
-
----
-
-## {data-menu-title="Spread Operator Arrays"}
-
-[Spread Operator: Arrays]{.slide-title2}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2|3|5|6"}
-const arr1 = [1, 2, 3];
-const arr2 = [...arr1, 4, 5];
-console.log(arr2); // [1, 2, 3, 4, 5]
-
-const combined = [...arr1, ...arr2];
-console.log(combined); // [1, 2, 3, 1, 2, 3, 4, 5]
-```
-
-Spread (`...`) expands array elements.
-
----
-
-## {data-menu-title="Spread Operator Objects"}
-
-[Spread Operator: Objects]{.slide-title2}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2|3|5|6"}
-const user = { name: "Raj", age: 25 };
-const updatedUser = { ...user, age: 26 };
-console.log(updatedUser); // { name: "Raj", age: 26 }
-
-const merged = { ...user, city: "Delhi" };
-console.log(merged); // { name: "Raj", age: 25, city: "Delhi" }
-```
-
-Copy and merge objects easily.
-
----
-
-## {data-menu-title="Rest Parameters"}
-
-[Rest Parameters]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2|5"}
-function sum(...numbers) {
-  return numbers.reduce((acc, n) => acc + n, 0);
+protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+  String user = req.getParameter("username");
+  res.getWriter().println("Posted user: " + user);
 }
-
-console.log(sum(1, 2, 3, 4)); // 10
 ```
-
-::: {.body-text-m}
-Rest (`...`) collects arguments into an array.
-:::
-
----
-
-## {data-menu-title="Arrow + Destructure"}
-
-[Combining Arrow Functions & Destructuring]{.slide-title3}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2|4-5"}
-const users = [{ name: "Amit", age: 22 }, { name: "Sita", age: 24 }];
-const names = users.map(({ name }) => name);
-console.log(names); // ["Amit", "Sita"]
-
-const greet = ({ name, age }) => `${name} is ${age} years old`;
-console.log(greet(users[0])); // Amit is 22 years old
-```
-
----
-
-## {data-menu-title="Ternary"}
-
-[Ternary Operator Refresher]{.slide-title2}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2"}
-const age = 20;
-const status = age >= 18 ? "Adult" : "Minor";
-console.log(status); // Adult
-```
-
-::: {.body-text-m}
-Shorthand for `if...else`.
-:::
-
----
-
-## {data-menu-title="Short Circuit"}
-
-[Short-circuit Evaluation]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1|2|4|5"}
-const username = user.name || "Guest";
-const display = isLoggedIn && <Dashboard />;
-
-const firstName = user?.name?.first;
-const count = items?.length ?? 0;
-```
-
-::: {.body-text-m}
-- `||` returns first truthy value
-- `&&` returns second if first is truthy
-- `?.` optional chaining
-- `??` nullish coalescing
-:::
-
----
-
-## {data-menu-title="Modules"}
-
-[ES6 Modules (Preview)]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1-2|6"}
-// math.js
-export const add = (a, b) => a + b;
-export const subtract = (a, b) => a - b;
-
-// app.js
-import { add, subtract } from './math.js';
-```
-
-::: {.body-text-m}
-Organize code into reusable modules.
-:::
-
----
-
-## {data-menu-title="Practice Example"}
-
-[Practice Example]{.slide-title}
-
-<hr>
-
-```{.javascript code-line-numbers="|1-4|6|7|8"}
-const students = [
-  { name: "Rahul", marks: 85 },
-  { name: "Neha", marks: 92 }
-];
-
-const toppers = students.filter(({ marks }) => marks > 90);
-const names = toppers.map(({ name }) => name);
-console.log(names); // ["Neha"]
-```
-
----
-
-## {data-menu-title="Common Mistakes"}
-
-[Common Mistakes]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Using `var` instead of `let`/`const`
-- Forgetting backticks in template literals
-- Modifying `const` primitive values
-- Confusing spread `...` with rest `...`
-- Not understanding block scope
-:::
-
----
-
-## {data-menu-title="Practice Task"}
-
-[Practice Task]{.slide-title}
+## Memory Booster {data-menu-title="Memory Booster"}
 
 <hr>
 
 ::: {.body-text-m}
-Given:
-```javascript
-const products = [
-  { name: "Laptop", price: 50000 },
-  { name: "Phone", price: 20000 }
-];
-```
+Syllabus memory points for **Handling HTTP GET & POST Requests**:
 
-1. Use destructuring to extract `name` and `price`
-2. Use template literals to display: "Laptop costs ₹50000"
-3. Use spread to add a new product
+- Core recall: doGet() and doPost()
+- Exam compare: GET parameterized retrieval vs POST state-changing submission
+- Practical anchor: Create one GET and one POST endpoint and test both
 :::
+---
 
+## {data-menu-title="Live Demo"}
+
+[Live Demo]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Live implementation for Handling HTTP GET & POST Requests:**
+
+?? **[Open Demo: Lecture 19 - Handling HTTP GET & POST Requests](../demos/lecture-19-demo.html){target="_blank"}**
+
+Demo checklist:
+- implement the key flow for this lecture
+- verify expected output for one success case
+- trigger one failure case and explain the fix
+:::
+---
+
+## {data-menu-title="Resources"}
+
+[Resources & References]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- [Jakarta Servlet Specification](https://jakarta.ee/specifications/servlet/)
+- [Oracle Java EE Tutorial (Servlet/JSP)](https://docs.oracle.com/javaee/7/tutorial/)
+- Classroom notes + lecture demo file for Lecture 19
+:::
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. verify the primary API usage for **Handling HTTP GET & POST Requests** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
+:::
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Define **Handling HTTP GET & POST Requests** with one practical use case.
+- Write/identify the key API or construct: **doGet() and doPost()**.
+- Differentiate: **GET parameterized retrieval vs POST state-changing submission**.
+- Mention one common implementation error and correction.
+:::
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **Handling HTTP GET & POST Requests** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+:::
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Implement: **Create one GET and one POST endpoint and test both**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
+:::
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- explain **Handling HTTP GET & POST Requests** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
+:::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 20 - Redirecting Requests & Request Dispatching
+- Preparation required: revise this lecture summary and code walkthrough
+:::
 ---
 
 ## {#end-slide data-menu-title="End Slide" background="#053660"}
@@ -393,12 +266,8 @@ const products = [
 [Questions?]{.white-text}
 </div>
 <div class="custom-subtitle3">
-Next: Lecture 20 - Revision: Units I & II
+Next: Lecture 20
 </div>
 </div>
-
-
-
-
 
 

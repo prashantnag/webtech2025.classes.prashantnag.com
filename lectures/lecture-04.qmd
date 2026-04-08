@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Lecture 4: HTML Grouping: Div & Span"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
@@ -25,20 +25,107 @@ Week 1 | Unit I: Web Page Designing<br>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
+[Learning Outcomes]{.slide-title}
 
 <hr>
 
-::: {.incremental .body-text-m}
-- Understand the difference between block and inline elements
-- Learn when and how to use `<div>` and `<span>`
-- Practice grouping and organizing HTML content
+::: {.body-text-m}
+After this lecture, students will be able to:
+
+- differentiate block and inline elements
+- apply `<div>` and `<span>` in meaningful contexts
+- organize HTML content using proper grouping
 :::
 
 ::: {.notes}
 This is crucial for structuring web pages. Most of modern web layout is based on organizing content with divs.
+:::
+
+---
+
+## {data-menu-title="Prerequisites"}
+
+[Prerequisites]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Basic HTML document structure
+- Familiarity with common HTML tags
+- Understanding of attributes and nesting
+:::
+
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus mapping:
+
+- HTML semantic grouping and structure
+- Div and span container elements
+- Foundation for page layout
+
+Prerequisites used:
+
+- HTML basic structure from Lecture 3
+- Understanding semantic markup
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Block vs inline fundamentals
+- Div and span use cases
+- Visual and code-level comparisons
+- Semantic grouping patterns
+- Best practices and real examples
+- Summary and exam preparation
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Grouping and organization are as important as the content itself in web development.
+- Without `<div>` and `<span>`, styling would have to target individual elements one at a time.
+- Understanding block versus inline behavior explains why elements stack or flow the way they do.
+- These containers are the building blocks for all modern CSS layouts including Flexbox and Grid.
+- Every professional web page you see relies on intentional container structure to work correctly.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Before we dive into details, think about these:**
+
+- Why does a `<p>` tag always push to the next line, but a `<strong>` tag stays within the sentence?
+- If you want to color just one word in a paragraph, which tag would you use and why?
+- How would you group a header, a navigation bar, and a main content section without mixing them up?
+- What happens to layout if you accidentally use an inline element where a block element was expected?
 :::
 
 ---
@@ -411,7 +498,7 @@ Semantic HTML improves SEO, accessibility, and makes code more readable for othe
 :::
 
 ::: {.fragment .body-text-m .center-text .topbr}
-[⭐ Prefer semantic elements when appropriate!]{.magenta-text}
+[? Prefer semantic elements when appropriate!]{.magenta-text}
 :::
 
 ---
@@ -423,7 +510,7 @@ Semantic HTML improves SEO, accessibility, and makes code more readable for othe
 <hr>
 
 ::: {.callout-tip}
-**✓ DO USE:**
+**? DO USE:**
 - Semantic HTML5 elements (`<header>`, `<nav>`, `<article>`, `<footer>`)
 - Meaningful class names for styling
 - Reasonable nesting (3-4 levels max)
@@ -431,7 +518,7 @@ Semantic HTML improves SEO, accessibility, and makes code more readable for othe
 :::
 
 ::: {.callout-warning}
-**✗ DON'T USE:**
+**? DON'T USE:**
 - `<div>` for everything without semantic alternatives
 - Deeply nested divs (5+ levels)
 - Generic names like `<div class="wrapper">`
@@ -495,26 +582,6 @@ Semantic HTML improves SEO, accessibility, and makes code more readable for othe
 
 ---
 
-## {data-menu-title="Practice Exercise"}
-
-[Practice Exercise]{.slide-title}
-
-<hr>
-
-Create a page structure with:
-
-::: {.incremental .body-text-m}
-1. A `<header>` with your name
-2. A `<nav>` with menu links
-3. A `<main>` containing articles
-4. Several `<article>` elements with content
-5. Use `<span>` to highlight important words
-6. A `<footer>` with copyright
-7. Meaningful class names for styling
-:::
-
----
-
 ## {data-menu-title="Resources"}
 
 [Resources & References]{.slide-title}
@@ -530,17 +597,183 @@ Create a page structure with:
 
 ---
 
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist for Div & Span]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Investigation order for layout and styling issues:
+
+1. inspect HTML structure to verify div nesting is correct
+2. check CSS selectors target the intended containers
+3. use browser DevTools to verify class and id attributes
+4. test box model behavior (margin, padding, border)
+5. verify inline versus block display behavior
+6. check for CSS conflicts and specificity issues
+7. replace generic containers with semantic elements where appropriate
+
+This approach separates structure issues from styling issues.
+:::
+
+---
+
+## {data-menu-title="Memory Booster"}
+
+[Memory Booster: The Container Analogy]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Think of your webpage like a **shipping warehouse**:
+
+- **`<div>`** = A **large shipping box** (block container - takes its own shelf space, stacks vertically)
+- **`<span>`** = A **small label sticker** (inline - sticks to the item without claiming extra space)
+- **`<header>`**, **`<nav>`**, **`<main>`** = **Named sections** of the warehouse (semantic zones)
+- **Nesting divs** = Boxes inside boxes (organized hierarchy)
+
+If you use a large shipping box where a label sticker was needed, you waste space.
+If you use a label sticker where a box was needed, things fall apart!
+:::
+
+---
+
+## {data-menu-title="Live Demo"}
+
+[Live Demo: Div, Span & Container Behavior]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Interactive demonstration showing block vs inline behavior and container organization:**
+
+?? **[Open Interactive Demo: HTML Grouping: Div & Span](../demos/lecture-04-demo.html){target="_blank"}**
+
+**What you'll see:**
+
+- Block vs inline visual comparison (side by side)
+- Div layout building: header, content, sidebar, footer
+- Span text highlighting and inline styling
+- Semantic HTML5 page structure walkthrough
+- DevTools box model visualization
+
+?? **Key insight:** Choosing containers wisely saves hours of CSS debugging later!
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, you should understand:
+
+- when to use div for grouping content
+- when span is appropriate for inline styling hooks
+- how block and inline behavior affects layout
+- how semantic elements improve structure and readability
+- how good container organization prepares pages for CSS
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- What is a block element?
+- What is an inline element?
+- Give one example of `<div>` usage.
+- Give one example of `<span>` usage.
+- Why are class names important?
+- Why should we avoid excessive nested divs?
+- What is semantic grouping?
+- Name two semantic alternatives to generic div containers.
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Differentiate block and inline elements with examples.
+- Explain practical usage of `<div>` and `<span>` in page design.
+- Explain semantic grouping and its benefits over generic containers.
+- Design a simple page layout using header, main, section, and footer.
+- Explain best practices for maintainable HTML structure.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- create a page with header, main, and footer
+- group content sections using `<div>` where needed
+- highlight keywords using `<span>`
+- add semantic elements for major sections
+- inspect final structure in DevTools
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- identify block vs inline elements?
+- choose correctly between div, span, and semantic tags?
+- create clean grouped markup for layouts?
+- answer short and long exam questions?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: HTML Lists and Images
+- Preparation required: revise grouping and semantic structure
+:::
+
+---
+
 ## {#end-slide data-menu-title="End Slide" background="#053660"}
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[HTML Grouping: Div & Span]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Week 1 Complete!<br>
 Lab 1: Development Environment Setup
 </div>
 </div>
+
 
 
 

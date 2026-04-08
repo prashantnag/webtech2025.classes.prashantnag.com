@@ -1,5 +1,5 @@
----
-title: "Lecture 26: Redirecting Requests & Request Dispatching"
+﻿---
+title: "Lecture 26: Spring IoC & Bean Life Cycle"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "March 10, 2026"
@@ -13,466 +13,375 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Redirecting Requests & Request Dispatching]{.white-text}
+[Spring IoC & Bean Life Cycle]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 9 | Unit III: Servlets<br>
+Week 7 | Unit IV: Spring Framework Basics<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Objectives"}
+
+## {data-menu-title="Learning Objectives"}
 
 [Learning Objectives]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Formally define redirect, forward, and include in servlet architecture
-- Analyze control transfer from protocol and container perspective
-- Explain the impact of each strategy on URL, request scope, and caching
-- Apply Post-Redirect-Get (PRG) pattern with reasoning, not just memorized syntax
-- Select routing strategy for real application scenarios
-- Troubleshoot routing bugs using deterministic checklist
+- Define Spring IoC and bean lifecycle in clear terms
+- Explain what the IoC container does in practice
+- Summarize the evolution of IoC in Spring
+- List key advantages of IoC-based lifecycle management
+- Explain IoC container responsibilities
+- Understand bean lifecycle stages
+- Use lifecycle callbacks correctly
 :::
 
 ---
 
-## {data-menu-title="Syllabus"}
+## {data-menu-title="Prerequisites"}
 
-[Unit III Topic Traceability]{.slide-title2}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Syllabus mapping:
-
-- Redirecting requests to other resources
-
-Prerequisites used:
-
-- HTTP methods and request-response model
-- Servlet lifecycle and `HttpServletRequest/HttpServletResponse`
-
-Forward dependency:
-
-- Session tracking topics in lectures 27 and 28
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 25 before moving into Spring IoC & Bean Life Cycle
 :::
-
 ---
 
-## {data-menu-title="Problem"}
+## {data-menu-title="Syllabus Mapping"}
 
-[Why Request Routing is a Core Skill]{.slide-title}
+[Syllabus Mapping]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-In enterprise applications, most defects are flow defects, not syntax defects.
+- Unit IV topic focus: Spring IoC & Bean Life Cycle
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
+:::
+---
 
-Typical failures caused by poor routing choices:
+## {data-menu-title="Agenda"}
 
-- duplicate inserts after browser refresh
-- lost validation messages
-- stale URLs causing incorrect bookmarking
-- accidental redirect loops
-- inconsistent security flow after login/logout
+[Agenda]{.slide-title2}
 
-Routing is therefore an architectural decision, not a minor API choice.
+<hr>
+
+::: {.body-text-m}
+- 5-minute recap from previous lecture
+- Concept deep dive: Spring IoC & Bean Life Cycle
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring IoC is not only about creating objects. It defines a complete lifecycle for beans:
+
+- bean creation and dependency resolution
+- initialization callbacks before business use
+- controlled shutdown and resource cleanup
+
+Lifecycle control becomes critical in enterprise systems where services open files,
+database connections, messaging clients, and thread pools.
 :::
 
 ---
 
-## {data-menu-title="Architecture"}
+## {data-menu-title="IoC Definition"}
 
-[Where Routing Happens in MVC]{.slide-title2}
+[Definition of Spring IoC]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Inversion of Control (IoC)** is a design principle where object creation,
+dependency wiring, and lifecycle handling are managed by a container,
+instead of being hardcoded inside application classes.
+
+In Spring, this container is the **ApplicationContext**.
+:::
+
+---
+
+## {data-menu-title="What Is IoC"}
+
+[What the IoC Container Is]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+The IoC container is the runtime engine that:
+
+- reads configuration or component scans
+- creates beans and injects dependencies
+- applies lifecycle callbacks at startup and shutdown
+- provides ready-to-use objects to business code
+
+[In one line: business classes focus on logic, container handles lifecycle mechanics.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="IoC History"}
+
+[History of IoC in Spring]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Quick evolution:
+
+- **2003-2004:** Spring popularizes lightweight IoC and DI in enterprise Java
+- **Early versions:** XML-based bean configuration dominates
+- **Later versions:** annotation-driven configuration becomes mainstream
+- **Spring Boot era:** convention-based setup makes IoC adoption faster and cleaner
+:::
+
+---
+
+## {data-menu-title="IoC Advantages"}
+
+[Advantages of IoC and Lifecycle Control]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Why this matters in real systems:
+
+- **Loose coupling:** classes depend on abstractions, not concrete creation code
+- **Predictable startup:** init callbacks run in a controlled order
+- **Safe shutdown:** destroy callbacks reduce resource leaks
+- **Better testing:** dependencies are easy to replace with test doubles
+- **Cleaner architecture:** lifecycle concerns stay out of business methods
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Key lifecycle design questions:
+
+1. Which tasks belong in construction and which belong in initialization callbacks?
+2. What risks appear when cleanup logic is missing at shutdown?
+3. How does lifecycle management improve reliability in long-running applications?
+:::
+
+---
+
+## {data-menu-title="Why Lifecycle Matters"}
+
+[Why Bean Lifecycle Management Matters]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Without lifecycle discipline, enterprise applications face:
+
+- repeated heavy initialization on each request
+- resource leaks from unclosed connections/files
+- startup timing issues caused by incorrect dependency order
+- unpredictable behavior during application shutdown
+
+[Lifecycle callbacks provide deterministic startup and cleanup behavior.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Lifecycle Stages"}
+
+[Bean Lifecycle Stages in Spring]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Lifecycle stages in order:
+
+1. Bean instantiation
+2. Dependency injection
+3. `BeanNameAware`, `BeanFactoryAware`, etc. (if implemented)
+4. `BeanPostProcessor` before-initialization
+5. `@PostConstruct` / `afterPropertiesSet()` / custom `initMethod`
+6. Bean is ready for business use
+7. `@PreDestroy` / `DisposableBean` / custom `destroyMethod`
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[Bean Lifecycle]{.slide-title}
 
 <hr>
 
 ```{mermaid}
-%%| fig-height: 4.0
 flowchart LR
-  A[Client Request] --> B[Front Controller / Servlet]
-  B --> C[Service Layer]
-  C --> D{Outcome}
-  D -->|Validation errors| E[Forward to JSP]
-  D -->|State changed| F[Redirect to GET URL]
-  E --> G[HTML with request scope messages]
-  F --> H[Fresh GET request]
-  H --> I[Stable response]
+	A["Instantiate Bean"] --> B["Dependency Injection"]
+	B --> C["@PostConstruct / init-method"]
+	C --> D["Bean in Use"]
+	D --> E["@PreDestroy / destroy-method"]
 ```
 
----
-
-## {data-menu-title="Definitions"}
-
-[Formal Definitions]{.slide-title}
-
-<hr>
-
-| Term | Definition | Initiator |
-|---|---|---|
-| Redirect | HTTP response instructing client to request a different URI | Server, executed by browser |
-| Forward | Internal dispatch of same request/response to another resource | Servlet container |
-| Include | Internal inclusion of another resource output into current response | Servlet container |
-
----
-
-## {data-menu-title="Redirect Mechanics"}
-
-[Redirect Internal Mechanics]{.slide-title2}
-
-<hr>
-
-::: {.body-text-m}
-`sendRedirect()` behavior in sequence:
-
-1. Container sets status and `Location` header
-2. Response is committed to client
-3. Browser creates a brand-new request
-4. Target resource executes independently
-
-Consequences:
-
-- request scope does not survive
-- request method may change based on status code behavior
-- network round-trip is required
+::: {.body-text-m .topbr}
+- IoC container controls complete object lifecycle
+- Initialization hooks are ideal for setup logic
+- Destruction hooks release resources cleanly
 :::
 
 ---
 
-## {data-menu-title="Redirect Sequence"}
+## {data-menu-title="Lifecycle APIs"}
 
-[Protocol Sequence: Redirect]{.slide-title}
-
-<hr>
-
-```{mermaid}
-%%| fig-height: 3.8
-sequenceDiagram
-  participant B as Browser
-  participant S as Source Servlet
-  participant T as Target Resource
-
-  B->>S: POST /student/create
-  S-->>B: 302 Location: /student/list
-  B->>T: GET /student/list
-  T-->>B: 200 OK + HTML
-```
-
----
-
-## {data-menu-title="Forward Mechanics"}
-
-[Forward Internal Mechanics]{.slide-title2}
+[Lifecycle Callback Options]{.slide-title2}
 
 <hr>
 
-::: {.body-text-m}
-`RequestDispatcher.forward()` behavior:
-
-1. Current servlet passes control internally
-2. Same request/response objects are reused
-3. Target resource receives all request attributes
-4. Response to browser is generated once
-
-Consequences:
-
-- better performance than redirect in most cases
-- URL generally stays at original route
-- ideal for controller-to-view rendering
-:::
-
----
-
-## {data-menu-title="Forward Sequence"}
-
-[Protocol Sequence: Forward]{.slide-title}
-
-<hr>
-
-```{mermaid}
-%%| fig-height: 3.8
-sequenceDiagram
-  participant B as Browser
-  participant C as Controller Servlet
-  participant V as JSP View
-
-  B->>C: POST /student/create
-  C->>V: forward(request, response)
-  V-->>B: 200 OK + HTML response
-```
-
----
-
-## {data-menu-title="Include Mechanics"}
-
-[Include and Response Composition]{.slide-title2}
-
-<hr>
-
-::: {.body-text-m}
-`include()` is for compositional rendering, not flow termination.
-
-Use cases:
-
-- common header/footer fragments
-- audit snippets or banners
-- template blocks in legacy JSP apps
-
-Important behavior:
-
-- control returns to caller after include
-- included resource should not commit independent final response
-:::
-
----
-
-## {data-menu-title="API"}
-
-[Essential API Usage]{.slide-title}
-
-<hr>
-
-```{.java}
-// Redirect
-response.sendRedirect(request.getContextPath() + "/student/list");
-
-// Forward
-request.getRequestDispatcher("/views/student-form.jsp").forward(request, response);
-
-// Include
-request.getRequestDispatcher("/views/common/header.jsp").include(request, response);
-```
-
----
-
-## {data-menu-title="Comparison"}
-
-[Decision Matrix]{.slide-title2}
-
-<hr>
-
-| Criterion | Redirect | Forward | Include |
+| Approach | Init | Destroy | Typical Use |
 |---|---|---|---|
-| Browser performs second request | Yes | No | No |
-| URL updates | Yes | No | No |
-| Request attributes available | No | Yes | Yes |
-| Cross-application/external target | Yes | No | No |
-| Suitable for Post-Redirect-Get (PRG) | Yes | No | No |
-| Suitable for templating | No | No | Yes |
+| JSR-250 | `@PostConstruct` | `@PreDestroy` | Clean, annotation-based lifecycle hooks |
+| Spring Interfaces | `InitializingBean` | `DisposableBean` | Framework-specific explicit callbacks |
+| Java Config | `initMethod` | `destroyMethod` | Externalized lifecycle in configuration |
 
----
-
-## {data-menu-title="Status Codes"}
-
-[Redirect Status Codes and Semantics]{.slide-title}
-
-<hr>
-
-::: {.body-text-m}
-Relevant HTTP status semantics:
-
-- `301`: permanent move, cacheable by clients/proxies
-- `302`: temporary redirect (commonly used by `sendRedirect`)
-- `303`: explicit instruction to use GET for follow-up
-- `307/308`: method-preserving redirects
-
-For MCA-level understanding, method preservation and cache behavior are critical distinctions.
+::: {.body-text-m .topbr}
+For most projects, `@PostConstruct` and `@PreDestroy` provide readable lifecycle logic.
 :::
 
 ---
 
-## {data-menu-title="Post-Redirect-Get"}
+## {data-menu-title="Code Walkthrough"}
 
-[Why Post-Redirect-Get (PRG) Solves Duplicate Submission]{.slide-title2}
-
-<hr>
-
-::: {.body-text-m}
-Without Post-Redirect-Get (PRG):
-
-- POST response page is tied to mutation request
-- refresh triggers browser re-submission prompt
-- accidental duplicate transaction risk
-
-With Post-Redirect-Get (PRG):
-
-- mutation handled in POST
-- user lands on idempotent GET page
-- refresh remains safe
-:::
-
----
-
-## {data-menu-title="Post-Redirect-Get Flow"}
-
-[Post-Redirect-Get (PRG) Flow Diagram]{.slide-title}
+[Code Walkthrough]{.slide-title2}
 
 <hr>
 
-```{mermaid}
-%%| fig-height: 3.9
-flowchart LR
-  A[POST /save] --> B[Server validates and persists]
-  B --> C[302 redirect to /list]
-  C --> D[GET /list]
-  D --> E[Render stable list view]
+```java
+@PostConstruct
+public void init(){ System.out.println("bean ready"); }
+
+@PreDestroy
+public void close(){ System.out.println("bean destroyed"); }
+
+@Bean(initMethod = "init", destroyMethod = "close")
+public ReportService reportService() {
+	return new ReportService();
+}
 ```
 
+::: {.body-text-m .topbr}
+[Walkthrough checkpoints:]{.teal-text}
+
+- callback sequence should appear in startup/shutdown logs
+- init logic must avoid business processing side effects
+- destroy logic should release external resources safely
+:::
+
 ---
 
-## {data-menu-title="Post-Redirect-Get Code"}
+## {data-menu-title="Prototype Caveat"}
 
-[Post-Redirect-Get (PRG) Implementation Pattern]{.slide-title2}
+[Important Caveat: Prototype Bean Destruction]{.slide-title2}
 
 <hr>
 
-```{.java}
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+::: {.body-text-m}
+In Spring, `@PreDestroy` is not automatically called for prototype beans because the
+container does not fully manage their complete lifecycle after creation.
 
-  ValidationResult result = validator.validate(request);
-  if (!result.isValid()) {
-    request.setAttribute("errors", result.getErrors());
-    request.getRequestDispatcher("/views/student-form.jsp").forward(request, response);
-    return;
-  }
+Implication:
+- for prototype beans using external resources, application code must handle cleanup.
+:::
 
-  studentService.create(result.toStudent());
-  response.sendRedirect(request.getContextPath() + "/student/list");
+```java
+@Scope("prototype")
+class TempWorker {
+	@PreDestroy
+	void close() { /* may not be called automatically */ }
 }
 ```
 
 ---
 
-## {data-menu-title="Scope Rules"}
+## {data-menu-title="Testing Lifecycle"}
 
-[Scope and Data Propagation Rules]{.slide-title}
-
-<hr>
-
-| Scope | Survives Forward | Survives Redirect | Typical Use |
-|---|---|---|---|
-| Request scope | Yes | No | validation errors, form inputs |
-| Session scope | Yes | Yes | login state, flash messages |
-| Application scope | Yes | Yes | shared config references |
-
----
-
-## {data-menu-title="Flash"}
-
-[Flash Message Pattern]{.slide-title2}
+[Testing Lifecycle Behavior]{.slide-title2}
 
 <hr>
 
-```{.java}
-HttpSession session = request.getSession();
-session.setAttribute("flashSuccess", "Student created successfully");
-response.sendRedirect(request.getContextPath() + "/student/list");
+::: {.body-text-m}
+Lifecycle behavior should be verified explicitly:
+
+- assert init callbacks executed after dependency injection
+- assert destroy callbacks execute on context close
+- verify no resource leaks in repeated start/stop cycles
+:::
+
+```java
+AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+ctx.getBean(ReportService.class);
+ctx.close(); // expect destroy callback
 ```
 
-```{.jsp}
-<c:if test="${not empty sessionScope.flashSuccess}">
-  <div class="alert alert-success">${sessionScope.flashSuccess}</div>
-</c:if>
-<c:remove var="flashSuccess" scope="session"/>
-```
+::: {.body-text-m .topbr}
+[Recap points:]{.teal-text}
+
+- lifecycle callbacks execute around bean usage, not in business method flow
+- container-managed lifecycle improves reliability and startup/shutdown discipline
+- lifecycle behavior must be verified in both runtime logs and tests
+:::
 
 ---
 
-## {data-menu-title="Path Strategy"}
+## {data-menu-title="Live Demo"}
 
-[Path Resolution Strategy]{.slide-title}
+[Live Demo]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Path mistakes are among the top causes of navigation failures.
+**Live implementation for Spring IoC & Bean Life Cycle:**
 
-Best practice:
+**[Open Demo: Lecture 26 - Spring IoC & Bean Life Cycle](../demos/lecture-26-demo.html){target="_blank"}**
 
-- use context-relative paths for redirects with `getContextPath()`
-- use app-internal absolute dispatcher paths like `/views/x.jsp`
-- avoid brittle hard-coded deployment paths
+Demo checklist:
+- Start app and inspect bean creation plus init order in logs
+- Trigger a request and show bean usage phase
+- Stop context/application and verify destroy callback execution
+- Simulate missing callback annotation and diagnose behavior
 :::
 
 ---
 
-## {data-menu-title="Case 1"}
+## {data-menu-title="Resources"}
 
-[Case Study: Login Flow]{.slide-title2}
+[Resources & References]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Design goal:
-
-- wrong credentials -> display error on same login page
-- correct credentials -> move to dashboard safely
-
-Correct strategy:
-
-- failure: `forward` with `request` error attribute
-- success: `redirect` to dashboard GET endpoint
+- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
+- [Spring Guides](https://spring.io/guides)
+- [Spring Bean Lifecycle Overview](https://www.baeldung.com/spring-bean-lifecycle)
+- Classroom notes + lecture demo file for Lecture 26
 :::
-
----
-
-## {data-menu-title="Case 2"}
-
-[Case Study: Update Profile]{.slide-title}
-
-<hr>
-
-::: {.body-text-m}
-Requirement: after update, user should bookmark resulting profile URL.
-
-Routing choice:
-
-- POST `/profile/update` performs update
-- redirect to GET `/profile/{id}`
-
-This ensures canonical URL and refresh-safe behavior.
-:::
-
----
-
-## {data-menu-title="Case 3"}
-
-[Case Study: Shared Layout]{.slide-title2}
-
-<hr>
-
-```{.java}
-request.getRequestDispatcher("/views/common/header.jsp").include(request, response);
-request.getRequestDispatcher("/views/dashboard-body.jsp").include(request, response);
-request.getRequestDispatcher("/views/common/footer.jsp").include(request, response);
-```
-
-::: {.body-text-m}
-Demonstrates include-based composition in traditional JSP rendering.
-:::
-
----
-
-## {data-menu-title="AntiPatterns"}
-
-[Common Anti-Patterns]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- forwarding after response commit
-- redirecting and then still writing response body
-- assuming request attributes survive redirect
-- implementing state-changing actions through GET
-- redirect loops due to missing route guards
-:::
-
 ---
 
 ## {data-menu-title="Debug"}
@@ -482,84 +391,91 @@ Demonstrates include-based composition in traditional JSP rendering.
 <hr>
 
 ::: {.body-text-m}
-Investigation order:
-
-1. confirm actual status code and headers
-2. verify final URL in browser network tab
-3. inspect request attributes at target
-4. validate path/context correctness
-5. check for double-dispatch or missing return
-
-This approach reduces random trial-and-error debugging.
+1. verify the primary API usage for **Spring IoC & Bean Life Cycle** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
 :::
-
----
-
-## {data-menu-title="Security"}
-
-[Routing and Security Interactions]{.slide-title}
-
-<hr>
-
-::: {.body-text-m}
-Security-sensitive observations:
-
-- never include confidential tokens in redirect query strings
-- guard post-login redirects against open redirect attacks
-- after logout, redirect to public page and invalidate session
-- ensure auth checks on redirected target resources
-:::
-
 ---
 
 ## {data-menu-title="Exam Questions"}
 
-[Exam-Oriented Questions]{.slide-title}
+[Exam Preparation Questions: Short]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Prepare detailed answers for:
-
-1. distinguish redirect and forward with request lifecycle
-2. explain Post-Redirect-Get (PRG) with sequence flow
-3. discuss request/session scope behavior in navigation
-4. explain include usage with example
-5. list routing anti-patterns and fixes
+- Define **Spring IoC & Bean Life Cycle** with one practical use case.
+- Write/identify the key API or construct: **bean instantiation and lifecycle callbacks**.
+- Differentiate: **Manual object creation vs IoC-managed bean lifecycle**.
+- Mention one common implementation error and correction.
+- Explain why prototype beans need explicit cleanup strategy.
 :::
+---
 
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **Spring IoC & Bean Life Cycle** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+- Design lifecycle handling for a bean that opens external resources at startup.
+:::
 ---
 
 ## {data-menu-title="Practice"}
 
-[Hands-On Practice Task]{.slide-title2}
+[Practice Task]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Implement `StudentRegistrationServlet`:
-
-- invalid form -> forward with error map
-- valid form -> persist and redirect to list
-- show one-time flash message on list
-- add safe default redirect target after auth
-
-This single exercise integrates all lecture concepts.
+- Implement: **Register bean and verify init/destroy callback execution**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
 :::
-
 ---
 
-## {data-menu-title="Summary"}
+## {data-menu-title="Checklist"}
 
-[Summary]{.slide-title}
+[Checklist]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-After this lecture, you should be able to:
+Can you:
 
-- reason about routing at protocol and container level
-- apply redirect/forward/include with correctness
-- design Post-Redirect-Get (PRG)-based mutation workflows
-- debug and secure servlet navigation in production-like scenarios
+- explain **Spring IoC & Bean Life Cycle** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
 :::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 27 - Bean Scopes: Singleton, Prototype, Request, Session, Application
+- Preparation required: revise this lecture summary and code walkthrough
+:::
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 27
+</div>
+</div>
+
+

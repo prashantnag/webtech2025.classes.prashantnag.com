@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 8: HTML Forms & Form Elements"
+---
+title: "Lecture 8: CSS Box Model, Float/Clear, Bootstrap & Revision"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 5, 2026"
@@ -14,396 +14,503 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Introduction to CSS]{.white-text}
+[CSS Box Model, Float/Clear, Bootstrap & Revision]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 2 | Unit I: HTML Forms & CSS Introduction<br>
+Week 2 | Unit I: Web Page Designing<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Learning Objectives"}
+## {data-menu-title="Learning Outcomes"}
 
-[Learning Objectives]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- Understand what CSS is and why it matters
-- Apply CSS using three methods
-- Write CSS selectors and rules
-- Use basic CSS properties for styling
-- Link external stylesheets
-:::
-
-::: {.notes}
-CSS transforms plain HTML into beautifully designed web pages. It's the visual language of the web.
-:::
-
----
-
-## {data-menu-title="What is CSS?"}
-
-[CSS: Cascading Style Sheets]{.slide-title}
+[Learning Outcomes]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-::: {.fragment}
-[**CSS**]{.teal-text} separates content from presentation
-:::
-::: {.fragment}
-- HTML provides **structure**
-:::
-::: {.fragment}
-- CSS provides **styling**
-:::
-::: {.fragment}
-- JavaScript provides **behavior**
-:::
+After this lecture, students will be able to:
+
+- explain form structure and the GET vs POST methods
+- apply all major HTML5 input types correctly
+- use labels and fieldsets for accessible forms
+- apply HTML5 client-side validation attributes
+- design a complete contact or registration form
 :::
 
-::: {.fragment}
-```
-HTML = Skeleton (structure)
-CSS  = Clothes & appearance
-JS   = Movement & interaction
-```
+::: {.notes}
+Forms are how users submit data - every login, checkout, and search uses a form.
 :::
 
 ---
 
-## {data-menu-title="Three CSS Methods"}
+## {data-menu-title="Prerequisites"}
 
-[Three Ways to Apply CSS]{.slide-title}
+[Prerequisites]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- HTML structure and semantic markup
+- Familiarity with classes and ids in HTML
+- Basic editor and browser preview usage
+:::
+
+---
+
+## {data-menu-title="Syllabus Mapping"}
+
+[Syllabus Mapping]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Syllabus mapping:
+
+- form element: action, method, name attributes
+- input types: text, password, email, number, date, radio, checkbox, file
+- select and textarea elements
+- label, fieldset, and legend for grouping
+- HTML5 validation: required, min, max, pattern, placeholder
+
+Prerequisites used:
+
+- HTML structure from Lectures 3-7
+- understanding of elements and attributes
+:::
+
+---
+
+## {data-menu-title="Agenda"}
+
+[Agenda]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Introduction and motivation
+- Form element structure
+- GET vs POST methods
+- Input types: text, password, email, date, number
+- Radio buttons, checkboxes, select, textarea
+- Labels and fieldset/legend grouping
+- HTML5 validation attributes
+- Summary and exam preparation
+:::
+
+---
+
+## {data-menu-title="Introduction"}
+
+[Introduction and Motivation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Every login, search, registration, checkout, and contact form on the web is an HTML form.
+- Forms are the primary mechanism for user interaction and data collection on websites.
+- A form without proper labels is inaccessible to millions of users with disabilities.
+- HTML5 introduced powerful built-in input types and validation that eliminate simple JavaScript checks.
+- Understanding forms properly connects frontend HTML to backend server processing and databases.
+:::
+
+---
+
+## {data-menu-title="Think About It"}
+
+[Think About It - Interactive Questions]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**Before we dive into details, think about these:**
+
+- When you search on Google and press Enter, how does your text reach Google's server?
+- What happens if a form has no `name` attributes on its inputs?
+- Why do some forms show your password as dots instead of letters?
+- What is the difference between a form using GET vs POST when you submit a login form?
+:::
+
+---
+
+## {data-menu-title="Form Flow"}
+
+[How HTML Forms Work]{.slide-title}
+
+<hr>
+
+```{mermaid}
+flowchart LR
+  U(["User fills form"])
+  B["Browser collects\nform data"]
+  R{"GET or POST?"}
+  G["Data in URL\n?key=value"]
+  P["Data in\nrequest body"]
+  S[("Server\nprocesses")]
+  U --> B --> R
+  R -->|GET| G --> S
+  R -->|POST| P --> S
+```
+
+::: {.body-text-m}
+- **GET**: data visible in URL - use for search queries, not sensitive data
+- **POST**: data in request body - use for login, registration, file uploads
+:::
+
+---
+
+## {data-menu-title="Form Element"}
+
+[The Form Element]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2|3|4"}
+<form action="/submit" method="POST">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <button type="submit">Submit</button>
+</form>
+```
+
+::: {.body-text-m .topbr}
+**Key attributes:**
+
+- `action` -> URL where form data is sent on submit
+- `method` -> `GET` or `POST` (how data is sent)
+- `name` -> identifies the form (important for JavaScript)
+- Every input needs a `name` attribute or it won't be sent to the server
+:::
+
+---
+
+## {data-menu-title="GET vs POST"}
+
+[GET vs POST: When to Use Each]{.slide-title2}
 
 <hr>
 
 ::: columns
-::: {.column width="33%"}
-[**1. Inline CSS**]{.teal-text}
+::: {.column width="50%"}
+[**GET Method**]{.teal-text}
+
+::: {.incremental .body-text-m}
+- Data appended to URL
+- Visible in browser address bar
+- Bookmarkable and shareable
+- Limited data size (~2KB)
+- Use for: search, filters, navigation
+- Example: `?query=html+forms`
+:::
+:::
+
+::: {.column width="50%"}
+[**POST Method**]{.teal-text}
+
+::: {.incremental .body-text-m}
+- Data in HTTP request body
+- Not visible in address bar
+- Not bookmarkable
+- Supports large data and files
+- Use for: login, registration, upload
+- Example: password, credit card data
+:::
+:::
+:::
+
+---
+
+## {data-menu-title="Text Inputs"}
+
+[Text-Based Input Types]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2|3|4|5"}
+<input type="text"     name="name"      placeholder="Your full name">
+
+<input type="password" name="pwd"       placeholder="Enter password">
+
+<input type="email"    name="email"     placeholder="you@example.com">
+
+<input type="search"   name="q"         placeholder="Search...">
+
+<input type="url"      name="website"   placeholder="https://...">
+
+<input type="tel"      name="phone"     placeholder="+91 ...">
+```
+
+::: {.body-text-m .topbr}
+[Each type provides built-in validation and mobile keyboard optimization]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Number and Date Inputs"}
+
+[Number, Date, and Range Inputs]{.slide-title}
+
+<hr>
+
+```{.html code-line-numbers="|1|2|3|4"}
+<input type="number" name="age"      min="18" max="100" step="1">
+
+<input type="date"   name="dob"      min="1900-01-01" max="2026-12-31">
+
+<input type="time"   name="appt"     min="09:00" max="17:00">
+
+<input type="range"  name="rating"   min="1" max="10" value="5">
+
+<input type="color"  name="theme">
+```
+
+::: {.body-text-m .topbr}
+- `min` and `max` set acceptable range for numbers and dates
+- `step` controls increment (default 1 for numbers)
+- `range` renders as a draggable slider
+:::
+
+---
+
+## {data-menu-title="Radio and Checkbox"}
+
+[Radio Buttons & Checkboxes]{.slide-title}
+
+<hr>
+
+**Radio buttons (pick ONE):**
+
+```{.html code-line-numbers="|1-4"}
+<input type="radio" name="gender" value="male" id="m">   <label for="m">Male</label>
+<input type="radio" name="gender" value="female" id="f"> <label for="f">Female</label>
+<input type="radio" name="gender" value="other" id="o">  <label for="o">Other</label>
+```
+
+**Checkboxes (pick MULTIPLE):**
+
+```{.html code-line-numbers="|1-4"}
+<input type="checkbox" name="skills" value="html" id="h"> <label for="h">HTML</label>
+<input type="checkbox" name="skills" value="css"  id="c"> <label for="c">CSS</label>
+<input type="checkbox" name="skills" value="js"   id="j"> <label for="j">JavaScript</label>
+```
+
+::: {.body-text-m .topbr}
+[Same `name` attribute groups radio buttons so only one can be selected]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Select and Textarea"}
+
+[Dropdown Select & Textarea]{.slide-title}
+
+<hr>
+
+**Select dropdown:**
+
+```{.html code-line-numbers="|1-5"}
+<select name="country" id="country">
+    <option value="">-- Choose country --</option>
+    <option value="in">India</option>
+    <option value="us">United States</option>
+    <option value="uk">United Kingdom</option>
+</select>
+```
+
+**Multi-line textarea:**
+
+```{.html code-line-numbers="|1-3"}
+<textarea name="message" id="message" rows="5" cols="40"
+          placeholder="Type your message here...">
+</textarea>
+```
+
+---
+
+## {data-menu-title="Labels"}
+
+[Label Element - Why It Matters]{.slide-title}
+
+<hr>
+
+::: columns
+::: {.column width="50%"}
+[**Without label (bad):**]{.magenta-text}
 
 ```html
-<p style="color: red;">
-  Red text
-</p>
+Name: <input type="text">
 ```
 
-Least preferred
+- Screen readers cannot link text to input
+- Clicking "Name" doesn't focus the input
 :::
 
-::: {.column width="33%"}
-[**2. Internal CSS**]{.teal-text}
+::: {.column width="50%"}
+[**With label (correct):**]{.teal-text}
 
 ```html
-<style>
-  p { color: blue; }
-</style>
+<label for="name">Name:</label>
+<input type="text" id="name"
+       name="name">
 ```
 
-In `<head>` tag
+- Screen reader reads label when input focused
+- Clicking "Name" focuses the input field
+:::
 :::
 
-::: {.column width="33%"}
-[**3. External CSS**]{.teal-text}
-
-```html
-<link rel="stylesheet" 
-      href="style.css">
-```
-
-Best practice!
-:::
+::: {.body-text-m .topbr}
+[**Rule:** Every form input must have an associated `<label>` - `for` on label must match `id` on input]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="CSS Syntax"}
+## {data-menu-title="Fieldset Legend"}
 
-[CSS Rule Syntax]{.slide-title}
+[Grouping with Fieldset & Legend]{.slide-title}
 
 <hr>
 
-```
-┌─────────────────────────────────────┐
-│ selector { property: value; }       │
-└─────────────────────────────────────┘
+```{.html code-line-numbers="|1|2|3-8|9-14|15"}
+<form action="/register" method="POST">
+    <fieldset>
+        <legend>Personal Information</legend>
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required>
 
-        ↓          ↓          ↓
-     What    Which        To what
-    to style  property    value
-```
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </fieldset>
 
-**Example:**
+    <fieldset>
+        <legend>Account Security</legend>
+        <label for="pwd">Password:</label>
+        <input type="password" id="pwd" name="password" minlength="8" required>
+    </fieldset>
 
-```css
-p {
-    color: red;
-    font-size: 16px;
-    background-color: yellow;
-}
+    <button type="submit">Create Account</button>
+</form>
 ```
 
 ---
 
-## {data-menu-title="CSS Selectors"}
+## {data-menu-title="HTML5 Validation"}
 
-[Common CSS Selectors]{.slide-title}
+[HTML5 Client-Side Validation]{.slide-title}
 
 <hr>
 
-::: {.body-text-m}
-::: {.fragment}
-[**Element Selector**]{.teal-text} - Select all `<p>` tags
-```css
-p { color: blue; }
+```{.html code-line-numbers="|1|2|3|4|5|6"}
+<input type="text"  required>                    <!-- Cannot be empty -->
+
+<input type="email" required>                    <!-- Must match email format -->
+
+<input type="text"  minlength="3" maxlength="20"> <!-- Length constraints -->
+
+<input type="number" min="1" max="100">          <!-- Range constraints -->
+
+<input type="text"  pattern="[A-Z]{3}[0-9]{4}"> <!-- Custom regex pattern -->
+
+<input type="text"  placeholder="Enter code..."> <!-- Hint text -->
 ```
-:::
-::: {.fragment}
-[**Class Selector**]{.teal-text} - Select by class attribute (`.` prefix)
-```css
-.highlight { background: yellow; }
-```
-:::
-::: {.fragment}
-[**ID Selector**]{.teal-text} - Select by id attribute (`#` prefix)
-```css
-#header { font-size: 24px; }
-```
-:::
+
+::: {.body-text-m .topbr}
+[Built-in validation runs before the form submits - no JavaScript required for basic checks!]{.teal-text}
 :::
 
 ---
 
-## {data-menu-title="Using Classes & IDs"}
+## {data-menu-title="Complete Form Example"}
 
-[Classes vs IDs]{.slide-title}
+[Complete Registration Form]{.slide-title}
 
 <hr>
 
-```{.html code-line-numbers="|1-5|6-10"}
-<!-- Classes (reusable) -->
-<p class="highlight">Important text</p>
-<p class="highlight">More important text</p>
-<span class="highlight">Also important</span>
+```{.html code-line-numbers="|1|2-4|5-6|7-8|9-11|12-13|14"}
+<form action="/register" method="POST">
+    <fieldset>
+        <legend>Personal Details</legend>
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="firstname" required minlength="2">
 
-<!-- IDs (unique) -->
-<div id="header">Page Header</div>
-<h1>Title</h1>
-<!-- There should only be ONE element with id="header" -->
-```
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-**In CSS:**
-```css
-.highlight { color: red; }    /* Affects all class="highlight" */
-#header { background: blue; } /* Affects id="header" only */
+        <label for="gender">Gender:</label>
+        <input type="radio" name="gender" value="m" id="gm"> <label for="gm">Male</label>
+        <input type="radio" name="gender" value="f" id="gf"> <label for="gf">Female</label>
+    </fieldset>
+    <button type="submit">Register</button>
+    <button type="reset">Clear Form</button>
+</form>
 ```
 
 ---
 
-## {data-menu-title="Color Properties"}
+## {data-menu-title="Form Best Practices"}
 
-[CSS Color Properties]{.slide-title}
-
-<hr>
-
-```{.css code-line-numbers="|1|2|3|4"}
-color: red;                    /* Text color */
-background-color: #f0f0f0;     /* Background color */
-border: 2px solid blue;        /* Border color */
-opacity: 0.8;                  /* Transparency (0-1) */
-```
-
-**Color formats:**
-
-```css
-color: red;              /* Named color */
-color: #FF0000;          /* Hexadecimal */
-color: rgb(255, 0, 0);   /* RGB values */
-color: rgba(255, 0, 0, 0.5); /* RGB with alpha */
-```
-
----
-
-## {data-menu-title="Font Properties"}
-
-[CSS Font Styling]{.slide-title}
-
-<hr>
-
-```{.css code-line-numbers="|1|2|3|4|5|6"}
-font-family: Arial, sans-serif;  /* Font type */
-font-size: 16px;                 /* Size -->
-font-weight: bold;               /* Bold, 100-900 -->
-font-style: italic;              /* Italic -->
-text-align: center;              /* Alignment -->
-text-decoration: underline;      /* Underline, overline, etc -->
-```
-
-**Safe fonts:**
-```css
-font-family: Arial, Helvetica, sans-serif;
-font-family: Georgia, serif;
-font-family: 'Times New Roman', serif;
-```
-
----
-
-## {data-menu-title="Box Model"}
-
-[The CSS Box Model]{.slide-title}
-
-<hr>
-
-Every element has padding, border, and margin:
-
-```
-╔════════════════════════════════╗
-║       MARGIN (Outside)         ║
-║  ┌──────────────────────────┐  ║
-║  │ BORDER                   │  ║
-║  │  ┌────────────────────┐  │  ║
-║  │  │ PADDING (Inside)   │  │  ║
-║  │  │  ┌──────────────┐  │  │  ║
-║  │  │  │   CONTENT    │  │  │  ║
-║  │  │  └──────────────┘  │  │  ║
-║  │  └────────────────────┘  │  ║
-║  └──────────────────────────┘  ║
-╚════════════════════════════════╝
-```
-
----
-
-## {data-menu-title="Spacing Properties"}
-
-[Margin & Padding]{.slide-title}
-
-<hr>
-
-```{.css code-line-numbers="|1|2|3|4|5"}
-margin: 10px;              /* Space outside (all sides) -->
-padding: 20px;             /* Space inside (all sides) -->
-margin: 10px 20px;         /* Top/bottom, left/right -->
-padding: 10px 20px 30px 40px; /* Top, right, bottom, left -->
-border: 2px solid red;     /* Width, style, color -->
-```
-
-**Individual sides:**
-```css
-margin-top: 10px;
-margin-right: 20px;
-margin-bottom: 10px;
-margin-left: 20px;
-```
-
----
-
-## {data-menu-title="Width & Height"}
-
-[Dimensions in CSS]{.slide-title}
-
-<hr>
-
-```{.css code-line-numbers="|1|2|3|4|5"}
-width: 300px;           /* Fixed width in pixels -->
-width: 100%;            /* Percentage of parent -->
-width: 100vw;           /* Percentage of viewport -->
-height: auto;           /* Automatic height -->
-max-width: 500px;       <!-- Responsive: max size -->
-```
-
-**Responsive sizing:**
-```css
-width: 100%;           /* Fill parent container */
-max-width: 1200px;     /* But don't exceed 1200px */
-height: auto;          /* Maintain aspect ratio */
-```
-
----
-
-## {data-menu-title="External Stylesheet"}
-
-[Linking External CSS (Best Practice)]{.slide-title}
-
-<hr>
-
-Create a separate `style.css` file:
-
-```css
-/* style.css */
-body {
-    background-color: #f5f5f5;
-    font-family: Arial, sans-serif;
-}
-
-h1 {
-    color: #333;
-    text-align: center;
-}
-
-p {
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-```
-
-In your HTML:
-
-```html
-<head>
-    <link rel="stylesheet" href="style.css">
-</head>
-```
-
-::: {.fragment .body-text-m .center-text .topbr}
-[One CSS file styles all HTML pages!]{.magenta-text}
-:::
-
----
-
-## {data-menu-title="CSS Best Practices"}
-
-[CSS Best Practices]{.slide-title}
+[HTML Form Best Practices]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-1. **Use external stylesheets** - Separate content and design
-2. **Use meaningful class names** - `.red-button` not `.x123`
-3. **Keep CSS organized** - Group related styles
-4. **Avoid inline styles** - Use classes instead
-5. **Use CSS variables** - For consistent colors/sizes
-6. **Mobile-first approach** - Design for mobile, enhance for desktop
-7. **Validate your CSS** - Check for errors
+1. **Always use labels** -> every input needs a connected `<label>` with matching `for`/`id`
+2. **Use semantic structure** -> `<fieldset>` and `<legend>` group related fields
+3. **Choose correct input type** -> `email`, `number`, `date` provide built-in validation and mobile keyboards
+4. **Add name attributes** -> inputs without `name` are not submitted to the server
+5. **Provide placeholder text** -> hints help users understand expected format
+6. **Use required attribute** -> marks fields that cannot be left blank
+7. **Test on mobile** -> forms are most frequently completed on smartphones
 :::
 
 ---
 
-## {data-menu-title="CSS Variables"}
+## {data-menu-title="Memory Booster"}
 
-[CSS Custom Properties (Variables)]{.slide-title}
+[Memory Booster: Forms as Paper Documents]{.slide-title}
 
 <hr>
 
-Define and reuse values:
+::: {.body-text-m}
+Think of an HTML form like a **paper application form**:
 
-```{.css code-line-numbers="|1-5|6|7|8"}
-:root {
-    --primary-color: #0066cc;
-    --secondary-color: #ff9900;
-    --font-size: 16px;
-}
+- **`<form>`** = The **entire application form** document
+- **`action`** = The **address** you mail the form to
+- **`method`** = **POST** (sealed envelope) vs **GET** (postcard - contents visible)
+- **`<input type="text">`** = **Blank line** to write your name/address
+- **`<input type="radio">`** = **Tick box** where you circle ONE answer
+- **`<input type="checkbox">`** = **Check all that apply** boxes
+- **`<select>`** = **Multiple choice** dropdown list
+- **`<label>`** = The **printed question** ("Name:", "Gender:", "Email:")
+- **`required`** = The **red asterisk** `*` marking mandatory fields
+:::
 
-h1 { color: var(--primary-color); }
-p { color: var(--secondary-color); }
-button { font-size: var(--font-size); }
-```
+---
 
-::: {.fragment .body-text-m .center-text .topbr}
-[Change color in one place, updates everywhere!]{.teal-text}
+## {data-menu-title="Live Demo"}
+
+[Live Demo: HTML Forms Explorer]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**Interactive demonstration of all form elements and validation:**
+
+?? **[Open Interactive Demo: HTML Forms & Form Elements](../demos/lecture-08-demo.html){target="_blank"}**
+
+**What you'll see:**
+
+- All major input types rendered and interactive
+- Radio vs checkbox behavior comparison
+- Label/input linking demonstration
+- Fieldset grouping for logical form sections
+- HTML5 validation in action (required, pattern, email)
+- Form submission data preview (GET vs POST)
+
+?? **Key insight:** Open DevTools Network tab and submit the form to see what data is actually sent!
 :::
 
 ---
@@ -415,11 +522,137 @@ button { font-size: var(--font-size); }
 <hr>
 
 ::: {.body-text-m}
-- [MDN: CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
-- [CSS-Tricks](https://css-tricks.com/)
-- [CSS Color Names](https://www.w3schools.com/colors/colors_names.asp)
-- [Font Resources: Google Fonts](https://fonts.google.com/)
+- [MDN: Your first form](https://developer.mozilla.org/en-US/docs/Learn/Forms/Your_first_form)
+- [MDN: HTML Input types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+- [MDN: Form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)
+- [W3C: Accessible forms](https://www.w3.org/WAI/tutorials/forms/)
 - [Course content: Week 2](/content/week-02.qmd)
+:::
+
+---
+
+## {data-menu-title="Debug"}
+
+[Structured Debug Checklist for Forms]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**When form data is not sent:**
+
+1. verify `action` and `method` attributes on `<form>`
+2. check every input has a `name` attribute
+3. confirm `type="submit"` on the submit button
+4. inspect DevTools Network tab after clicking submit
+5. check for JavaScript errors blocking submission
+
+**When validation does not work:**
+
+1. verify `required` is placed on the input element
+2. check `pattern` value is valid regex
+3. confirm `min`/`max` types match the input type
+4. test in a different browser (some attributes differ)
+:::
+
+---
+
+## {data-menu-title="Summary"}
+
+[Summary]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+After this lecture, you should understand:
+
+- `<form>` element with action, method, and name
+- GET vs POST: when and why to use each
+- All major input types and their built-in behavior
+- Radio buttons, checkboxes, select, textarea
+- Labels and fieldset/legend for accessible grouping
+- HTML5 validation: required, min, max, pattern, placeholder
+:::
+
+---
+
+## {data-menu-title="Exam Questions"}
+
+[Exam Preparation Questions: Short]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- What is the purpose of the `<form>` element?
+- What is the difference between GET and POST method?
+- Why is the `name` attribute important in form inputs?
+- What is the role of `<label>` in accessibility?
+- What is `<fieldset>` used for?
+- Name four common HTML5 input types.
+- What does the `required` attribute do?
+- What is the `placeholder` attribute?
+:::
+
+---
+
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain complete HTML form structure with a registration example.
+- Differentiate GET and POST with practical scenarios.
+- Explain all major input types with examples and use cases.
+- Discuss HTML5 form validation attributes and their behaviour.
+- Design an accessible contact form using labels, fieldset, and validation.
+:::
+
+---
+
+## {data-menu-title="Practice"}
+
+[Practice Task]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- create a complete registration form with at least 6 different input types
+- group fields using `<fieldset>` and `<legend>`
+- add proper `<label>` for every input using `for`/`id` linking
+- apply `required`, `minlength`, and `placeholder` attributes
+- test form submission and inspect submitted data in DevTools
+:::
+
+---
+
+## {data-menu-title="Checklist"}
+
+[Checklist]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Can you:
+
+- create a complete semantic and accessible HTML form?
+- choose the right input type for each data field?
+- explain GET and POST method differences?
+- apply HTML5 validation attributes correctly?
+- answer short and long exam questions?
+:::
+
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Introduction to CSS
+- Preparation required: revise HTML structure, classes, and ids from all previous lectures
 :::
 
 ---
@@ -428,16 +661,9 @@ button { font-size: var(--font-size); }
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[CSS Box Model, Float/Clear, Bootstrap & Revision]{.white-text}
 </div>
 <div class="custom-subtitle3">
-Next: Week 3 - CSS Styling & JavaScript Introduction
+Next: Week 3 - Introduction to CSS
 </div>
 </div>
-
-
-
-
-
-
-

@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lecture 22 Demo - Session Tracking with HttpSession</title>
+  <link rel="stylesheet" href="./demo-shared.css">
+  <style>
+    .shell { max-width: 980px; margin: 2rem auto; padding: 1rem; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+    .card { background:#fff; border:1px solid #d9dde3; border-radius:10px; padding:1rem; }
+    button { background:#053660; color:#fff; border:0; padding:.55rem .9rem; border-radius:8px; cursor:pointer; margin-right:.4rem; }
+    pre { background:#111827; color:#e5e7eb; border-radius:8px; padding:.8rem; overflow:auto; }
+    .state { font-family:Consolas, monospace; }
+    @media (max-width: 800px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <h1>Lecture 22 Demo: HttpSession</h1>
+    <p>Simulate login session creation, access to protected resource, and logout invalidation.</p>
+    <section class="grid">
+      <article class="card">
+        <h3>Session Actions</h3>
+        <p>
+          <button id="login">Login (Create Session)</button>
+          <button id="access">Access Protected Page</button>
+          <button id="logout">Logout (Invalidate)</button>
+        </p>
+        <p class="state" id="sessionState">Session: none</p>
+      </article>
+      <article class="card">
+        <h3>Container Trace</h3>
+        <pre id="trace">No actions yet.</pre>
+      </article>
+    </section>
+  </main>
+  <script>
+    let session = null;
+    const trace = document.getElementById('trace');
+    const state = document.getElementById('sessionState');
+    const log = (arr) => trace.textContent = arr.join('\n');
+
+    document.getElementById('login').addEventListener('click', () => {
+      session = { id: 'S-' + Math.floor(Math.random()*100000), user:'student1', role:'student' };
+      state.textContent = `Session: ${session.id} (user=${session.user})`;
+      log([
+        'request.getSession() -> created',
+        `JSESSIONID=${session.id}`,
+        'setAttribute(user, student1)',
+        'setAttribute(role, student)'
+      ]);
+    });
+
+    document.getElementById('access').addEventListener('click', () => {
+      if (!session) {
+        log(['No active session.', 'Redirect -> /login']);
+        return;
+      }
+      log([
+        `Incoming JSESSIONID=${session.id}`,
+        `getAttribute(user) -> ${session.user}`,
+        'Protected content rendered.'
+      ]);
+    });
+
+    document.getElementById('logout').addEventListener('click', () => {
+      if (!session) { log(['No active session to invalidate.']); return; }
+      log([`invalidate() called for ${session.id}`, 'Session destroyed.']);
+      session = null;
+      state.textContent = 'Session: none';
+    });
+  </script>
+</body>
+</html>

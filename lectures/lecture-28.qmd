@@ -1,8 +1,8 @@
----
-title: "Lecture 28: Session Tracking using HttpSession"
+﻿---
+title: "Lecture 28: Autowiring & Annotations in Spring"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
-date: "March 24, 2026"
+date: "March 12, 2026"
 code-annotations: below
 ---
 
@@ -13,538 +13,790 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Session Tracking using HttpSession]{.white-text}
+[Autowiring & Annotations in Spring]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 9 | Unit III: Servlets<br>
+Week 7 | Unit IV: Spring Framework Basics<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
 
 ---
 
-## {data-menu-title="Objectives"}
+
+## {data-menu-title="Learning Objectives"}
 
 [Learning Objectives]{.slide-title}
 
 <hr>
 
 ::: {.incremental .body-text-m}
-- Explain `HttpSession` architecture and lifecycle in servlet container
-- Use session APIs correctly with strong null-safety patterns
-- Implement authentication, authorization, timeout, and logout flows
-- Analyze session security risks: fixation, hijacking, stale sessions
-- Apply scalable session design principles for distributed deployments
-- Build exam-quality conceptual and code-level answers
+- Apply autowiring patterns
+- Use stereotype annotations
+- Disambiguate with @Qualifier and @Primary
 :::
 
 ---
 
-## {data-menu-title="Syllabus"}
+## {data-menu-title="Prerequisites"}
 
-[Unit III Topic Traceability]{.slide-title2}
+[Prerequisites]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Primary syllabus mapping:
-
-- Session tracking with `HttpSession`
-
-Dependency relationship:
-
-- uses cookie concepts from lecture 27
-- supports JSP/MVC control flow in lecture 29 onward
+- Core Java OOP concepts and interface-based design
+- Basic understanding of Servlets/JSP request flow from Unit III
+- Revision of Lecture 27 before moving into Autowiring & Annotations in Spring
 :::
-
 ---
 
-## {data-menu-title="Need"}
+## {data-menu-title="Syllabus Mapping"}
 
-[Why HttpSession is Needed]{.slide-title}
+[Syllabus Mapping]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Cookie-only tracking is insufficient for secure, mutable, server-controlled state.
-
-`HttpSession` provides:
-
-- server ownership of user state
-- reduced client tampering risk
-- controlled lifecycle and invalidation
-- centralized management for authenticated flows
+- Unit IV topic focus: Autowiring & Annotations in Spring
+- CO alignment: implementation understanding + architecture reasoning
+- Assessment alignment: short definitions + long implementation/design questions
 :::
-
 ---
 
-## {data-menu-title="Architecture"}
+## {data-menu-title="Agenda"}
 
-[Session Architecture in Container]{.slide-title2}
-
-<hr>
-
-```{mermaid}
-%%| fig-height: 4.0
-flowchart LR
-  A[Browser Request] --> B[Servlet Container]
-  B --> C[Session ID Resolver]
-  C --> D[Session Store]
-  D --> E[HttpSession object]
-  E --> F[Servlet/JSP Business Logic]
-```
-
----
-
-## {data-menu-title="Identity"}
-
-[How Session Identity Works]{.slide-title}
+[Agenda]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Session identity is maintained by a session id token, commonly `JSESSIONID`.
+- 5-minute recap from previous lecture
+- Concept deep dive: Autowiring & Annotations in Spring
+- Code/configuration walkthrough and output analysis
+- Debug checklist and exam-oriented summary
+:::
+---
 
-Transport path:
+## {data-menu-title="Introduction"}
 
-- primarily cookie
-- optionally URL rewriting for fallback
+[Introduction]{.slide-title}
 
-The token points to server-side state; business data is not stored in token itself.
+<hr>
+
+::: {.body-text-m}
+Annotations reduce wiring boilerplate while preserving clarity.
 :::
 
 ---
 
-## {data-menu-title="Lifecycle"}
+## {data-menu-title="Think About It"}
 
-[Session Lifecycle States]{.slide-title2}
+[Think About It]{.slide-title2}
 
 <hr>
 
-```{mermaid}
-%%| fig-height: 4.0
-stateDiagram-v2
-  [*] --> Created: request.getSession()/getSession(true)
-  Created --> Active: container returns session id
-  Active --> Active: subsequent valid requests update last accessed time
-  Active --> Expired: max inactive interval exceeded
-  Active --> Invalidated: invalidate() or security reset
-  Expired --> [*]
-  Invalidated --> [*]
-```
-
-::: {.body-text-s}
-`HttpSession` is created by the container, remains active while reused by valid requests, and is destroyed either by timeout or explicit invalidation.
+::: {.body-text-m}
+How does Spring choose one bean among many?
 :::
 
 ---
 
-## {data-menu-title="Core API"}
+## {data-menu-title="What Is Autowiring"}
 
-[Core HttpSession API Map]{.slide-title}
+[What Is Autowiring?]{.slide-title2}
 
 <hr>
 
-| API | Semantics | Typical Use |
+::: {.body-text-m}
+**Autowiring** is Spring's automatic dependency resolution mechanism.
+
+Instead of explicitly wiring beans in XML or Java configuration, Spring:
+
+- Scans for beans in the container
+- Matches dependencies by type, name, or qualifier
+- Injects the resolved bean automatically
+
+[This eliminates most manual bean wiring and reduces boilerplate configuration.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Benefits of Autowiring"}
+
+[Why Use Autowiring?]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+Autowiring provides several advantages:
+
+- **Less configuration:** No need to declare every dependency explicitly
+- **Type safety:** Compile-time checking of dependency types
+- **Faster development:** Focus on business logic, not wiring mechanics
+- **Cleaner code:** Dependencies are clear from field/constructor declarations
+
+[Modern Spring applications rely heavily on annotation-driven autowiring.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Stereotype Annotations"}
+
+[Stereotype Annotations]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+Spring provides **stereotype annotations** to mark classes as beans:
+
+| Annotation | Purpose | Layer |
 |---|---|---|
-| `getSession()` | fetch or create | post-login creation |
-| `getSession(false)` | fetch only if exists | protected page checks |
-| `setAttribute` | add/update key | user id, role |
-| `getAttribute` | read key | auth/authorization checks |
-| `removeAttribute` | remove key | transient cleanup |
-| `invalidate` | destroy session | logout and security reset |
-| `setMaxInactiveInterval` | timeout in seconds | inactivity policy |
+| `@Component` | Generic Spring-managed bean | Any |
+| `@Service` | Business logic layer | Service |
+| `@Repository` | Data access layer | DAO |
+| `@Controller` | Web presentation layer | MVC Controller |
 
----
-
-## {data-menu-title="Create"}
-
-[Create Session After Authentication]{.slide-title2}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession(true);
-session.setAttribute("userId", user.getId());
-session.setAttribute("role", user.getRole());
-session.setAttribute("loginAt", java.time.Instant.now());
-```
-
----
-
-## {data-menu-title="Read"}
-
-[Read Session with Null Safety]{.slide-title}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession(false);
-if (session == null) {
-  response.sendRedirect(request.getContextPath() + "/login.jsp");
-  return;
-}
-Long userId = (Long) session.getAttribute("userId");
-```
-
----
-
-## {data-menu-title="Update"}
-
-[Update and Remove Attributes]{.slide-title2}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession(false);
-if (session != null) {
-  session.setAttribute("lastAction", "PROFILE_UPDATED");
-  session.removeAttribute("temporaryOtp");
-}
-```
-
-::: {.body-text-s}
-Remove transient values as soon as they are no longer required.
+All are specializations of `@Component` with semantic meaning.
 :::
 
 ---
 
-## {data-menu-title="Invalidate"}
+## {data-menu-title="Component Example"}
 
-[Session Invalidation Semantics]{.slide-title}
+[@Component Annotation]{.slide-title2}
+
+<hr>
+
+```java
+@Component
+public class EmailValidator {
+    public boolean isValid(String email) {
+        return email != null && email.contains("@");
+    }
+}
+
+@Component
+public class RegistrationService {
+    @Autowired
+    private EmailValidator validator;
+    
+    public void register(String email) {
+        if (validator.isValid(email)) {
+            // process registration
+        }
+    }
+}
+```
+
+::: {.body-text-m .topbr}
+Spring automatically creates both beans and injects `EmailValidator` into `RegistrationService`.
+:::
+
+---
+
+## {data-menu-title="Service Annotation"}
+
+[@Service Annotation]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-`invalidate()` should be treated as security boundary reset.
+**@Service** marks business logic components.
 
-Use cases:
-
-- explicit logout
-- password change
-- role changes requiring re-auth
-- suspicious activity detection
-:::
-
-```{.java}
-HttpSession session = request.getSession(false);
-if (session != null) session.invalidate();
+```java
+@Service
+public class OrderService {
+    @Autowired private OrderRepository repository;
+    @Autowired private PaymentGateway paymentGateway;
+    
+    public void processOrder(Order order) {
+        // business logic
+        repository.save(order);
+        paymentGateway.charge(order.getTotal());
+    }
+}
 ```
+
+Semantically clearer than `@Component` and enables service-layer AOP.
+:::
 
 ---
 
-## {data-menu-title="Auth Flow"}
+## {data-menu-title="Repository Annotation"}
 
-[Authentication Flow with HttpSession]{.slide-title2}
+[@Repository Annotation]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**@Repository** marks data access components.
+
+```java
+@Repository
+public class UserRepository {
+    @Autowired private JdbcTemplate jdbcTemplate;
+    
+    public User findById(Long id) {
+        return jdbcTemplate.queryForObject(
+            "SELECT * FROM users WHERE id = ?",
+            new UserRowMapper(), id
+        );
+    }
+}
+```
+
+Enables automatic exception translation from persistence-specific exceptions to Spring's `DataAccessException`.
+:::
+
+---
+
+## {data-menu-title="Controller Annotation"}
+
+[@Controller Annotation]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+**@Controller** marks web layer components.
+
+```java
+@Controller
+public class HomeController {
+    @Autowired private ProductService productService;
+    
+    @RequestMapping("/products")
+    public String listProducts(Model model) {
+        model.addAttribute("products", 
+            productService.getAllProducts());
+        return "productList";
+    }
+}
+```
+
+Used with Spring MVC for handling HTTP requests.
+:::
+
+---
+
+## {data-menu-title="Autowired Details"}
+
+[@Autowired Annotation]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+**@Autowired** tells Spring to inject a dependency automatically.
+
+Can be used on:
+
+- **Fields** (most common, but less testable)
+- **Constructors** (recommended, enables immutability)
+- **Setters** (optional dependencies)
+
+```java
+@Service
+public class NotificationService {
+    @Autowired private EmailService emailService;
+}
+```
+
+Spring finds a bean of type `EmailService` and injects it.
+:::
+
+---
+
+## {data-menu-title="Constructor Injection"}
+
+[Constructor Injection (Recommended)]{.slide-title2}
+
+<hr>
+
+```java
+@Service
+public class OrderProcessor {
+    private final OrderRepository repository;
+    private final PaymentService paymentService;
+    
+    @Autowired  // optional since Spring 4.3 for single constructor
+    public OrderProcessor(OrderRepository repository,
+                         PaymentService paymentService) {
+        this.repository = repository;
+        this.paymentService = paymentService;
+    }
+}
+```
+
+::: {.body-text-m .topbr}
+**Benefits:** Immutable dependencies, easier testing, clear required dependencies
+:::
+
+---
+
+## {data-menu-title="Field Injection"}
+
+[Field Injection]{.slide-title2}
+
+<hr>
+
+```java
+@Service
+public class ReportGenerator {
+    @Autowired private DataService dataService;
+    @Autowired private TemplateEngine templateEngine;
+    
+    public Report generate() {
+        // use dependencies
+    }
+}
+```
+
+::: {.body-text-m .topbr}
+**Pros:** Concise, less boilerplate
+
+**Cons:** Cannot make fields final, harder to unit test, hides dependencies
+:::
+
+---
+
+## {data-menu-title="Setter Injection"}
+
+[Setter Injection]{.slide-title2}
+
+<hr>
+
+```java
+@Service
+public class CacheManager {
+    private CacheProvider cacheProvider;
+    
+    @Autowired(required = false)
+    public void setCacheProvider(CacheProvider cacheProvider) {
+        this.cacheProvider = cacheProvider;
+    }
+}
+```
+
+::: {.body-text-m .topbr}
+**Best for:** Optional dependencies with `required = false`
+
+**Note:** Dependencies can be changed after construction
+:::
+
+---
+
+## {data-menu-title="Autowiring Modes"}
+
+[Autowiring Resolution Strategy]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+When `@Autowired` is used, Spring resolves dependencies:
+
+1. **By Type** — Find beans matching the required type
+2. **If multiple matches** — Apply disambiguation:
+   - Check for `@Primary` bean
+   - Match by parameter/field name
+   - Look for `@Qualifier` annotation
+3. **If no match** — Throw `NoSuchBeanDefinitionException` (unless `required = false`)
+
+[Type-based autowiring is the default and most common approach.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Ambiguity Problem"}
+
+[The Ambiguity Problem]{.slide-title2}
+
+<hr>
+
+```java
+public interface Notifier {
+    void send(String message);
+}
+
+@Component
+public class EmailNotifier implements Notifier { }
+
+@Component
+public class SmsNotifier implements Notifier { }
+
+@Service
+public class AlertService {
+    @Autowired Notifier notifier;  // Which one?
+}
+```
+
+::: {.body-text-m .topbr}
+**Error:** `NoUniqueBeanDefinitionException` — Spring finds two `Notifier` beans
+:::
+
+---
+
+## {data-menu-title="Primary Solution"}
+
+[Solution 1: @Primary]{.slide-title2}
+
+<hr>
+
+```java
+@Component
+public class EmailNotifier implements Notifier { }
+
+@Component
+@Primary  // This one wins when ambiguous
+public class SmsNotifier implements Notifier { }
+
+@Service
+public class AlertService {
+    @Autowired Notifier notifier;  // gets SmsNotifier
+}
+```
+
+::: {.body-text-m .topbr}
+**@Primary** marks a bean as the default choice when multiple candidates exist.
+
+[Use when one implementation is clearly the default.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Qualifier Solution"}
+
+[Solution 2: @Qualifier]{.slide-title2}
+
+<hr>
+
+```java
+@Component("emailNotifier")
+public class EmailNotifier implements Notifier { }
+
+@Component("smsNotifier")
+public class SmsNotifier implements Notifier { }
+
+@Service
+public class AlertService {
+    @Autowired 
+    @Qualifier("emailNotifier")
+    private Notifier notifier;  // explicitly choose email
+}
+```
+
+::: {.body-text-m .topbr}
+**@Qualifier** specifies which bean to inject by name.
+
+[Use when you need explicit control over which implementation to use.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Qualifier Custom"}
+
+[Custom Qualifier Annotations]{.slide-title2}
+
+<hr>
+
+```java
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface Email { }
+
+@Component @Email
+public class EmailNotifier implements Notifier { }
+
+@Service
+public class AlertService {
+    @Autowired @Email
+    private Notifier notifier;  // type-safe qualifier
+}
+```
+
+::: {.body-text-m .topbr}
+Custom qualifiers provide type-safe, refactor-friendly disambiguation.
+:::
+
+---
+
+## {data-menu-title="Collections"}
+
+[Autowiring Collections]{.slide-title2}
+
+<hr>
+
+```java
+@Service
+public class NotificationHub {
+    @Autowired
+    private List<Notifier> allNotifiers;
+    
+    public void broadcast(String message) {
+        for (Notifier n : allNotifiers) {
+            n.send(message);
+        }
+    }
+}
+```
+
+::: {.body-text-m .topbr}
+Spring automatically injects **all beans** of type `Notifier` into the list.
+
+[Works with `List`, `Set`, `Map<String, T>` (key = bean name).]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Optional Dependencies"}
+
+[Optional Dependencies]{.slide-title2}
+
+<hr>
+
+```java
+@Service
+public class ReportService {
+    @Autowired(required = false)
+    private TemplateCustomizer customizer;
+    
+    public Report generate() {
+        if (customizer != null) {
+            customizer.customize(report);
+        }
+        return report;
+    }
+}
+```
+
+::: {.body-text-m .topbr}
+Use `required = false` when dependency is optional and may not exist.
+
+Alternative: Use `Optional<T>` or `ObjectProvider<T>`
+:::
+
+---
+
+## {data-menu-title="Best Practices"}
+
+[Autowiring Best Practices]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+1. **Prefer constructor injection** for required dependencies
+2. **Use field injection sparingly** (quick prototypes only)
+3. **Mark defaults with @Primary** when one implementation dominates
+4. **Use @Qualifier** for explicit control or multiple implementations
+5. **Avoid circular dependencies** (constructor injection makes them obvious)
+6. **Use `@Autowired(required = false)`** or `Optional<T>` for optional deps
+
+[Constructor injection + @Primary/@Qualifier covers 95% of real use cases.]{.teal-text}
+:::
+
+---
+
+## {data-menu-title="Component Scan"}
+
+[Enabling Component Scanning]{.slide-title2}
+
+<hr>
+
+```java
+@Configuration
+@ComponentScan(basePackages = "com.example.myapp")
+public class AppConfig {
+}
+```
+
+::: {.body-text-m .topbr}
+**@ComponentScan** tells Spring where to look for `@Component`, `@Service`, etc.
+
+**Spring Boot** enables this automatically for the package and sub-packages of the main application class.
+:::
+
+---
+
+## {data-menu-title="Core Concept"}
+
+[Autowiring and Annotations]{.slide-title}
 
 <hr>
 
 ```{mermaid}
-%%| fig-height: 4.0
-sequenceDiagram
-  participant U as User
-  participant L as LoginServlet
-  participant P as ProtectedServlet
-
-  U->>L: POST /login credentials
-  L-->>U: create session + redirect /dashboard
-  U->>P: GET /dashboard with session id
-  P-->>U: authorize and render response
+flowchart LR
+  A["@Component Scan"] --> B["Bean Registry"]
+  B --> C["@Autowired Injection Point"]
+  C --> D{"Multiple Candidates?"}
+  D -->|No| E["Inject Bean"]
+  D -->|Yes| F["Resolve by @Qualifier / @Primary"]
+  F --> E
 ```
 
----
-
-## {data-menu-title="Protected Route"}
-
-[Protected Endpoint Guard Pattern]{.slide-title}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession(false);
-boolean loggedIn = session != null && session.getAttribute("userId") != null;
-
-if (!loggedIn) {
-  response.sendRedirect(request.getContextPath() + "/login.jsp");
-  return;
-}
-```
-
----
-
-## {data-menu-title="Authorization"}
-
-[Role-Based Authorization Check]{.slide-title2}
-
-<hr>
-
-```{.java}
-String role = (String) session.getAttribute("role");
-if (!"ADMIN".equals(role)) {
-  response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
-  return;
-}
-```
-
-::: {.body-text-m}
-Authentication verifies identity; authorization enforces privilege.
+::: {.body-text-m .topbr}
+- Stereotype annotations register beans automatically
+- `@Autowired` resolves dependencies by type
+- `@Qualifier` and `@Primary` solve ambiguity
 :::
 
 ---
 
-## {data-menu-title="Filter Strategy"}
+## {data-menu-title="Code Walkthrough"}
 
-[Why Use Servlet Filters for Session Checks]{.slide-title}
+[Code Walkthrough]{.slide-title2}
+
+<hr>
+
+```{.java code-line-numbers="|1-3"}
+@Service
+class AlertService {
+  @Autowired @Qualifier("emailNotifier")
+  Notifier notifier;
+}
+
+@Component("emailNotifier")
+class EmailNotifier implements Notifier {}
+
+@Component("smsNotifier")
+@Primary
+class SmsNotifier implements Notifier {}
+```
+## Memory Booster {data-menu-title="Memory Booster"}
 
 <hr>
 
 ::: {.body-text-m}
-Centralizing auth checks in filter avoids repeated boilerplate across servlets.
+Syllabus memory points for **Autowiring & Annotations in Spring**:
 
-Benefits:
-
-- consistency
-- easier audits
-- lower maintenance cost
+- Core recall: @Autowired, @Component, @Service, @Repository
+- Exam compare: Manual wiring vs annotation-driven autowiring
+- Practical anchor: Build service graph with annotation-based injection
 :::
-
 ---
 
-## {data-menu-title="Filter Code"}
+## {data-menu-title="Live Demo"}
 
-[Auth Filter Example]{.slide-title2}
-
-<hr>
-
-```{.java}
-HttpServletRequest req = (HttpServletRequest) request;
-HttpServletResponse res = (HttpServletResponse) response;
-HttpSession session = req.getSession(false);
-
-boolean loggedIn = session != null && session.getAttribute("userId") != null;
-if (!loggedIn) {
-  res.sendRedirect(req.getContextPath() + "/login.jsp");
-  return;
-}
-chain.doFilter(request, response);
-```
-
----
-
-## {data-menu-title="Timeout"}
-
-[Session Timeout Configuration]{.slide-title}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession();
-session.setMaxInactiveInterval(20 * 60); // 20 minutes
-```
-
-```{.xml}
-<session-config>
-  <session-timeout>20</session-timeout>
-</session-config>
-```
-
----
-
-## {data-menu-title="Expiration UX"}
-
-[Graceful Session Expiration Handling]{.slide-title2}
-
-<hr>
-
-```{.java}
-HttpSession session = request.getSession(false);
-if (session == null) {
-  request.setAttribute("msg", "Session expired. Please login again.");
-  request.getRequestDispatcher("/login.jsp").forward(request, response);
-  return;
-}
-```
-
-::: {.body-text-s}
-Better UX reduces user confusion and support tickets.
-:::
-
----
-
-## {data-menu-title="Fixation"}
-
-[Session Fixation Attack and Mitigation]{.slide-title}
+[Live Demo]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Fixation risk: attacker forces victim to use known session id.
+**Live implementation for Autowiring & Annotations in Spring:**
 
-Mitigation at login:
+?? **[Open Demo: Lecture 28 - Autowiring & Annotations in Spring](../demos/lecture-28-demo.html){target="_blank"}**
 
-1. invalidate pre-auth session
-2. create fresh session id
-3. bind authenticated identity to new session
+Demo checklist:
+- Register two `Notifier` beans and trigger autowiring ambiguity
+- Resolve ambiguity first using `@Primary`, then with `@Qualifier`
+- Demonstrate constructor injection as best-practice alternative
+- Break one annotation intentionally and trace startup error
 :::
-
 ---
 
-## {data-menu-title="Fixation Code"}
+## {data-menu-title="Resources"}
 
-[Fixation Mitigation Code]{.slide-title2}
-
-<hr>
-
-```{.java}
-HttpSession old = request.getSession(false);
-if (old != null) {
-  old.invalidate();
-}
-HttpSession fresh = request.getSession(true);
-fresh.setAttribute("userId", user.getId());
-```
-
----
-
-## {data-menu-title="Hijacking"}
-
-[Session Hijacking Risk Controls]{.slide-title}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- enforce HTTPS end-to-end
-- set secure cookie flags for session id
-- short inactivity timeout for sensitive applications
-- logout invalidates server session and client token
-- monitor suspicious IP/device/session anomalies
-:::
-
----
-
-## {data-menu-title="Storage Policy"}
-
-[What to Store in Session]{.slide-title2}
-
-<hr>
-
-| Store | Avoid |
-|---|---|
-| user id and role | password or secrets |
-| compact workflow state | large object graphs |
-| one-time flash messages | heavy report data |
-| authorization cache keys | permanent records |
-
----
-
-## {data-menu-title="Cookie Link"}
-
-[Relationship with Cookie Layer]{.slide-title2}
+[Resources & References]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-`HttpSession` uses cookie primarily as transport for session id.
-
-If cookie unavailable:
-
-- container can rewrite URL using `encodeURL`
-- security and URL hygiene concerns increase
+- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
+- [Spring Guides](https://spring.io/guides)
+- Classroom notes + lecture demo file for Lecture 28
 :::
-
-```{.java}
-String safeUrl = response.encodeURL("dashboard.jsp");
-response.sendRedirect(safeUrl);
-```
-
 ---
 
 ## {data-menu-title="Debug"}
 
-[Session Debugging Checklist]{.slide-title}
+[Structured Debug Checklist]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Check sequence:
-
-1. session created at login success?
-2. session id present in next request?
-3. auth filter/guard ordering correct?
-4. timeout policy too aggressive?
-5. logout invalidation functioning?
+1. verify the primary API usage for **Autowiring & Annotations in Spring** is correct (imports, method names, config)
+2. check request/bean/session flow and object lifecycle assumptions
+3. inspect server logs for the first exception (not just the final symptom)
+4. reproduce one failing case and one passing case before finalizing fixes
 :::
-
 ---
 
-## {data-menu-title="Common Issues"}
+## {data-menu-title="Exam Questions"}
 
-[Frequent Implementation Errors]{.slide-title2}
-
-<hr>
-
-::: {.incremental .body-text-m}
-- using `getSession()` in guards and creating empty sessions
-- missing null checks with `getSession(false)`
-- forgetting authorization after authentication
-- keeping stale sessions active after role changes
-- storing oversized data causing memory pressure
-:::
-
----
-
-## {data-menu-title="Exam"}
-
-[Exam and Viva Questions]{.slide-title2}
+[Exam Preparation Questions: Short]{.slide-title}
 
 <hr>
 
 ::: {.body-text-m}
-Prepare long-answer quality responses:
-
-1. explain `HttpSession` lifecycle with diagram
-2. compare `getSession()` and `getSession(false)`
-3. design auth + authorization + logout flow
-4. discuss session fixation and mitigation
-5. explain scaling concerns for session-based apps
+- Define **Autowiring & Annotations in Spring** with one practical use case.
+- Write/identify the key API or construct: **@Autowired, @Component, @Service, @Repository**.
+- Differentiate: **Manual wiring vs annotation-driven autowiring**.
+- Mention one common implementation error and correction.
 :::
+---
 
+## {data-menu-title="Long Questions"}
+
+[Exam Preparation Questions: Long]{.slide-title}
+
+<hr>
+
+::: {.body-text-m}
+- Explain **Autowiring & Annotations in Spring** with architecture/flow and implementation steps.
+- Write a structured answer comparing two approaches used in this topic.
+- Discuss debugging strategy for this topic with likely failure points.
+:::
 ---
 
 ## {data-menu-title="Practice"}
 
-[Hands-On Lab Task]{.slide-title}
+[Practice Task]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-Implement secure module:
-
-- login servlet + role attribute
-- auth filter for protected routes
-- admin authorization check
-- configurable timeout behavior
-- logout and forced re-login after role change
-
-Stretch objective:
-
-- simulate fixation mitigation and verify session id rotation.
+- Implement: **Build service graph with annotation-based injection**.
+- Add console/log output to validate flow step-by-step.
+- Document one bug you encountered and the exact fix.
 :::
-
 ---
 
-## {data-menu-title="Summary"}
+## {data-menu-title="Checklist"}
 
-[Summary]{.slide-title2}
+[Checklist]{.slide-title2}
 
 <hr>
 
 ::: {.body-text-m}
-You can now:
+Can you:
 
-- architect session management beyond basic syntax
-- implement robust and secure servlet session flows
-- reason about lifecycle, security, and scaling trade-offs
-- answer Unit III concepts at MCA standard depth
+- explain **Autowiring & Annotations in Spring** in your own words?
+- implement a basic example end-to-end?
+- identify and fix one common runtime issue?
 :::
+---
+
+## {data-menu-title="Next Lecture"}
+
+[Next Lecture]{.slide-title2}
+
+<hr>
+
+::: {.body-text-m}
+- Topic: Lecture 29 - Introduction to Design Patterns in Spring
+- Preparation required: revise this lecture summary and code walkthrough
+:::
+---
+
+## {#end-slide data-menu-title="End Slide" background="#053660"}
+
+<div class="page-center">
+<div class="custom-subtitle">
+[Questions?]{.white-text}
+</div>
+<div class="custom-subtitle3">
+Next: Lecture 29
+</div>
+</div>
+
+

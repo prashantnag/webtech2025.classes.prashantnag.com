@@ -1,5 +1,5 @@
 ---
-title: "Lecture 40: Spring Boot Actuator, Logger, Web App Build & Final Revision"
+title: "Lecture 40: Final Revision & Hands-on Integration (Spring Boot + REST)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "March 30, 2026"
@@ -13,11 +13,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[Spring Boot Actuator, Logger, Web App Build & Final Revision]{.white-text}
+[Final Revision & Hands-on Integration (Spring Boot + REST)]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 12 | Unit V: Final Revision<br>
+Week 10 | Unit V: Spring Boot & REST Services<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -226,7 +226,7 @@ flowchart LR
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Thank You]{.white-text}
+[Final Revision & Hands-on Integration (Spring Boot + REST)]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Course Wrap-up: All the best for final project and end-sem exam

@@ -1,5 +1,5 @@
-﻿---
-title: "Lecture 13: Introduction to Bootstrap"
+---
+title: "Lecture 13: Block Scope Variables (let, const)"
 subtitle: "{{< meta course.number >}} - {{< meta course.title >}}"
 author: "{{< meta instructor.name >}}"
 date: "February 16, 2026"
@@ -14,11 +14,11 @@ code-annotations: below
 </div>
 
 <div class="custom-subtitle">
-[JavaScript Functions & Event Handling]{.white-text}
+[Block Scope Variables (let, const)]{.white-text}
 </div>
 
 <div class="custom-subtitle3">
-Week 4 | Unit II: JavaScript Functions & Events<br>
+Week 4 | Unit II: Scripting with JavaScript<br>
 {{< meta course.number >}} - {{< meta course.title >}}<br>
 {{< meta instructor.name >}}, {{< meta instructor.title >}}
 </div>
@@ -247,7 +247,7 @@ Alternative site path: `/html/demos/lecture-13-demo.html`
 
 <div class="page-center">
 <div class="custom-subtitle">
-[Questions?]{.white-text}
+[Block Scope Variables (let, const)]{.white-text}
 </div>
 <div class="custom-subtitle3">
 Next: Lecture 14 - Conditions & Looping
